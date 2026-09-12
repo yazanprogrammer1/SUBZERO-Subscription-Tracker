@@ -1,9 +1,10 @@
 # SUBZERO version catalog — single source of truth for every dependency version.
 # All versions verified against Maven metadata / official release pages on 2026-09-11.
+# AGP is pinned to the newest version the current Android Studio supports (see lint.xml).
 
 [versions]
 # Build tooling
-agp = "9.4.0"
+agp = "9.2.1"
 kotlin = "2.4.20"
 ksp = "2.3.12"
 

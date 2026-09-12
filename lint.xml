@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Project-wide lint configuration. Lint warnings are build errors (see build-logic), so every
+  entry here is a deliberate, explained exception. Keep this file short.
+-->
+<lint>
+    <!--
+      AGP is pinned to the newest version supported by the Android Studio release the team uses,
+      not the newest version published. Bump AGP together with Studio, not because lint says so.
+    -->
+    <issue id="AndroidGradlePluginVersion" severity="ignore" />
+</lint>

@@ -90,7 +90,7 @@ Additional decisions made during Phase 1 (routine, recorded for traceability):
 
 ## Verified toolchain (2026-09-11)
 
-Kotlin 2.4.20 · AGP 9.4.0 (built-in Kotlin, no `kotlin-android` plugin) · Gradle 9.7.1 · KSP 2.3.12 ·
+Kotlin 2.4.20 · AGP 9.2.1 (pinned to the Android Studio-supported version; built-in Kotlin, no `kotlin-android` plugin) · Gradle 9.7.1 · KSP 2.3.12 ·
 Compose BOM 2026.09.00 (ui 1.12.1, material3 1.4.0) · Navigation 3 1.1.7 · Lifecycle 2.11.0 ·
 Hilt 2.60.1 + androidx.hilt 1.4.0 · Room 2.8.5 · DataStore 1.2.1 · WorkManager 2.11.2 ·
 Coroutines 1.11.0 · Serialization 1.11.0 · JUnit 4.13.2 · Truth 1.4.5 · Turbine 1.2.1.
