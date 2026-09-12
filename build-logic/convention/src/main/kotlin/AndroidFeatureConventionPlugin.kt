@@ -1,7 +1,9 @@
+import com.android.build.api.dsl.LibraryExtension
 import com.subzero.buildlogic.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
 /**
@@ -14,6 +16,11 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             apply(plugin = "subzero.android.library")
             apply(plugin = "subzero.android.library.compose")
             apply(plugin = "subzero.hilt")
+
+            // Compose UI tests run on the JVM through Robolectric so they are part of `gradlew test`.
+            extensions.configure<LibraryExtension> {
+                testOptions.unitTests.isIncludeAndroidResources = true
+            }
 
             dependencies {
                 "implementation"(project(":core:common"))
@@ -28,9 +35,15 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 "implementation"(libs.findLibrary("kotlinx-coroutines-core").get())
 
                 "testImplementation"(project(":core:testing"))
+                "testImplementation"(testFixtures(project(":core:domain")))
                 "testImplementation"(libs.findLibrary("kotlinx-coroutines-test").get())
                 "testImplementation"(libs.findLibrary("turbine").get())
+                "testImplementation"(libs.findLibrary("robolectric").get())
+                "testImplementation"(libs.findLibrary("androidx-test-core").get())
+                "testImplementation"(libs.findLibrary("androidx-compose-ui-test-junit4").get())
+                "testImplementation"(libs.findLibrary("androidx-compose-ui-test-manifest").get())
                 "androidTestImplementation"(project(":core:testing"))
+                "androidTestImplementation"(testFixtures(project(":core:domain")))
                 "androidTestImplementation"(libs.findLibrary("androidx-compose-ui-test-junit4").get())
                 "debugImplementation"(libs.findLibrary("androidx-compose-ui-test-manifest").get())
             }

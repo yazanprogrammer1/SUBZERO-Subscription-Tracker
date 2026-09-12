@@ -30,8 +30,10 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                     .lowercase() + "_"
             }
 
-            // Robolectric reaches into java.io internals that JDK 17+ seals by default.
             tasks.withType<Test>().configureEach {
+                // Generated Hilt test sources make Gradle think every module has tests.
+                failOnNoDiscoveredTests.set(false)
+                // Robolectric reaches into java.io internals that JDK 17+ seals by default.
                 jvmArgs(
                     "--add-opens", "java.base/java.io=ALL-UNNAMED",
                     "--add-exports", "java.base/jdk.internal.access=ALL-UNNAMED",

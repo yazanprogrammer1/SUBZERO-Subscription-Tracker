@@ -1,18 +1,28 @@
 package com.subzero.app.ui
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.subzero.app.MainUiState
 import com.subzero.app.R
 import com.subzero.app.navigation.SubzeroNavigator
 import com.subzero.app.navigation.rememberTopLevelBackStack
@@ -25,33 +35,77 @@ import com.subzero.core.navigation.HomeKey
 import com.subzero.core.navigation.InsightsKey
 import com.subzero.core.navigation.LocalNavigator
 import com.subzero.core.navigation.SettingsKey
+import com.subzero.core.navigation.SubscriptionFormKey
 import com.subzero.core.navigation.SubscriptionsKey
 import com.subzero.core.navigation.TopLevelKey
 import com.subzero.feature.calendar.calendarEntry
 import com.subzero.feature.home.homeEntry
 import com.subzero.feature.insights.insightsEntry
+import com.subzero.feature.onboarding.OnboardingOutcome
+import com.subzero.feature.onboarding.OnboardingRoute
 import com.subzero.feature.onboarding.onboardingEntry
 import com.subzero.feature.settings.settingsEntry
 import com.subzero.feature.subscriptions.subscriptionsEntries
 
 /**
- * The app shell: Navigation 3 display + bottom navigation.
- *
- * Onboarding gating (first launch -> OnboardingKey) is wired in Phase 4 once preferences exist.
+ * Root of the UI. Shows onboarding until it has been completed once, then the main shell
+ * (Navigation 3 display + bottom navigation). Switching between them fades through.
  */
 @Composable
-fun SubzeroApp() {
+fun SubzeroApp(uiState: MainUiState) {
+    // Set when the user chose "Add your first subscription"; consumed by the shell once it exists.
+    var pendingAddSubscription by rememberSaveable { mutableStateOf(false) }
+    val motion = SubzeroTheme.motion
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(SubzeroTheme.colors.background),
+    ) {
+        AnimatedContent(
+            targetState = uiState,
+            contentKey = { (it as? MainUiState.Ready)?.onboardingCompleted },
+            transitionSpec = { fadeIn(motion.emphasizedEnterSpec()) togetherWith fadeOut(motion.emphasizedExitSpec()) },
+            label = "root",
+        ) { state ->
+            when (state) {
+                MainUiState.Loading -> Box(Modifier.fillMaxSize())
+                is MainUiState.Ready -> if (state.onboardingCompleted) {
+                    MainShell(
+                        openAddSubscription = pendingAddSubscription,
+                        onAddSubscriptionOpened = { pendingAddSubscription = false },
+                    )
+                } else {
+                    OnboardingRoute(
+                        onFinished = { outcome ->
+                            pendingAddSubscription = outcome == OnboardingOutcome.AddFirstSubscription
+                        },
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun MainShell(
+    openAddSubscription: Boolean,
+    onAddSubscriptionOpened: () -> Unit,
+) {
     val topLevelBackStack = rememberTopLevelBackStack(startKey = HomeKey)
     val navigator = remember(topLevelBackStack) { SubzeroNavigator(topLevelBackStack) }
     val showBottomBar = topLevelBackStack.currentKey is TopLevelKey
     val transitions = rememberNavTransitions()
 
+    LaunchedEffect(openAddSubscription) {
+        if (openAddSubscription) {
+            navigator.navigate(SubscriptionFormKey())
+            onAddSubscriptionOpened()
+        }
+    }
+
     CompositionLocalProvider(LocalNavigator provides navigator) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(SubzeroTheme.colors.background),
-        ) {
+        Column(modifier = Modifier.fillMaxSize()) {
             Box(modifier = Modifier.weight(1f)) {
                 NavDisplay(
                     backStack = topLevelBackStack.backStack,
@@ -61,7 +115,7 @@ fun SubzeroApp() {
                         rememberViewModelStoreNavEntryDecorator(),
                     ),
                     entryProvider = entryProvider {
-                        onboardingEntry(transitions)
+                        onboardingEntry(transitions, onFinished = { topLevelBackStack.pop() })
                         homeEntry(transitions)
                         subscriptionsEntries(transitions)
                         calendarEntry(transitions)

@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     testImplementation(projects.core.testing)
+    testImplementation(testFixtures(projects.core.domain))
     androidTestImplementation(projects.core.testing)
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.test.espresso.core)

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_onboarding_page1_title">Meet SUBZERO</string>
+    <string name="feature_onboarding_page1_body">Know what you pay.\nBefore it charges you.</string>
+    <string name="feature_onboarding_page2_title">See everything</string>
+    <string name="feature_onboarding_page2_body">Bring your recurring expenses into one clear view.</string>
+    <string name="feature_onboarding_page3_title">Predict your spending</string>
+    <string name="feature_onboarding_page3_body">Know what is coming before the charge hits.</string>
+    <string name="feature_onboarding_page4_title">Find what you are wasting</string>
+    <string name="feature_onboarding_page4_body">Discover subscriptions you do not use enough.</string>
+    <string name="feature_onboarding_page5_title">Start your financial overview</string>
+    <string name="feature_onboarding_page5_body">Build your subscription dashboard in minutes.</string>
+
+    <string name="feature_onboarding_next">Next</string>
+    <string name="feature_onboarding_skip">Skip</string>
+    <string name="feature_onboarding_add_first">Add your first subscription</string>
+    <string name="feature_onboarding_skip_for_now">Skip for now</string>
+    <string name="feature_onboarding_reminders_hint">You can turn on charge reminders any time in Settings.</string>
+    <string name="feature_onboarding_page_indicator">Page %1$d of %2$d</string>
+
+    <string name="feature_onboarding_example_next_charge">Next charge</string>
+    <string name="feature_onboarding_example_tomorrow">Tomorrow</string>
+    <string name="feature_onboarding_example_per_month">/ month</string>
+    <string name="feature_onboarding_example_could_save">You could save</string>
+    <string name="feature_onboarding_example_low_usage">2 subscriptions with low usage</string>
+    <string name="feature_onboarding_example_next_prefix">Next: %1$s</string>
+    <string name="feature_onboarding_example_rarely_used">Rarely used</string>
+</resources>
