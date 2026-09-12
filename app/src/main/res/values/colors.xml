@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Only used by the window/splash before Compose draws. Mirrors SubzeroColors.background. -->
+    <color name="subzero_window_background">#070B14</color>
+    <color name="subzero_launcher_background">#0E1526</color>
+    <color name="subzero_launcher_accent">#5EE7FF</color>
+</resources>

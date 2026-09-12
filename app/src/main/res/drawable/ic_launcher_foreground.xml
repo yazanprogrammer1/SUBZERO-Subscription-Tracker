@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Interim launcher mark: an angular "S" in the brand accent. Final icon is a Phase 13 deliverable. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="@color/subzero_launcher_accent"
+        android:pathData="M62,28 L44,52 L54,52 L46,80 L64,56 L54,56 Z" />
+</vector>

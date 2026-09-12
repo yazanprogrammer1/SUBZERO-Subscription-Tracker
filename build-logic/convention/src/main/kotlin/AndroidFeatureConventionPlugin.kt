@@ -1,0 +1,39 @@
+import com.subzero.buildlogic.libs
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.dependencies
+
+/**
+ * A feature module: Compose UI + ViewModels for one product area.
+ * Feature modules depend on core modules only, never on each other.
+ */
+class AndroidFeatureConventionPlugin : Plugin<Project> {
+    override fun apply(target: Project) {
+        with(target) {
+            apply(plugin = "subzero.android.library")
+            apply(plugin = "subzero.android.library.compose")
+            apply(plugin = "subzero.hilt")
+
+            dependencies {
+                "implementation"(project(":core:common"))
+                "implementation"(project(":core:domain"))
+                "implementation"(project(":core:designsystem"))
+                "implementation"(project(":core:navigation"))
+
+                "implementation"(libs.findLibrary("androidx-hilt-lifecycle-viewmodel-compose").get())
+                "implementation"(libs.findLibrary("androidx-lifecycle-runtime-compose").get())
+                "implementation"(libs.findLibrary("androidx-lifecycle-viewmodel-compose").get())
+                "implementation"(libs.findLibrary("androidx-navigation3-runtime").get())
+                "implementation"(libs.findLibrary("kotlinx-coroutines-core").get())
+
+                "testImplementation"(project(":core:testing"))
+                "testImplementation"(libs.findLibrary("kotlinx-coroutines-test").get())
+                "testImplementation"(libs.findLibrary("turbine").get())
+                "androidTestImplementation"(project(":core:testing"))
+                "androidTestImplementation"(libs.findLibrary("androidx-compose-ui-test-junit4").get())
+                "debugImplementation"(libs.findLibrary("androidx-compose-ui-test-manifest").get())
+            }
+        }
+    }
+}
