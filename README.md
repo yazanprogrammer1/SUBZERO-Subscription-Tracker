@@ -8,7 +8,7 @@ cut. No accounts, no network, no bank access.
 
 ## Requirements
 
-- Android Studio (current stable) with JDK 17+ (the bundled JBR works)
+- Android Studio (current stable). The Gradle daemon runs on JDK 21 (`gradle/gradle-daemon-jvm.properties`); Gradle auto-provisions it if the Studio JBR is not found
 - Android SDK: platform 37, build-tools 37
 
 ## Build
