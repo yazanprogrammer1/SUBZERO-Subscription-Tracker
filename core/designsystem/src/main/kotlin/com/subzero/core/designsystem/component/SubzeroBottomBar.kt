@@ -1,30 +1,42 @@
 package com.subzero.core.designsystem.component
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.subzero.core.designsystem.icon.SubzeroIcons
+import com.subzero.core.designsystem.preview.PreviewTheme
+import com.subzero.core.designsystem.preview.SubzeroPreviews
 import com.subzero.core.designsystem.theme.SubzeroTheme
 
 @Immutable
@@ -35,11 +47,14 @@ data class SubzeroBottomBarItem(
     val onClick: () -> Unit,
 )
 
+private val BarMinHeight = 64.dp
+private val IndicatorWidth = 56.dp
+private val IndicatorHeight = 30.dp
+private val HideLabelsBelow = 320.dp
+
 /**
- * Bottom navigation for the five top-level destinations.
- *
- * Phase 1 baseline: correct semantics, sizing and theming. The animated active indicator
- * and refined visuals land with the full design system in Phase 3.
+ * Bottom navigation for the five top-level destinations (design-system.md §6.3, §7).
+ * A pill indicator slides between items; icon and label tint crossfade.
  */
 @Composable
 fun SubzeroBottomBar(
@@ -47,51 +62,101 @@ fun SubzeroBottomBar(
     modifier: Modifier = Modifier,
 ) {
     val colors = SubzeroTheme.colors
-    Row(
+    val motion = SubzeroTheme.motion
+    val selectedIndex = items.indexOfFirst { it.selected }.coerceAtLeast(0)
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+
+    BoxWithConstraints(
         modifier = modifier
             .fillMaxWidth()
             .background(colors.surface)
             .windowInsetsPadding(WindowInsets.navigationBars)
-            .heightIn(min = 64.dp)
-            .selectableGroup(),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically,
+            .heightIn(min = BarMinHeight),
     ) {
-        items.forEach { item ->
-            val tint = if (item.selected) colors.accent else colors.textTertiary
-            Column(
+        val showLabels = maxWidth >= HideLabelsBelow
+        val itemWidth = maxWidth / items.size
+        val indicatorTarget = itemWidth * selectedIndex + (itemWidth - IndicatorWidth) / 2
+        val indicatorOffset by animateFloatAsState(
+            targetValue = indicatorTarget.value,
+            animationSpec = motion.standardSpec(),
+            label = "navIndicator",
+        )
+
+        Box(modifier = Modifier.fillMaxWidth().height(BarMinHeight)) {
+            // The sliding pill sits behind the icons, aligned with the icon box of the column
+            // (icon 30dp + label 18dp centred in 64dp, or icon alone). Offset mirrors for RTL.
+            val indicatorTop = if (showLabels) 8.dp else (BarMinHeight - IndicatorHeight) / 2
+            Box(
                 modifier = Modifier
-                    .weight(1f)
-                    .heightIn(min = 56.dp)
-                    .selectable(
-                        selected = item.selected,
-                        onClick = item.onClick,
-                        role = Role.Tab,
+                    .padding(top = indicatorTop)
+                    .then(
+                        if (isRtl) {
+                            Modifier.align(Alignment.TopEnd).padding(end = indicatorOffset.dp)
+                        } else {
+                            Modifier.padding(start = indicatorOffset.dp)
+                        },
                     )
-                    .padding(vertical = SubzeroTheme.spacing.xs),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
+                    .size(IndicatorWidth, IndicatorHeight)
+                    .clip(SubzeroTheme.shapes.full)
+                    .background(colors.accentContainer),
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(BarMinHeight)
+                    .selectableGroup(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(imageVector = item.icon, contentDescription = null, tint = tint)
-                Text(
-                    text = item.label,
-                    style = SubzeroTheme.typography.caption,
-                    color = tint,
-                    maxLines = 1,
-                )
+                items.forEach { item ->
+                    val tint by animateColorAsState(
+                        targetValue = if (item.selected) colors.accent else colors.textTertiary,
+                        animationSpec = motion.standardSpec(),
+                        label = "navTint",
+                    )
+                    Column(
+                        modifier = Modifier
+                            .width(itemWidth)
+                            .height(BarMinHeight)
+                            .selectable(
+                                selected = item.selected,
+                                onClick = item.onClick,
+                                role = Role.Tab,
+                            )
+                            .semantics { contentDescription = item.label },
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                    ) {
+                        Box(modifier = Modifier.size(IndicatorWidth, IndicatorHeight), contentAlignment = Alignment.Center) {
+                            Icon(imageVector = item.icon, contentDescription = null, tint = tint, modifier = Modifier.size(22.dp))
+                        }
+                        if (showLabels) {
+                            Text(
+                                text = item.label,
+                                style = SubzeroTheme.typography.caption,
+                                color = tint,
+                                maxLines = 1,
+                                modifier = Modifier.padding(top = 2.dp),
+                            )
+                        }
+                    }
+                }
             }
         }
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFF070B14)
+@SubzeroPreviews
 @Composable
 private fun SubzeroBottomBarPreview() {
-    SubzeroTheme(darkTheme = true) {
+    PreviewTheme {
         SubzeroBottomBar(
             items = listOf(
-                SubzeroBottomBarItem("Home", Icons.Outlined.Home, selected = true) {},
-                SubzeroBottomBarItem("Settings", Icons.Outlined.Settings, selected = false) {},
+                SubzeroBottomBarItem("Home", SubzeroIcons.Home, selected = true) {},
+                SubzeroBottomBarItem("Subscriptions", SubzeroIcons.Subscriptions, selected = false) {},
+                SubzeroBottomBarItem("Calendar", SubzeroIcons.Calendar, selected = false) {},
+                SubzeroBottomBarItem("Insights", SubzeroIcons.Insights, selected = false) {},
+                SubzeroBottomBarItem("Settings", SubzeroIcons.Settings, selected = false) {},
             ),
         )
     }

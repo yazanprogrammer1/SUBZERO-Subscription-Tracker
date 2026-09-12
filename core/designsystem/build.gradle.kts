@@ -15,4 +15,6 @@ dependencies {
     api(libs.androidx.compose.ui.graphics)
     api(libs.androidx.compose.animation)
     api(libs.androidx.compose.ui.tooling.preview)
+    api(projects.core.domain)
+    implementation(libs.androidx.core.ktx)
 }

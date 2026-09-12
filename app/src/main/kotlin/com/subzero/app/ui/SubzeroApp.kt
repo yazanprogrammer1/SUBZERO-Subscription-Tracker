@@ -4,12 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.List
-import androidx.compose.material.icons.outlined.DateRange
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -24,6 +18,7 @@ import com.subzero.app.navigation.SubzeroNavigator
 import com.subzero.app.navigation.rememberTopLevelBackStack
 import com.subzero.core.designsystem.component.SubzeroBottomBar
 import com.subzero.core.designsystem.component.SubzeroBottomBarItem
+import com.subzero.core.designsystem.icon.SubzeroIcons
 import com.subzero.core.designsystem.theme.SubzeroTheme
 import com.subzero.core.navigation.CalendarKey
 import com.subzero.core.navigation.HomeKey
@@ -49,6 +44,7 @@ fun SubzeroApp() {
     val topLevelBackStack = rememberTopLevelBackStack(startKey = HomeKey)
     val navigator = remember(topLevelBackStack) { SubzeroNavigator(topLevelBackStack) }
     val showBottomBar = topLevelBackStack.currentKey is TopLevelKey
+    val transitions = rememberNavTransitions()
 
     CompositionLocalProvider(LocalNavigator provides navigator) {
         Column(
@@ -65,12 +61,12 @@ fun SubzeroApp() {
                         rememberViewModelStoreNavEntryDecorator(),
                     ),
                     entryProvider = entryProvider {
-                        onboardingEntry()
-                        homeEntry()
-                        subscriptionsEntries()
-                        calendarEntry()
-                        insightsEntry()
-                        settingsEntry()
+                        onboardingEntry(transitions)
+                        homeEntry(transitions)
+                        subscriptionsEntries(transitions)
+                        calendarEntry(transitions)
+                        insightsEntry(transitions)
+                        settingsEntry(transitions)
                     },
                 )
             }
@@ -79,31 +75,31 @@ fun SubzeroApp() {
                     items = listOf(
                         SubzeroBottomBarItem(
                             label = stringResource(R.string.nav_home),
-                            icon = Icons.Outlined.Home,
+                            icon = SubzeroIcons.Home,
                             selected = topLevelBackStack.topLevelKey == HomeKey,
                             onClick = { navigator.switchTab(HomeKey) },
                         ),
                         SubzeroBottomBarItem(
                             label = stringResource(R.string.nav_subscriptions),
-                            icon = Icons.AutoMirrored.Outlined.List,
+                            icon = SubzeroIcons.Subscriptions,
                             selected = topLevelBackStack.topLevelKey == SubscriptionsKey,
                             onClick = { navigator.switchTab(SubscriptionsKey) },
                         ),
                         SubzeroBottomBarItem(
                             label = stringResource(R.string.nav_calendar),
-                            icon = Icons.Outlined.DateRange,
+                            icon = SubzeroIcons.Calendar,
                             selected = topLevelBackStack.topLevelKey == CalendarKey,
                             onClick = { navigator.switchTab(CalendarKey) },
                         ),
                         SubzeroBottomBarItem(
                             label = stringResource(R.string.nav_insights),
-                            icon = Icons.Outlined.Info,
+                            icon = SubzeroIcons.Insights,
                             selected = topLevelBackStack.topLevelKey == InsightsKey,
                             onClick = { navigator.switchTab(InsightsKey) },
                         ),
                         SubzeroBottomBarItem(
                             label = stringResource(R.string.nav_settings),
-                            icon = Icons.Outlined.Settings,
+                            icon = SubzeroIcons.Settings,
                             selected = topLevelBackStack.topLevelKey == SettingsKey,
                             onClick = { navigator.switchTab(SettingsKey) },
                         ),
