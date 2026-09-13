@@ -40,3 +40,7 @@ data class SubscriptionDetailKey(val subscriptionId: String) : SubzeroNavKey
 /** `subscriptionId == null` means "add new", otherwise "edit existing". */
 @Serializable
 data class SubscriptionFormKey(val subscriptionId: String? = null) : SubzeroNavKey
+
+/** The conversational assistant, pushed over any tab. */
+@Serializable
+data object AssistantKey : SubzeroNavKey

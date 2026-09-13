@@ -20,6 +20,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -58,6 +60,7 @@ import com.subzero.core.designsystem.theme.SubzeroTheme
 import com.subzero.core.domain.insight.Insight
 import com.subzero.core.domain.model.DeclaredUsage
 import com.subzero.core.domain.model.SubscriptionId
+import com.subzero.core.navigation.AssistantKey
 import com.subzero.core.navigation.LocalNavigator
 import com.subzero.core.navigation.SubscriptionDetailKey
 import com.subzero.core.navigation.SubscriptionFormKey
@@ -68,6 +71,7 @@ enum class InsightsTab { Overview, Spending, Usage }
 internal object InsightsTestTags {
     const val EMPTY = "insights_empty"
     const val NO_INSIGHTS = "insights_none"
+    const val ASSISTANT = "insights_assistant"
     fun tab(tab: InsightsTab) = "insights_tab_${tab.name}"
     fun insight(id: String) = "insight_$id"
 }
@@ -84,6 +88,7 @@ fun InsightsRoute(viewModel: InsightsViewModel = hiltViewModel()) {
         onOpenSubscription = { navigator.navigate(SubscriptionDetailKey(it.value)) },
         onReviewSubscriptions = { navigator.switchTab(SubscriptionsKey) },
         onAdd = { navigator.navigate(SubscriptionFormKey()) },
+        onAskAssistant = { navigator.navigate(AssistantKey) },
     )
 }
 
@@ -94,6 +99,7 @@ fun InsightsScreen(
     onReviewSubscriptions: () -> Unit,
     onAdd: () -> Unit,
     modifier: Modifier = Modifier,
+    onAskAssistant: (() -> Unit)? = null,
 ) {
     val colors = SubzeroTheme.colors
     val spacing = SubzeroTheme.spacing
@@ -111,7 +117,16 @@ fun InsightsScreen(
                 .widthIn(max = ContentMaxWidth)
                 .align(Alignment.TopCenter),
         ) {
-            SubzeroTopBar(title = stringResource(R.string.feature_insights_title))
+            SubzeroTopBar(
+                title = stringResource(R.string.feature_insights_title),
+                actions = {
+                    if (onAskAssistant != null) {
+                        IconButton(onClick = onAskAssistant, modifier = Modifier.testTag(InsightsTestTags.ASSISTANT)) {
+                            Icon(SubzeroIcons.Sparkle, contentDescription = stringResource(R.string.feature_insights_ask), tint = colors.accent)
+                        }
+                    }
+                },
+            )
             when (state) {
                 InsightsUiState.Loading -> SubzeroHeroSkeleton(modifier = Modifier.padding(spacing.screen))
                 InsightsUiState.NoSubscriptions -> SubzeroEmptyState(

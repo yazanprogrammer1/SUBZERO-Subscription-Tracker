@@ -42,6 +42,7 @@ import com.subzero.core.navigation.SubscriptionDetailKey
 import com.subzero.core.navigation.SubscriptionFormKey
 import com.subzero.core.navigation.SubscriptionsKey
 import com.subzero.core.navigation.TopLevelKey
+import com.subzero.feature.assistant.assistantEntry
 import com.subzero.feature.calendar.calendarEntry
 import com.subzero.feature.home.homeEntry
 import com.subzero.feature.insights.insightsEntry
@@ -143,6 +144,7 @@ private fun MainShell(
                             calendarEntry(transitions)
                             insightsEntry(transitions)
                             settingsEntry(transitions)
+                            assistantEntry(transitions)
                         },
                     )
                 }

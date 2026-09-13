@@ -10,6 +10,7 @@ First release.
 - Payment calendar
 - Insights: yearly total, largest subscription, category concentration, low usage, price increases
 - Optional reminders before a charge, a monthly summary and a savings note — all off by default
+- SUBZERO Assistant (beta): ask about your spending in plain words, answered on-device from your data
 - Export to JSON or CSV; delete everything with one tap
 - Dark and light themes; no account, no analytics, no internet permission
 

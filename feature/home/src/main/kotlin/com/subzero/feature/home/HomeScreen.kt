@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -51,6 +53,7 @@ import com.subzero.core.designsystem.icon.SubzeroIcons
 import com.subzero.core.designsystem.theme.SubzeroTheme
 import com.subzero.core.designsystem.theme.SubzeroTone
 import com.subzero.core.domain.model.SubscriptionId
+import com.subzero.core.navigation.AssistantKey
 import com.subzero.core.navigation.LocalNavigator
 import com.subzero.core.navigation.SubscriptionDetailKey
 import com.subzero.core.navigation.SubscriptionFormKey
@@ -79,6 +82,7 @@ fun HomeRoute(viewModel: HomeViewModel = hiltViewModel()) {
         onAdd = { navigator.navigate(SubscriptionFormKey()) },
         onOpenSubscription = { navigator.navigate(SubscriptionDetailKey(it.value)) },
         onReviewSubscriptions = { navigator.switchTab(SubscriptionsKey) },
+        onAskAssistant = { navigator.navigate(AssistantKey) },
     )
 }
 
@@ -90,6 +94,7 @@ fun HomeScreen(
     onReviewSubscriptions: () -> Unit,
     modifier: Modifier = Modifier,
     clock: Clock = Clock.systemDefaultZone(),
+    onAskAssistant: (() -> Unit)? = null,
 ) {
     val colors = SubzeroTheme.colors
     val spacing = SubzeroTheme.spacing
@@ -106,6 +111,13 @@ fun HomeScreen(
         ) {
             SubzeroTopBar(
                 title = greeting(name = (state as? HomeUiState.Dashboard)?.displayName ?: (state as? HomeUiState.Empty)?.displayName, clock = clock),
+                actions = {
+                    if (onAskAssistant != null && state is HomeUiState.Dashboard) {
+                        IconButton(onClick = onAskAssistant) {
+                            Icon(SubzeroIcons.Sparkle, contentDescription = stringResource(R.string.feature_home_ask), tint = colors.accent)
+                        }
+                    }
+                },
             )
             when (state) {
                 HomeUiState.Loading -> Column(modifier = Modifier.padding(horizontal = spacing.screen)) {

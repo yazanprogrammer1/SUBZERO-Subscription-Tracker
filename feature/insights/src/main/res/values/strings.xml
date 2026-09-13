@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="feature_insights_title">Insights</string>
+    <string name="feature_insights_ask">Ask SUBZERO</string>
     <string name="feature_insights_tab_overview">Overview</string>
     <string name="feature_insights_tab_spending">Spending</string>
     <string name="feature_insights_tab_usage">Usage</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="feature_home_ask">Ask SUBZERO</string>
     <string name="feature_home_greeting_morning">Good morning</string>
     <string name="feature_home_greeting_afternoon">Good afternoon</string>
     <string name="feature_home_greeting_evening">Good evening</string>

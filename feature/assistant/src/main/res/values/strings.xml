@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_assistant_title">SUBZERO Assistant</string>
+    <string name="feature_assistant_beta">Beta</string>
+    <string name="feature_assistant_offline_note">Works offline. Answers come only from your data and never leave your phone.</string>
+    <string name="feature_assistant_welcome">Ask me about your subscriptions.</string>
+    <string name="feature_assistant_input_hint">Ask a question</string>
+    <string name="feature_assistant_send">Send</string>
+    <string name="feature_assistant_suggestion_ai">How much am I spending on AI?</string>
+    <string name="feature_assistant_suggestion_most">What costs me the most?</string>
+    <string name="feature_assistant_suggestion_cancel">What can I cancel?</string>
+    <string name="feature_assistant_suggestion_next">When is my next charge?</string>
+    <string name="feature_assistant_suggestion_total">How much do I pay per month?</string>
+    <string name="feature_assistant_suggestion_increase">Which prices went up?</string>
+
+    <!-- Answers -->
+    <string name="feature_assistant_answer_total_lead">You spend</string>
+    <plurals name="feature_assistant_answer_total_body">
+        <item quantity="one">a month across %1$d active subscription.</item>
+        <item quantity="other">a month across %1$d active subscriptions.</item>
+    </plurals>
+    <plurals name="feature_assistant_answer_category_body">
+        <item quantity="one">a month on %2$s, across %1$d subscription.</item>
+        <item quantity="other">a month on %2$s, across %1$d subscriptions.</item>
+    </plurals>
+    <string name="feature_assistant_answer_nothing_in_category">You have no active %1$s subscriptions.</string>
+    <string name="feature_assistant_answer_top">Your most expensive subscriptions, by monthly cost:</string>
+    <string name="feature_assistant_answer_cancel_lead">Based on what you told me, these get little use:</string>
+    <string name="feature_assistant_answer_cancel_body">Together they cost %1$s a month. Would you like to review them?</string>
+    <string name="feature_assistant_answer_no_cancel">Nothing stands out. You have not marked any subscription as rarely used.</string>
+    <plurals name="feature_assistant_answer_no_cancel_hint">
+        <item quantity="one">%1$d subscription has no usage info yet; tell me how often you use it and I can say more.</item>
+        <item quantity="other">%1$d subscriptions have no usage info yet; tell me how often you use them and I can say more.</item>
+    </plurals>
+    <string name="feature_assistant_answer_no_usage">I do not have enough usage data to say. Open a subscription and tell me how often you use it.</string>
+    <string name="feature_assistant_answer_next">Your next charge is %1$s, %2$s:</string>
+    <string name="feature_assistant_answer_no_upcoming">Nothing is scheduled. All your subscriptions are paused or canceled.</string>
+    <plurals name="feature_assistant_answer_upcoming">
+        <item quantity="one">%1$d charge still to come this month:</item>
+        <item quantity="other">%1$d charges still to come this month:</item>
+    </plurals>
+    <string name="feature_assistant_answer_upcoming_total">That is %1$s in total.</string>
+    <string name="feature_assistant_answer_increases">These subscriptions raised their price:</string>
+    <string name="feature_assistant_answer_increase_item">from %1$s, since %2$s</string>
+    <string name="feature_assistant_answer_no_increases">No price increases recorded.</string>
+    <plurals name="feature_assistant_answer_count">
+        <item quantity="one">You have %1$d active subscription. Categories, one example each:</item>
+        <item quantity="other">You have %1$d active subscriptions. Categories, one example each:</item>
+    </plurals>
+    <string name="feature_assistant_answer_no_subscriptions">Add a subscription first and I can answer that.</string>
+    <string name="feature_assistant_answer_unknown">I can answer questions about what you spend, by category, your most expensive subscriptions, what you rarely use, price increases and upcoming charges. Try one of these:</string>
+    <plurals name="feature_assistant_answer_foreign">
+        <item quantity="one">%1$d subscription in another currency is not included.</item>
+        <item quantity="other">%1$d subscriptions in other currencies are not included.</item>
+    </plurals>
+    <string name="feature_assistant_review">Review subscriptions</string>
+</resources>
