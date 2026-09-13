@@ -1,12 +1,20 @@
 package com.subzero.feature.settings
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.subzero.core.data.export.ExportFormat
+import com.subzero.core.data.export.DataManager
+import com.subzero.core.data.export.StorageInfo
+import com.subzero.core.domain.model.CurrencyCode
 import com.subzero.core.domain.model.NotificationPreferences
+import com.subzero.core.domain.model.ThemeMode
 import com.subzero.core.domain.model.UserPreferences
+import com.subzero.core.domain.repository.SubscriptionRepository
 import com.subzero.core.domain.repository.UserPreferencesRepository
+import com.subzero.core.notifications.NotificationLedger
 import com.subzero.core.notifications.NotificationScheduler
-import com.subzero.core.notifications.SubzeroNotifier
+import com.subzero.core.notifications.Notifier
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,8 +22,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+/** One-shot outcomes the screen shows once (snackbar-style), then clears. */
+enum class SettingsMessage { EXPORTED, EXPORT_FAILED, DATA_DELETED, DELETE_FAILED }
 
 sealed interface SettingsUiState {
     data object Loading : SettingsUiState
@@ -24,33 +36,73 @@ sealed interface SettingsUiState {
         val preferences: UserPreferences,
         /** Whether the OS currently lets SUBZERO post notifications. */
         val notificationsAllowed: Boolean,
+        val storage: StorageInfo?,
+        val appVersion: String,
+        val isBusy: Boolean = false,
+        val message: SettingsMessage? = null,
     ) : SettingsUiState {
         val anyNotificationEnabled: Boolean
             get() = preferences.notifications.let { it.upcomingChargeEnabled || it.monthlySummaryEnabled || it.savingsInsightsEnabled }
     }
 }
 
+/** App metadata the settings screen shows; provided by the app module. */
+data class AppInfo(val versionName: String)
+
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val preferences: UserPreferencesRepository,
-    private val notifier: SubzeroNotifier,
+    private val subscriptions: SubscriptionRepository,
+    private val notifier: Notifier,
     private val scheduler: NotificationScheduler,
+    private val ledger: NotificationLedger,
+    private val dataManager: DataManager,
+    appInfo: AppInfo,
 ) : ViewModel() {
 
-    private val permissionState = MutableStateFlow(notifier.areNotificationsEnabled)
+    private data class Transient(
+        val notificationsAllowed: Boolean,
+        val storage: StorageInfo? = null,
+        val isBusy: Boolean = false,
+        val message: SettingsMessage? = null,
+    )
 
-    val uiState: StateFlow<SettingsUiState> = combine(preferences.preferences, permissionState) { prefs, allowed ->
-        SettingsUiState.Ready(preferences = prefs, notificationsAllowed = allowed)
+    private val transient = MutableStateFlow(Transient(notificationsAllowed = notifier.areNotificationsEnabled))
+
+    val uiState: StateFlow<SettingsUiState> = combine(preferences.preferences, transient) { prefs, t ->
+        SettingsUiState.Ready(
+            preferences = prefs,
+            notificationsAllowed = t.notificationsAllowed,
+            storage = t.storage,
+            appVersion = appInfo.versionName,
+            isBusy = t.isBusy,
+            message = t.message,
+        )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS),
         initialValue = SettingsUiState.Loading,
     )
 
-    /** Called when the screen resumes or a permission request returns, since the OS state can change outside the app. */
-    fun refreshPermission() {
-        permissionState.value = notifier.areNotificationsEnabled
+    init {
+        refreshStorage()
     }
+
+    /** Called when the screen resumes or a permission request returns, since the OS state can change outside the app. */
+    fun refreshPermission() = transient.update { it.copy(notificationsAllowed = notifier.areNotificationsEnabled) }
+
+    fun refreshStorage() {
+        viewModelScope.launch {
+            val info = runCatching { dataManager.storageInfo() }.getOrNull()
+            transient.update { it.copy(storage = info) }
+        }
+    }
+
+    fun setDisplayName(name: String?) = viewModelScope.launch { preferences.setDisplayName(name) }
+
+    fun setHomeCurrency(currency: CurrencyCode) = viewModelScope.launch { preferences.setHomeCurrency(currency) }
+
+    fun setThemeMode(mode: ThemeMode) = viewModelScope.launch { preferences.setThemeMode(mode) }
 
     fun setUpcomingEnabled(enabled: Boolean) = updateNotifications { it.copy(upcomingChargeEnabled = enabled) }
 
@@ -60,11 +112,38 @@ class SettingsViewModel @Inject constructor(
 
     fun setSavingsInsightsEnabled(enabled: Boolean) = updateNotifications { it.copy(savingsInsightsEnabled = enabled) }
 
+    /** Writes the export to the document the user picked. */
+    fun exportTo(uri: Uri, format: ExportFormat) = busy {
+        runCatching { dataManager.writeExport(uri, format) }
+            .fold(onSuccess = { SettingsMessage.EXPORTED }, onFailure = { SettingsMessage.EXPORT_FAILED })
+    }
+
+    /** Wipes subscriptions, preferences and the notification ledger; onboarding shows again. */
+    fun deleteAllData() = busy {
+        runCatching {
+            subscriptions.deleteAll()
+            ledger.clear()
+            scheduler.cancel()
+            preferences.clear()
+        }.fold(onSuccess = { SettingsMessage.DATA_DELETED }, onFailure = { SettingsMessage.DELETE_FAILED })
+    }
+
+    fun consumeMessage() = transient.update { it.copy(message = null) }
+
     private fun updateNotifications(transform: (NotificationPreferences) -> NotificationPreferences) {
         viewModelScope.launch {
-            val updated = transform(preferences.preferences.first().notifications)
-            preferences.setNotificationPreferences(updated)
+            preferences.setNotificationPreferences(transform(preferences.preferences.first().notifications))
             scheduler.ensureScheduled()
+        }
+    }
+
+    private fun busy(block: suspend () -> SettingsMessage) {
+        if (transient.value.isBusy) return
+        transient.update { it.copy(isBusy = true, message = null) }
+        viewModelScope.launch {
+            val message = block()
+            transient.update { it.copy(isBusy = false, message = message) }
+            refreshStorage()
         }
     }
 

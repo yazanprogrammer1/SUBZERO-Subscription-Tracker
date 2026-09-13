@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.subzero.android.library)
     alias(libs.plugins.subzero.android.room)
     alias(libs.plugins.subzero.hilt)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -24,6 +25,7 @@ dependencies {
     implementation(projects.core.common)
 
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.android)
 
     testImplementation(testFixtures(projects.core.domain))

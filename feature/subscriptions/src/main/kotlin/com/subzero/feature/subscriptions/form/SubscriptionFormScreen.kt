@@ -38,6 +38,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.subzero.core.designsystem.component.SubzeroButton
 import com.subzero.core.designsystem.component.SubzeroButtonStyle
 import com.subzero.core.designsystem.component.SubzeroChip
+import com.subzero.core.designsystem.component.SubzeroCurrencySheet
 import com.subzero.core.designsystem.component.SubzeroErrorState
 import com.subzero.core.designsystem.component.SubzeroHeroSkeleton
 import com.subzero.core.designsystem.component.SubzeroSwitch
@@ -277,7 +278,7 @@ private fun FormContent(state: SubscriptionFormState, actions: FormActions, onBa
     }
 
     if (showCurrency) {
-        CurrencySheet(selected = state.currency, onSelect = { actions.onCurrency(it); showCurrency = false }, onDismiss = { showCurrency = false })
+        SubzeroCurrencySheet(selected = state.currency, onSelect = { actions.onCurrency(it); showCurrency = false }, onDismiss = { showCurrency = false })
     }
     if (showNextDatePicker) {
         SubzeroDatePickerDialog(initial = state.nextPaymentDate, onConfirm = actions.onNextDate, onDismiss = { showNextDatePicker = false })

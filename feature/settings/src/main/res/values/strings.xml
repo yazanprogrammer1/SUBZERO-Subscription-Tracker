@@ -18,5 +18,47 @@
     <string name="feature_settings_summary_body">On the 1st: what you spent last month.</string>
     <string name="feature_settings_savings_title">Savings insights</string>
     <string name="feature_settings_savings_body">Once a month, if you could save something based on what you told us.</string>
-    <string name="feature_settings_more_soon">Profile, currency, appearance, privacy and data options arrive in the next update.</string>
+
+    <!-- Profile -->
+    <string name="feature_settings_profile">Profile</string>
+    <string name="feature_settings_name">Your name</string>
+    <string name="feature_settings_name_hint">Used for the greeting only</string>
+    <string name="feature_settings_name_save">Save</string>
+
+    <!-- Currency and appearance -->
+    <string name="feature_settings_preferences">Preferences</string>
+    <string name="feature_settings_currency">Home currency</string>
+    <string name="feature_settings_currency_body">Totals are shown in this currency. Subscriptions in other currencies are listed but not added up.</string>
+    <string name="feature_settings_appearance">Appearance</string>
+    <string name="feature_settings_theme_system">System</string>
+    <string name="feature_settings_theme_dark">Dark</string>
+    <string name="feature_settings_theme_light">Light</string>
+
+    <!-- Privacy -->
+    <string name="feature_settings_privacy">Privacy &amp; security</string>
+    <string name="feature_settings_privacy_body">Everything you enter stays on this device. SUBZERO has no account, no analytics and no internet permission. Your data is included in your Android backup, encrypted by Google.</string>
+
+    <!-- Data -->
+    <string name="feature_settings_data">Data &amp; storage</string>
+    <plurals name="feature_settings_storage_line">
+        <item quantity="one">%1$d subscription · %2$s on device</item>
+        <item quantity="other">%1$d subscriptions · %2$s on device</item>
+    </plurals>
+    <string name="feature_settings_export">Export data</string>
+    <string name="feature_settings_export_body">Save a copy you own. JSON keeps everything; CSV opens in spreadsheets.</string>
+    <string name="feature_settings_export_json">Export JSON</string>
+    <string name="feature_settings_export_csv">Export CSV</string>
+    <string name="feature_settings_delete_all">Delete all data</string>
+    <string name="feature_settings_delete_all_title">Delete everything?</string>
+    <string name="feature_settings_delete_all_message">All subscriptions, history and settings on this device will be removed. This cannot be undone.</string>
+    <string name="feature_settings_message_exported">Export saved.</string>
+    <string name="feature_settings_message_export_failed">The export could not be saved.</string>
+    <string name="feature_settings_message_deleted">All data deleted.</string>
+    <string name="feature_settings_message_delete_failed">Your data could not be deleted.</string>
+
+    <!-- About -->
+    <string name="feature_settings_about">About</string>
+    <string name="feature_settings_version">SUBZERO %1$s</string>
+    <string name="feature_settings_tagline">Know what you pay. Before it charges you.</string>
+    <string name="feature_settings_licenses">Inter typeface by Rasmus Andersson, SIL Open Font License 1.1.</string>
 </resources>

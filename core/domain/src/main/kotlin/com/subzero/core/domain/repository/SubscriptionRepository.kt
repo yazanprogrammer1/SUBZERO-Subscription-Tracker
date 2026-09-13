@@ -30,6 +30,9 @@ interface SubscriptionRepository {
     /** Deletes the subscription and everything that references it. */
     suspend fun deleteSubscription(id: SubscriptionId)
 
+    /** Wipes every subscription, price change and payment record. */
+    suspend fun deleteAll()
+
     fun observePriceHistory(id: SubscriptionId): Flow<List<PriceChange>>
 
     suspend fun getPriceHistory(id: SubscriptionId): List<PriceChange>

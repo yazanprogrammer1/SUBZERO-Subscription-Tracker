@@ -7,6 +7,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.data)
     implementation(projects.core.notifications)
     implementation(libs.androidx.activity.compose)
 }

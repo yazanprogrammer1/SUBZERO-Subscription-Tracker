@@ -113,4 +113,7 @@
     <string name="core_designsystem_insight_price_body">From %1$s to %2$s, a %3$s%% increase.</string>
     <string name="core_designsystem_insight_large_title">A large charge is coming: %1$s.</string>
     <string name="core_designsystem_insight_large_body">%1$s charges %2$s.</string>
+
+    <string name="core_designsystem_currency_title">Choose currency</string>
+    <string name="core_designsystem_currency_search">Search currencies</string>
 </resources>

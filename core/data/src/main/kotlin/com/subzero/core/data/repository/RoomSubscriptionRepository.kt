@@ -57,6 +57,10 @@ class RoomSubscriptionRepository @Inject constructor(
         dao.deleteById(id.value)
     }
 
+    override suspend fun deleteAll() = withContext(ioDispatcher) {
+        dao.deleteAll()
+    }
+
     override fun observePriceHistory(id: SubscriptionId): Flow<List<PriceChange>> =
         dao.observePriceChanges(id.value).map { list -> list.map { it.toDomain() } }.flowOn(ioDispatcher)
 

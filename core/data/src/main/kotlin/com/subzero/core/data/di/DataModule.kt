@@ -11,6 +11,8 @@ import com.subzero.core.common.coroutines.Dispatcher
 import com.subzero.core.common.coroutines.SubzeroDispatcher
 import com.subzero.core.data.database.SubzeroDatabase
 import com.subzero.core.data.database.dao.SubscriptionDao
+import com.subzero.core.data.export.DataManager
+import com.subzero.core.data.export.LocalDataManager
 import com.subzero.core.data.preferences.DataStoreUserPreferencesRepository
 import com.subzero.core.data.repository.RoomSubscriptionRepository
 import com.subzero.core.domain.repository.SubscriptionRepository
@@ -35,6 +37,9 @@ internal abstract class DataModule {
 
     @Binds
     abstract fun bindsUserPreferencesRepository(impl: DataStoreUserPreferencesRepository): UserPreferencesRepository
+
+    @Binds
+    abstract fun bindsDataManager(impl: LocalDataManager): DataManager
 
     companion object {
 

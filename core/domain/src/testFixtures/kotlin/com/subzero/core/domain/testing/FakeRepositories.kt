@@ -65,6 +65,12 @@ class FakeSubscriptionRepository : SubscriptionRepository {
         payments.update { list -> list.filterNot { it.subscriptionId == id } }
     }
 
+    override suspend fun deleteAll() {
+        subscriptions.value = emptyMap()
+        priceChanges.value = emptyList()
+        payments.value = emptyList()
+    }
+
     override fun observePriceHistory(id: SubscriptionId): Flow<List<PriceChange>> =
         priceChanges.map { list -> list.filter { it.subscriptionId == id }.sortedBy { it.effectiveFrom } }
 
