@@ -1,11 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Interim launcher mark: an angular "S" in the brand accent. Final icon is a Phase 13 deliverable. -->
+<!-- The SUBZERO bolt inside the 66dp safe zone, accent gradient over a soft glow disc. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+    <path android:pathData="M54,54 m-30,0 a30,30 0 1,0 60,0 a30,30 0 1,0 -60,0">
+        <aapt:attr xmlns:aapt="http://schemas.android.com/aapt" name="android:fillColor">
+            <gradient
+                android:centerX="54" android:centerY="54"
+                android:gradientRadius="30"
+                android:type="radial">
+                <item android:offset="0" android:color="#665EE7FF" />
+                <item android:offset="0.6" android:color="#1A5EE7FF" />
+                <item android:offset="1" android:color="#005EE7FF" />
+            </gradient>
+        </aapt:attr>
+    </path>
     <path
-        android:fillColor="@color/subzero_launcher_accent"
-        android:pathData="M62,28 L44,52 L54,52 L46,80 L64,56 L54,56 Z" />
+        android:pathData="M59.6,31.8 L45.2,52.9 L53.6,52.9 L47.6,76.2 L62.4,54.9 L54,54.9 Z"
+        android:strokeColor="#FF7FEFFF"
+        android:strokeWidth="1.2"
+        android:strokeLineJoin="round">
+        <aapt:attr xmlns:aapt="http://schemas.android.com/aapt" name="android:fillColor">
+            <gradient
+                android:startX="48" android:startY="32"
+                android:endX="60" android:endY="76"
+                android:type="linear">
+                <item android:offset="0" android:color="#FF5EE7FF" />
+                <item android:offset="1" android:color="#FF4DA3FF" />
+            </gradient>
+        </aapt:attr>
+    </path>
 </vector>

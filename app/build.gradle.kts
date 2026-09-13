@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.subzero.android.application)
     alias(libs.plugins.subzero.android.application.compose)
@@ -5,13 +7,38 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+// Release signing comes from an untracked keystore.properties (see keystore.properties.example)
+// or from CI environment variables. Without either, release builds stay unsigned.
+val keystoreProperties: Properties? = rootProject.file("keystore.properties")
+    .takeIf { it.exists() }
+    ?.let { file -> Properties().apply { file.inputStream().use(::load) } }
+    ?: System.getenv("SUBZERO_KEYSTORE_PATH")?.let { path ->
+        Properties().apply {
+            setProperty("storeFile", path)
+            setProperty("storePassword", System.getenv("SUBZERO_KEYSTORE_PASSWORD").orEmpty())
+            setProperty("keyAlias", System.getenv("SUBZERO_KEY_ALIAS").orEmpty())
+            setProperty("keyPassword", System.getenv("SUBZERO_KEY_PASSWORD").orEmpty())
+        }
+    }
+
 android {
     namespace = "com.subzero.app"
 
     defaultConfig {
         applicationId = "com.subzero.app"
         versionCode = 1
-        versionName = "0.1.0"
+        versionName = "1.0.0"
+    }
+
+    signingConfigs {
+        if (keystoreProperties != null) {
+            create("release") {
+                storeFile = rootProject.file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
+        }
     }
 
     buildTypes {
@@ -25,7 +52,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            // Signing is configured in Phase 13 from a keystore that never enters the repo.
+            signingConfig = if (keystoreProperties != null) signingConfigs.getByName("release") else null
         }
     }
 

@@ -23,6 +23,8 @@ The first build downloads Gradle 9.7.1 and all dependencies.
 
 ## Structure
 
+Release process: [docs/release/runbook.md](docs/release/runbook.md). QA: [docs/qa/device-checklist.md](docs/qa/device-checklist.md).
+
 See [docs/architecture/00-kickoff.md](docs/architecture/00-kickoff.md) for the architecture,
 module layout, data model, decisions and roadmap.
 
