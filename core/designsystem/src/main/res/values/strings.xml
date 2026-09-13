@@ -84,4 +84,33 @@
         <item quantity="one">%d day ago</item>
         <item quantity="other">%d days ago</item>
     </plurals>
+
+    <!-- Insight wording. Careful phrasing: data-backed observations, never instructions to cancel. -->
+    <string name="core_designsystem_insight_yearly_title">You spend %1$s a year on subscriptions.</string>
+    <plurals name="core_designsystem_insight_yearly_body">
+        <item quantity="one">That is %1$s a month across %2$d active subscription.</item>
+        <item quantity="other">That is %1$s a month across %2$d active subscriptions.</item>
+    </plurals>
+    <string name="core_designsystem_insight_largest_title">%1$s is your largest subscription.</string>
+    <string name="core_designsystem_insight_largest_body">%1$s a year, about %2$d%% of everything you pay.</string>
+    <plurals name="core_designsystem_insight_category_title">
+        <item quantity="one">You pay for %1$d %2$s subscription.</item>
+        <item quantity="other">You pay for %1$d %2$s subscriptions.</item>
+    </plurals>
+    <string name="core_designsystem_insight_category_body">%1$s a month together.</string>
+    <plurals name="core_designsystem_insight_category_body_rarely">
+        <item quantity="one">%1$s a month together. You said you rarely use %2$d of them.</item>
+        <item quantity="other">%1$s a month together. You said you rarely use %2$d of them.</item>
+    </plurals>
+    <string name="core_designsystem_insight_low_usage_title">You rarely use %1$s.</string>
+    <string name="core_designsystem_insight_low_usage_body">Based on what you told us, it costs %1$s a year. Worth a review?</string>
+    <string name="core_designsystem_insight_savings_title">You could save about %1$s a month.</string>
+    <plurals name="core_designsystem_insight_savings_body">
+        <item quantity="one">%1$d subscription you rarely use adds up to %2$s a year.</item>
+        <item quantity="other">%1$d subscriptions you rarely use add up to %2$s a year.</item>
+    </plurals>
+    <string name="core_designsystem_insight_price_title">%1$s increased its price.</string>
+    <string name="core_designsystem_insight_price_body">From %1$s to %2$s, a %3$s%% increase.</string>
+    <string name="core_designsystem_insight_large_title">A large charge is coming: %1$s.</string>
+    <string name="core_designsystem_insight_large_body">%1$s charges %2$s.</string>
 </resources>

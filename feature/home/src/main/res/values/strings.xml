@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_home_greeting_morning">Good morning</string>
+    <string name="feature_home_greeting_afternoon">Good afternoon</string>
+    <string name="feature_home_greeting_evening">Good evening</string>
+    <string name="feature_home_greeting_named">%1$s, %2$s</string>
+    <string name="feature_home_monthly_spending">Monthly spending</string>
+    <string name="feature_home_per_month">per month</string>
+    <string name="feature_home_per_year">%1$s / year</string>
+    <plurals name="feature_home_active_count">
+        <item quantity="one">%1$d active subscription</item>
+        <item quantity="other">%1$d active subscriptions</item>
+    </plurals>
+    <plurals name="feature_home_foreign_excluded">
+        <item quantity="one">%1$d subscription in another currency is not included.</item>
+        <item quantity="other">%1$d subscriptions in other currencies are not included.</item>
+    </plurals>
+    <string name="feature_home_upcoming">Upcoming</string>
+    <string name="feature_home_next_charge">Next charge</string>
+    <string name="feature_home_no_upcoming">Nothing scheduled. All your subscriptions are paused or canceled.</string>
+    <string name="feature_home_see_all">See all</string>
+    <string name="feature_home_spending_overview">Spending overview</string>
+    <string name="feature_home_this_month">This month</string>
+    <string name="feature_home_vs_last_month">vs last month</string>
+    <string name="feature_home_change_up">+%1$s%%</string>
+    <string name="feature_home_change_down">−%1$s%%</string>
+    <string name="feature_home_change_none">No change</string>
+    <string name="feature_home_change_new">First month</string>
+    <string name="feature_home_projected_note">Includes %1$s still scheduled this month.</string>
+    <plurals name="feature_home_trend_chart">
+        <item quantity="one">Monthly spending over the last %1$d month, this month %2$s</item>
+        <item quantity="other">Monthly spending over the last %1$d months, this month %2$s</item>
+    </plurals>
+    <string name="feature_home_savings_title">Potential savings</string>
+    <plurals name="feature_home_savings_detail">
+        <item quantity="one">Based on %1$d subscription you said you rarely use.</item>
+        <item quantity="other">Based on %1$d subscriptions you said you rarely use.</item>
+    </plurals>
+    <string name="feature_home_savings_none_title">No savings spotted yet</string>
+    <string name="feature_home_savings_none_body">Tell SUBZERO how often you use each subscription and it will look for savings.</string>
+    <string name="feature_home_insight">Smart insight</string>
+    <string name="feature_home_review">Review subscriptions</string>
+    <string name="feature_home_empty_title">Your recurring spending starts here.</string>
+    <string name="feature_home_empty_body">Add your first subscription and SUBZERO will build your dashboard.</string>
+    <string name="feature_home_add">Add subscription</string>
+</resources>

@@ -64,6 +64,12 @@ class RoomSubscriptionRepository @Inject constructor(
         dao.getPriceChanges(id.value).map { it.toDomain() }
     }
 
+    override fun observeAllPriceChanges(): Flow<List<PriceChange>> =
+        dao.observeAllPriceChanges().map { list -> list.map { it.toDomain() } }.flowOn(ioDispatcher)
+
+    override fun observePaymentRecordsBetween(from: LocalDate, to: LocalDate): Flow<List<PaymentRecord>> =
+        dao.observePaymentRecordsBetween(from, to).map { list -> list.map { it.toDomain() } }.flowOn(ioDispatcher)
+
     override fun observePaymentRecords(id: SubscriptionId): Flow<List<PaymentRecord>> =
         dao.observePaymentRecords(id.value).map { list -> list.map { it.toDomain() } }.flowOn(ioDispatcher)
 

@@ -71,6 +71,12 @@ class FakeSubscriptionRepository : SubscriptionRepository {
     override suspend fun getPriceHistory(id: SubscriptionId): List<PriceChange> =
         priceChanges.value.filter { it.subscriptionId == id }.sortedBy { it.effectiveFrom }
 
+    override fun observeAllPriceChanges(): Flow<List<PriceChange>> =
+        priceChanges.map { list -> list.sortedBy { it.effectiveFrom } }
+
+    override fun observePaymentRecordsBetween(from: LocalDate, to: LocalDate): Flow<List<PaymentRecord>> =
+        payments.map { list -> list.filter { it.paidOn in from..to }.sortedBy { it.paidOn } }
+
     override fun observePaymentRecords(id: SubscriptionId): Flow<List<PaymentRecord>> =
         payments.map { list -> list.filter { it.subscriptionId == id }.sortedBy { it.paidOn } }
 

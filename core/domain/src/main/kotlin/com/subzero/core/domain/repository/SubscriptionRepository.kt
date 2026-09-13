@@ -34,7 +34,13 @@ interface SubscriptionRepository {
 
     suspend fun getPriceHistory(id: SubscriptionId): List<PriceChange>
 
+    /** Every price change across subscriptions, for insights that look at history. */
+    fun observeAllPriceChanges(): Flow<List<PriceChange>>
+
     fun observePaymentRecords(id: SubscriptionId): Flow<List<PaymentRecord>>
+
+    /** All payment records with [PaymentRecord.paidOn] in the closed range, across subscriptions, as they change. */
+    fun observePaymentRecordsBetween(from: LocalDate, to: LocalDate): Flow<List<PaymentRecord>>
 
     suspend fun getPaymentRecords(id: SubscriptionId): List<PaymentRecord>
 

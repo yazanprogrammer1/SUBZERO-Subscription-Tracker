@@ -51,6 +51,9 @@ interface SubscriptionDao {
     @Query("SELECT * FROM price_changes WHERE subscription_id = :subscriptionId ORDER BY effective_from ASC")
     suspend fun getPriceChanges(subscriptionId: String): List<PriceChangeEntity>
 
+    @Query("SELECT * FROM price_changes ORDER BY effective_from ASC")
+    fun observeAllPriceChanges(): Flow<List<PriceChangeEntity>>
+
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertPriceChange(priceChange: PriceChangeEntity)
 
@@ -64,6 +67,9 @@ interface SubscriptionDao {
 
     @Query("SELECT * FROM payment_records WHERE paid_on BETWEEN :from AND :to ORDER BY paid_on ASC")
     suspend fun getPaymentRecordsBetween(from: LocalDate, to: LocalDate): List<PaymentRecordEntity>
+
+    @Query("SELECT * FROM payment_records WHERE paid_on BETWEEN :from AND :to ORDER BY paid_on ASC")
+    fun observePaymentRecordsBetween(from: LocalDate, to: LocalDate): Flow<List<PaymentRecordEntity>>
 
     /** Ignores rows that collide on the unique (subscription_id, paid_on) index. */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
