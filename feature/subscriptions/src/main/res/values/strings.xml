@@ -73,4 +73,33 @@
     <string name="feature_subscriptions_form_saved_added">Subscription added</string>
     <string name="feature_subscriptions_form_saved_updated">Changes saved</string>
     <string name="feature_subscriptions_form_saved_next">Next charge: %1$s</string>
+
+    <!-- Detail -->
+    <string name="feature_subscriptions_detail_edit">Edit</string>
+    <string name="feature_subscriptions_detail_next_payment">Next payment</string>
+    <string name="feature_subscriptions_detail_equivalent">%1$s / month  ·  %2$s / year</string>
+    <string name="feature_subscriptions_detail_history_title">Spending history</string>
+    <string name="feature_subscriptions_detail_history_subtitle">Last 12 months</string>
+    <string name="feature_subscriptions_detail_history_total">Total spent</string>
+    <string name="feature_subscriptions_detail_history_estimated">Includes estimates from before you added it</string>
+    <string name="feature_subscriptions_detail_history_empty">No charges recorded yet.</string>
+    <string name="feature_subscriptions_detail_history_chart">Spending per month over the last 12 months, total %1$s</string>
+    <string name="feature_subscriptions_detail_price_title">Price history</string>
+    <string name="feature_subscriptions_detail_price_current">Current</string>
+    <string name="feature_subscriptions_detail_price_since">Since %1$s</string>
+    <string name="feature_subscriptions_detail_price_no_changes">No price changes yet.</string>
+    <string name="feature_subscriptions_detail_usage_title">How often do you use it?</string>
+    <string name="feature_subscriptions_detail_usage_help">Your answer feeds the savings insights. Nothing is tracked automatically.</string>
+    <string name="feature_subscriptions_detail_notes_title">Notes</string>
+    <string name="feature_subscriptions_detail_pause">Pause</string>
+    <string name="feature_subscriptions_detail_resume">Resume</string>
+    <string name="feature_subscriptions_detail_mark_canceled">Mark as canceled</string>
+    <string name="feature_subscriptions_detail_delete">Delete</string>
+    <string name="feature_subscriptions_detail_delete_title">Delete %1$s?</string>
+    <string name="feature_subscriptions_detail_delete_message">This removes the subscription and its history. This cannot be undone.</string>
+    <string name="feature_subscriptions_detail_cancel_title">Mark %1$s as canceled?</string>
+    <string name="feature_subscriptions_detail_cancel_message">SUBZERO stops counting it and will not remind you about it. You can resume it any time.</string>
+    <string name="feature_subscriptions_detail_action_failed">That change could not be saved.</string>
+    <string name="feature_subscriptions_detail_status_paused_help">Paused: not counted in totals and no reminders.</string>
+    <string name="feature_subscriptions_detail_status_canceled_help">Canceled: kept for your records only.</string>
 </resources>

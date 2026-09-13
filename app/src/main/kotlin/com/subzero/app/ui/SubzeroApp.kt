@@ -1,6 +1,8 @@
 package com.subzero.app.ui
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
@@ -26,6 +28,7 @@ import com.subzero.app.MainUiState
 import com.subzero.app.R
 import com.subzero.app.navigation.SubzeroNavigator
 import com.subzero.app.navigation.rememberTopLevelBackStack
+import com.subzero.core.designsystem.component.LocalSharedTransitionScope
 import com.subzero.core.designsystem.component.SubzeroBottomBar
 import com.subzero.core.designsystem.component.SubzeroBottomBarItem
 import com.subzero.core.designsystem.icon.SubzeroIcons
@@ -87,6 +90,7 @@ fun SubzeroApp(uiState: MainUiState) {
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun MainShell(
     openAddSubscription: Boolean,
@@ -106,23 +110,26 @@ private fun MainShell(
 
     CompositionLocalProvider(LocalNavigator provides navigator) {
         Column(modifier = Modifier.fillMaxSize()) {
-            Box(modifier = Modifier.weight(1f)) {
-                NavDisplay(
-                    backStack = topLevelBackStack.backStack,
-                    onBack = { topLevelBackStack.pop() },
-                    entryDecorators = listOf(
-                        rememberSaveableStateHolderNavEntryDecorator(),
-                        rememberViewModelStoreNavEntryDecorator(),
-                    ),
-                    entryProvider = entryProvider {
-                        onboardingEntry(transitions, onFinished = { topLevelBackStack.pop() })
-                        homeEntry(transitions)
-                        subscriptionsEntries(transitions)
-                        calendarEntry(transitions)
-                        insightsEntry(transitions)
-                        settingsEntry(transitions)
-                    },
-                )
+            SharedTransitionLayout(modifier = Modifier.weight(1f)) {
+                CompositionLocalProvider(LocalSharedTransitionScope provides this) {
+                    NavDisplay(
+                        backStack = topLevelBackStack.backStack,
+                        onBack = { topLevelBackStack.pop() },
+                        entryDecorators = listOf(
+                            rememberSaveableStateHolderNavEntryDecorator(),
+                            rememberViewModelStoreNavEntryDecorator(),
+                        ),
+                        sharedTransitionScope = this,
+                        entryProvider = entryProvider {
+                            onboardingEntry(transitions, onFinished = { topLevelBackStack.pop() })
+                            homeEntry(transitions)
+                            subscriptionsEntries(transitions)
+                            calendarEntry(transitions)
+                            insightsEntry(transitions)
+                            settingsEntry(transitions)
+                        },
+                    )
+                }
             }
             if (showBottomBar) {
                 SubzeroBottomBar(
