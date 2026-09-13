@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_settings_title">Settings</string>
+    <string name="feature_settings_notifications">Notifications</string>
+    <string name="feature_settings_notifications_intro">SUBZERO only notifies you about what you turn on here. Nothing is on by default.</string>
+    <string name="feature_settings_notifications_permission_title">Notifications are turned off for SUBZERO</string>
+    <string name="feature_settings_notifications_permission_body">Allow notifications to receive the reminders you enable below.</string>
+    <string name="feature_settings_notifications_allow">Allow notifications</string>
+    <string name="feature_settings_notifications_open_settings">Open system settings</string>
+    <string name="feature_settings_upcoming_title">Upcoming charges</string>
+    <string name="feature_settings_upcoming_body">A reminder before a subscription charges you.</string>
+    <string name="feature_settings_upcoming_days">Remind me</string>
+    <plurals name="feature_settings_days_before">
+        <item quantity="one">%d day before</item>
+        <item quantity="other">%d days before</item>
+    </plurals>
+    <string name="feature_settings_summary_title">Monthly summary</string>
+    <string name="feature_settings_summary_body">On the 1st: what you spent last month.</string>
+    <string name="feature_settings_savings_title">Savings insights</string>
+    <string name="feature_settings_savings_body">Once a month, if you could save something based on what you told us.</string>
+    <string name="feature_settings_more_soon">Profile, currency, appearance, privacy and data options arrive in the next update.</string>
+</resources>

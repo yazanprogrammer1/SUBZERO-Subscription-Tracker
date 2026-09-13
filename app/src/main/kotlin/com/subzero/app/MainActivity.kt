@@ -1,5 +1,6 @@
 package com.subzero.app
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,6 +13,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.subzero.app.ui.SubzeroApp
 import com.subzero.core.designsystem.theme.SubzeroTheme
 import com.subzero.core.domain.model.ThemeMode
+import com.subzero.core.notifications.NotificationDeepLink
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,8 +27,10 @@ class MainActivity : ComponentActivity() {
         // Hold the splash until preferences are read so onboarding never flashes behind Home.
         splash.setKeepOnScreenCondition { viewModel.uiState.value is MainUiState.Loading }
         enableEdgeToEdge()
+        viewModel.openSubscription(NotificationDeepLink.subscriptionIdFrom(intent))
         setContent {
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val pendingSubscriptionId by viewModel.pendingSubscriptionId.collectAsStateWithLifecycle()
             val themeMode = (uiState as? MainUiState.Ready)?.themeMode ?: ThemeMode.SYSTEM
             val darkTheme = when (themeMode) {
                 ThemeMode.SYSTEM -> isSystemInDarkTheme()
@@ -34,8 +38,17 @@ class MainActivity : ComponentActivity() {
                 ThemeMode.LIGHT -> false
             }
             SubzeroTheme(darkTheme = darkTheme) {
-                SubzeroApp(uiState = uiState)
+                SubzeroApp(
+                    uiState = uiState,
+                    pendingSubscriptionId = pendingSubscriptionId,
+                    onPendingSubscriptionOpened = viewModel::consumePendingSubscription,
+                )
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        viewModel.openSubscription(NotificationDeepLink.subscriptionIdFrom(intent))
     }
 }

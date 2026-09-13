@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Reminders are opt-in; the app asks for this at the moment the user enables them. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+</manifest>

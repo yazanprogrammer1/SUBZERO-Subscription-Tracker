@@ -39,6 +39,7 @@ include(":core:domain")
 include(":core:data")
 include(":core:designsystem")
 include(":core:navigation")
+include(":core:notifications")
 include(":core:testing")
 
 include(":feature:onboarding")

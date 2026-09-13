@@ -6,8 +6,10 @@ import com.subzero.core.common.coroutines.ApplicationScope
 import com.subzero.core.domain.model.ThemeMode
 import com.subzero.core.domain.repository.UserPreferencesRepository
 import com.subzero.core.domain.usecase.RollForwardBillingDatesUseCase
+import com.subzero.core.notifications.NotificationScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -29,8 +31,14 @@ sealed interface MainUiState {
 class MainViewModel @Inject constructor(
     preferences: UserPreferencesRepository,
     rollForwardBillingDates: RollForwardBillingDatesUseCase,
+    notificationScheduler: NotificationScheduler,
     @ApplicationScope applicationScope: CoroutineScope,
 ) : ViewModel() {
+
+    private val _pendingSubscriptionId = MutableStateFlow<String?>(null)
+
+    /** A subscription to open once the shell exists, e.g. from a notification tap. */
+    val pendingSubscriptionId: StateFlow<String?> = _pendingSubscriptionId
 
     val uiState: StateFlow<MainUiState> = preferences.preferences
         .map { MainUiState.Ready(onboardingCompleted = it.onboardingCompleted, themeMode = it.themeMode) }
@@ -44,6 +52,15 @@ class MainViewModel @Inject constructor(
         // Bring billing dates up to date on every launch. Runs in the application scope so a
         // quick process death does not leave a half-applied rollover behind a cancelled job.
         applicationScope.launch { rollForwardBillingDates() }
+        notificationScheduler.ensureScheduled()
+    }
+
+    fun openSubscription(id: String?) {
+        if (id != null) _pendingSubscriptionId.value = id
+    }
+
+    fun consumePendingSubscription() {
+        _pendingSubscriptionId.value = null
     }
 
     private companion object {

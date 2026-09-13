@@ -38,6 +38,7 @@ import com.subzero.core.navigation.HomeKey
 import com.subzero.core.navigation.InsightsKey
 import com.subzero.core.navigation.LocalNavigator
 import com.subzero.core.navigation.SettingsKey
+import com.subzero.core.navigation.SubscriptionDetailKey
 import com.subzero.core.navigation.SubscriptionFormKey
 import com.subzero.core.navigation.SubscriptionsKey
 import com.subzero.core.navigation.TopLevelKey
@@ -55,7 +56,11 @@ import com.subzero.feature.subscriptions.subscriptionsEntries
  * (Navigation 3 display + bottom navigation). Switching between them fades through.
  */
 @Composable
-fun SubzeroApp(uiState: MainUiState) {
+fun SubzeroApp(
+    uiState: MainUiState,
+    pendingSubscriptionId: String? = null,
+    onPendingSubscriptionOpened: () -> Unit = {},
+) {
     // Set when the user chose "Add your first subscription"; consumed by the shell once it exists.
     var pendingAddSubscription by rememberSaveable { mutableStateOf(false) }
     val motion = SubzeroTheme.motion
@@ -77,6 +82,8 @@ fun SubzeroApp(uiState: MainUiState) {
                     MainShell(
                         openAddSubscription = pendingAddSubscription,
                         onAddSubscriptionOpened = { pendingAddSubscription = false },
+                        openSubscriptionId = pendingSubscriptionId,
+                        onSubscriptionOpened = onPendingSubscriptionOpened,
                     )
                 } else {
                     OnboardingRoute(
@@ -95,6 +102,8 @@ fun SubzeroApp(uiState: MainUiState) {
 private fun MainShell(
     openAddSubscription: Boolean,
     onAddSubscriptionOpened: () -> Unit,
+    openSubscriptionId: String?,
+    onSubscriptionOpened: () -> Unit,
 ) {
     val topLevelBackStack = rememberTopLevelBackStack(startKey = HomeKey)
     val navigator = remember(topLevelBackStack) { SubzeroNavigator(topLevelBackStack) }
@@ -105,6 +114,13 @@ private fun MainShell(
         if (openAddSubscription) {
             navigator.navigate(SubscriptionFormKey())
             onAddSubscriptionOpened()
+        }
+    }
+    LaunchedEffect(openSubscriptionId) {
+        if (openSubscriptionId != null) {
+            navigator.switchTab(SubscriptionsKey)
+            navigator.navigate(SubscriptionDetailKey(openSubscriptionId))
+            onSubscriptionOpened()
         }
     }
 

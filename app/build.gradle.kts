@@ -40,6 +40,7 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.designsystem)
     implementation(projects.core.navigation)
+    implementation(projects.core.notifications)
 
     implementation(projects.feature.onboarding)
     implementation(projects.feature.home)
@@ -57,6 +58,9 @@ dependencies {
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)
 

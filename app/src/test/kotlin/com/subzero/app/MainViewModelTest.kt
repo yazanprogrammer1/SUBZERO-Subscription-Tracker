@@ -9,6 +9,7 @@ import com.subzero.core.domain.testing.date
 import com.subzero.core.domain.testing.fixedClock
 import com.subzero.core.domain.testing.subscription
 import com.subzero.core.domain.usecase.RollForwardBillingDatesUseCase
+import com.subzero.core.notifications.NotificationScheduler
 import com.subzero.core.testing.rule.MainDispatcherRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -22,10 +23,16 @@ class MainViewModelTest {
     private val preferences = FakeUserPreferencesRepository()
     private val subscriptions = FakeSubscriptionRepository()
     private val clock = fixedClock(date("2026-09-12"))
+    private val scheduler = object : NotificationScheduler {
+        var scheduled = 0
+        override fun ensureScheduled() { scheduled++ }
+        override fun cancel() = Unit
+    }
 
     private fun viewModel() = MainViewModel(
         preferences = preferences,
         rollForwardBillingDates = RollForwardBillingDatesUseCase(subscriptions, clock),
+        notificationScheduler = scheduler,
         applicationScope = kotlinx.coroutines.CoroutineScope(mainDispatcherRule.testDispatcher),
     )
 
@@ -54,5 +61,6 @@ class MainViewModelTest {
 
         assertThat(subscriptions.paymentsSnapshot).hasSize(1)
         assertThat(subscriptions.subscriptionsSnapshot.single().nextBillingDate).isEqualTo(date("2026-10-12"))
+        assertThat(scheduler.scheduled).isEqualTo(1)
     }
 }

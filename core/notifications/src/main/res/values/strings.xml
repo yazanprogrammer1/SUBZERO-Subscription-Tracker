@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="core_notifications_channel_upcoming">Upcoming charges</string>
+    <string name="core_notifications_channel_upcoming_description">Reminders before a subscription charges you.</string>
+    <string name="core_notifications_channel_summary">Monthly summary</string>
+    <string name="core_notifications_channel_summary_description">What you spent on subscriptions last month.</string>
+    <string name="core_notifications_channel_insights">Savings insights</string>
+    <string name="core_notifications_channel_insights_description">Occasional notes about what you could save.</string>
+
+    <string name="core_notifications_upcoming_title">%1$s charges %2$s %3$s</string>
+    <string name="core_notifications_upcoming_today">today</string>
+    <string name="core_notifications_upcoming_tomorrow">tomorrow</string>
+    <plurals name="core_notifications_upcoming_in_days">
+        <item quantity="one">in %d day</item>
+        <item quantity="other">in %d days</item>
+    </plurals>
+    <string name="core_notifications_upcoming_body">Tap to see the details.</string>
+    <plurals name="core_notifications_upcoming_group_title">
+        <item quantity="one">%1$d upcoming charge</item>
+        <item quantity="other">%1$d upcoming charges</item>
+    </plurals>
+    <string name="core_notifications_summary_title">You spent %1$s on subscriptions in %2$s.</string>
+    <plurals name="core_notifications_summary_body">
+        <item quantity="one">Across %1$d subscription.</item>
+        <item quantity="other">Across %1$d subscriptions.</item>
+    </plurals>
+    <string name="core_notifications_savings_title">You may be able to save about %1$s a month.</string>
+    <plurals name="core_notifications_savings_body">
+        <item quantity="one">%1$d subscription you said you rarely use. Worth a review?</item>
+        <item quantity="other">%1$d subscriptions you said you rarely use. Worth a review?</item>
+    </plurals>
+</resources>
