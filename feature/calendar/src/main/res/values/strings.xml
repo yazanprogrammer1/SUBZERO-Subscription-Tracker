@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_calendar_title">Calendar</string>
+    <string name="feature_calendar_scheduled_this_month">scheduled this month</string>
+    <string name="feature_calendar_scheduled_in_month">scheduled in %1$s</string>
+    <plurals name="feature_calendar_foreign_excluded">
+        <item quantity="one">%1$d charge in another currency is not included.</item>
+        <item quantity="other">%1$d charges in other currencies are not included.</item>
+    </plurals>
+    <string name="feature_calendar_previous_month">Previous month</string>
+    <string name="feature_calendar_next_month">Next month</string>
+    <string name="feature_calendar_today">Today</string>
+    <string name="feature_calendar_no_charges_month">No charges scheduled in %1$s.</string>
+    <string name="feature_calendar_no_charges_day">Nothing scheduled on %1$s.</string>
+    <string name="feature_calendar_whole_month">All charges this month</string>
+    <plurals name="feature_calendar_day_description">
+        <item quantity="one">%1$s, %2$d charge</item>
+        <item quantity="other">%1$s, %2$d charges</item>
+    </plurals>
+    <string name="feature_calendar_day_no_charges">%1$s, no charges</string>
+    <string name="feature_calendar_empty_title">Nothing on the calendar yet.</string>
+    <string name="feature_calendar_empty_body">Add a subscription and its charges will appear here.</string>
+    <string name="feature_calendar_add">Add subscription</string>
+</resources>
