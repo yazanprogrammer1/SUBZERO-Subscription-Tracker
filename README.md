@@ -41,8 +41,22 @@ feature/       onboarding, home, subscriptions, calendar, insights, settings, as
 ## Assistant
 
 The assistant answers from the data on the device (`core:domain`, `LocalAssistant`), in English
-and Arabic. Questions it cannot parse can optionally be sent to a hosted model — Settings →
+and Arabic. It understands: monthly and yearly totals, spend in one category, a full category
+breakdown, most and least expensive subscriptions, one subscription by name, what you rarely use,
+price increases, the next charge, what is due this month or in the next N days, what you have
+actually paid (this month, last month, this year, in total), what is paused or canceled, how many
+you track, plus greetings and "what can you do". Anything else is answered honestly as not
+understood, with suggestions — it never guesses.
+
+Two things make it feel like a conversation: naming a service answers about that service, and a
+short follow-up with a pronoun ("when is it charged?", "كم سعره؟") keeps the previous subject,
+carried in `AssistantContext.focus`. Every answer offers follow-up chips, whose own localized text
+becomes the next question.
+
+Questions it cannot parse can optionally be sent to a hosted model — Settings →
 Assistant → Enhanced answers, off by default, and the row only appears when a key is configured.
+The model gets the earlier turns of the conversation, the subscription summary, the totals, price
+changes and payments summarized by month.
 
 Configure the provider in `local.properties` (git-ignored, never committed) or through the
 matching environment variables for CI:
@@ -58,14 +72,19 @@ subzero.ai.provider=anthropic    # SUBZERO_AI_PROVIDER  (anthropic | openai)
 `{baseUrl}/chat/completions` with a bearer token. Settings → Assistant → **Test connection**
 sends one request and shows the provider's error verbatim if it fails.
 
-What leaves the device is a summary of the active subscriptions (name, amount, cycle, category,
-declared usage, next date) and the question. Notes, the display name, ids and payment history
-never are. A key embedded in an APK is extractable, so a public release should point `baseUrl`
+What leaves the device is a summary of the subscriptions (name, amount, cycle, category, declared
+usage, next date; paused ones by name and status), the totals, price changes, monthly payment
+totals, the earlier turns and the question. Notes, the display name and record ids never are. A key embedded in an APK is extractable, so a public release should point `baseUrl`
 at a proxy you control rather than shipping a provider key.
 
 ## Localization
 
 Strings live in `values/` (English) and `values-ar/` (Arabic) per module; `app/src/main/res/xml/
 locales_config.xml` drives the Android 13+ per-app language picker (Settings → Preferences →
-Language). Arabic plurals carry all six CLDR categories. `LocalAssistant` normalizes Arabic input
+Language). Arabic plurals carry all six CLDR categories.
+
+The type scale is script-aware (`SubzeroTypography`, `TypeScript`): Inter carries no Arabic glyphs,
+so Arabic is drawn by the system Arabic face, whose descenders (the final م of "التقويم") were
+clipped by Inter's tighter line box. Under Arabic, headings step down one step, every line gets at
+least 1.5x leading, and negative tracking is dropped. `LocalAssistant` normalizes Arabic input
 (diacritics, alef/ya variants, Arabic-Indic digits) before matching keywords.

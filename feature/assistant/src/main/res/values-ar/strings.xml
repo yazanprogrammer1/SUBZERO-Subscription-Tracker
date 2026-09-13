@@ -12,8 +12,65 @@
     <string name="feature_assistant_suggestion_next">متى الخصم القادم؟</string>
     <string name="feature_assistant_suggestion_total">كم أدفع شهريًا؟</string>
     <string name="feature_assistant_suggestion_increase">أي الأسعار ارتفعت؟</string>
+    <string name="feature_assistant_suggestion_yearly">كم أدفع سنويًا؟</string>
+    <string name="feature_assistant_suggestion_cheapest">ما هي أرخص اشتراكاتي؟</string>
+    <string name="feature_assistant_suggestion_week">ما الذي سيُخصم خلال الأيام السبعة القادمة؟</string>
+    <string name="feature_assistant_suggestion_breakdown">أين تذهب أموالي؟</string>
+    <string name="feature_assistant_suggestion_recorded">كم صرفت الشهر الماضي؟</string>
+    <string name="feature_assistant_suggestion_inactive">ما الاشتراكات المتوقفة أو الملغاة؟</string>
+    <string name="feature_assistant_suggestion_help">ماذا يمكنك أن تفعل؟</string>
 
     <!-- Answers -->
+    <string name="feature_assistant_followups">جرّب بعدها</string>
+    <plurals name="feature_assistant_answer_yearly_body">
+        <item quantity="zero">سنويًا عبر %1$d اشتراك نشط.</item>
+        <item quantity="one">سنويًا عبر اشتراك نشط واحد.</item>
+        <item quantity="two">سنويًا عبر اشتراكين نشطين.</item>
+        <item quantity="few">سنويًا عبر %1$d اشتراكات نشطة.</item>
+        <item quantity="many">سنويًا عبر %1$d اشتراكًا نشطًا.</item>
+        <item quantity="other">سنويًا عبر %1$d اشتراك نشط.</item>
+    </plurals>
+    <string name="feature_assistant_answer_yearly_monthly">أي %1$s شهريًا.</string>
+    <string name="feature_assistant_answer_breakdown">إلى أين تذهب أموالك كل شهر:</string>
+    <string name="feature_assistant_answer_breakdown_total">%1$s شهريًا في المجموع.</string>
+    <string name="feature_assistant_answer_cheapest">أقل اشتراكاتك تكلفة، حسب التكلفة الشهرية:</string>
+    <string name="feature_assistant_answer_detail_price">%1$s يكلفك %2$s %3$s، أي نحو %4$s سنويًا.</string>
+    <string name="feature_assistant_answer_detail_next">الخصم القادم %1$s، في %2$s.</string>
+    <string name="feature_assistant_answer_detail_inactive">حالته %1$s، لذا لا يُحتسب في إجمالياتك.</string>
+    <string name="feature_assistant_answer_detail_usage">قلت إنك تستخدمه %1$s.</string>
+    <string name="feature_assistant_answer_detail_usage_unknown">لم تخبرني بعد كم مرة تستخدمه.</string>
+    <plurals name="feature_assistant_answer_upcoming_days">
+        <item quantity="zero">%1$d خصم خلال %2$d أيام القادمة:</item>
+        <item quantity="one">خصم واحد خلال %2$d أيام القادمة:</item>
+        <item quantity="two">خصمان خلال %2$d أيام القادمة:</item>
+        <item quantity="few">%1$d خصوم خلال %2$d أيام القادمة:</item>
+        <item quantity="many">%1$d خصمًا خلال %2$d أيام القادمة:</item>
+        <item quantity="other">%1$d خصم خلال %2$d أيام القادمة:</item>
+    </plurals>
+    <string name="feature_assistant_answer_recorded_this_month">دفعت حتى الآن هذا الشهر</string>
+    <string name="feature_assistant_answer_recorded_last_month">دفعت الشهر الماضي</string>
+    <string name="feature_assistant_answer_recorded_this_year">دفعت حتى الآن هذا العام</string>
+    <string name="feature_assistant_answer_recorded_all_time">دفعت في المجموع</string>
+    <plurals name="feature_assistant_answer_recorded_count">
+        <item quantity="zero">عبر %1$d دفعة مسجلة.</item>
+        <item quantity="one">عبر دفعة واحدة مسجلة.</item>
+        <item quantity="two">عبر دفعتين مسجلتين.</item>
+        <item quantity="few">عبر %1$d دفعات مسجلة.</item>
+        <item quantity="many">عبر %1$d دفعة مسجلة.</item>
+        <item quantity="other">عبر %1$d دفعة مسجلة.</item>
+    </plurals>
+    <string name="feature_assistant_answer_no_recorded">لا توجد دفعات مسجلة لتلك الفترة بعد. يسجّل SUBZERO الخصم عندما يمر تاريخه والتطبيق مثبّت.</string>
+    <plurals name="feature_assistant_answer_inactive">
+        <item quantity="zero">%1$d اشتراك متوقف أو ملغى:</item>
+        <item quantity="one">اشتراك واحد متوقف أو ملغى:</item>
+        <item quantity="two">اشتراكان متوقفان أو ملغيان:</item>
+        <item quantity="few">%1$d اشتراكات متوقفة أو ملغاة:</item>
+        <item quantity="many">%1$d اشتراكًا متوقفًا أو ملغى:</item>
+        <item quantity="other">%1$d اشتراك متوقف أو ملغى:</item>
+    </plurals>
+    <string name="feature_assistant_answer_no_inactive">كل ما تتابعه نشط.</string>
+    <string name="feature_assistant_answer_capabilities">أجيب من بياناتك أنت: كم تنفق شهريًا أو سنويًا، وأين يذهب المال حسب الفئة، وأغلى اشتراكاتك وأرخصها، وما نادرًا ما تستخدمه، وزيادات الأسعار، وما سيُخصم قريبًا، وما دفعته فعليًا، وتفاصيل أي اشتراك بالاسم. جرّب أحد هذه:</string>
+    <string name="feature_assistant_answer_greeting">أهلًا. اسألني أي شيء عن اشتراكاتك.</string>
     <string name="feature_assistant_answer_total_lead">أنت تنفق</string>
     <plurals name="feature_assistant_answer_total_body">
         <item quantity="zero">شهريًا عبر %1$d اشتراك نشط.</item>
@@ -68,7 +125,7 @@
         <item quantity="other">لديك %1$d اشتراك نشط. الفئات، مثال واحد لكل فئة:</item>
     </plurals>
     <string name="feature_assistant_answer_no_subscriptions">أضف اشتراكًا أولًا لأتمكن من الإجابة.</string>
-    <string name="feature_assistant_answer_unknown">يمكنني الإجابة عن أسئلة حول ما تنفقه، وحسب الفئة، وأغلى اشتراكاتك، وما نادرًا ما تستخدمه، وزيادات الأسعار، والخصومات القادمة. جرّب أحد هذه:</string>
+    <string name="feature_assistant_answer_unknown">لم أفهم ذلك. يمكنني الإجابة عن ما تنفقه شهريًا أو سنويًا، وتوزيعه على الفئات، وأغلى اشتراكاتك وأرخصها، وما نادرًا ما تستخدمه، وزيادات الأسعار، والخصومات القادمة، وما دفعته فعليًا، وأي اشتراك بالاسم. جرّب أحد هذه:</string>
     <plurals name="feature_assistant_answer_foreign">
         <item quantity="zero">%1$d اشتراك بعملة أخرى غير مُدرج.</item>
         <item quantity="one">اشتراك واحد بعملة أخرى غير مُدرج.</item>

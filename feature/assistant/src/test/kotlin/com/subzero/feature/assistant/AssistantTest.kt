@@ -12,6 +12,7 @@ import com.subzero.core.designsystem.theme.SubzeroTheme
 import com.subzero.core.domain.assistant.AnswerItem
 import com.subzero.core.domain.assistant.AnswerKind
 import com.subzero.core.domain.assistant.AssistantAnswer
+import com.subzero.core.domain.assistant.AssistantSuggestion
 import com.subzero.core.domain.assistant.LocalAssistant
 import com.subzero.core.domain.model.Category
 import com.subzero.core.domain.model.DeclaredUsage
@@ -103,6 +104,51 @@ class AssistantTest {
         compose.onNodeWithText("Works offline.", substring = true).assertIsDisplayed()
         compose.onNodeWithTag(AssistantTestTags.suggestion(2)).performClick()
         assertThat(asked).isEqualTo("What can I cancel?")
+    }
+
+    @Test
+    fun `follow-up chips ask the question they show`() {
+        val answer = AssistantAnswer(
+            kind = AnswerKind.TOTAL_SPEND,
+            amount = usd(2000),
+            count = 1,
+            suggestions = listOf(AssistantSuggestion.YEARLY, AssistantSuggestion.BREAKDOWN),
+        )
+        setContent(AssistantUiState(messages = listOf(AssistantMessage.Answer(1, answer, today))))
+
+        compose.onNodeWithText("Try next").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithTag(AssistantTestTags.followUp(1)).performScrollTo().performClick()
+        assertThat(asked).isEqualTo("Where does my money go?")
+    }
+
+    @Test
+    fun `a subscription detail card states price, next charge and declared usage`() {
+        val answer = AssistantAnswer(
+            kind = AnswerKind.SUBSCRIPTION_DETAIL,
+            amount = usd(2000),
+            secondaryAmount = usd(24000),
+            items = listOf(AnswerItem(chatgpt, usd(2000))),
+            date = date("2026-09-20"),
+            category = Category.AI,
+        )
+        setContent(AssistantUiState(messages = listOf(AssistantMessage.Answer(1, answer, today))))
+
+        compose.onNodeWithText("ChatGPT costs $20.00 / month, about $240.00 a year.").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("You said you use it rarely.").performScrollTo().assertIsDisplayed()
+    }
+
+    @Test
+    fun `the conversation keeps its subject across turns`() = runTest {
+        repository.seed(chatgpt)
+        val vm = viewModel()
+
+        vm.ask("How much is ChatGPT?")
+        vm.ask("when is it charged?")
+
+        val answers = vm.uiState.value.messages.filterIsInstance<AssistantMessage.Answer>()
+        assertThat(answers).hasSize(2)
+        answers.forEach { assertThat(it.answer.kind).isEqualTo(AnswerKind.SUBSCRIPTION_DETAIL) }
+        assertThat(answers.last().answer.items.single().subscription.name).isEqualTo("ChatGPT")
     }
 
     @Test

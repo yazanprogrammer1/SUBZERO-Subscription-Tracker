@@ -23,10 +23,12 @@ fun SubzeroTheme(
     content: @Composable () -> Unit,
 ) {
     val colors = if (darkTheme) DarkColors else LightColors
-    val typography = remember { subzeroTypography() }
     val motion = SubzeroMotion(reduceMotion = rememberReduceMotion())
     val configuration = LocalConfiguration.current
-    val moneyFormatter = remember(configuration) { MoneyFormatter(configuration.locales[0]) }
+    val locale = configuration.locales[0]
+    // The type scale is script-aware: Arabic headings step down and every line gets more room.
+    val typography = remember(locale) { subzeroTypography(script = TypeScript.of(locale)) }
+    val moneyFormatter = remember(locale) { MoneyFormatter(locale) }
 
     val materialColors = if (darkTheme) {
         darkColorScheme(

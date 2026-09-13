@@ -3,12 +3,14 @@ package com.subzero.core.ai
 import com.google.common.truth.Truth.assertThat
 import com.subzero.core.domain.assistant.AnswerKind
 import com.subzero.core.domain.assistant.AssistantContext
+import com.subzero.core.domain.assistant.AssistantTurn
 import com.subzero.core.domain.assistant.LocalAssistant
 import com.subzero.core.domain.model.CurrencyCode
 import com.subzero.core.domain.model.DeclaredUsage
 import com.subzero.core.domain.model.SubscriptionStatus
 import com.subzero.core.domain.testing.FakeUserPreferencesRepository
 import com.subzero.core.domain.testing.date
+import com.subzero.core.domain.testing.paymentRecord
 import com.subzero.core.domain.testing.fixedClock
 import com.subzero.core.domain.testing.subscription
 import com.subzero.core.domain.testing.usd
@@ -51,13 +53,51 @@ class RemoteAssistantTest {
         assertThat(user).contains("Netflix | 1549 USD every 1 month")
         assertThat(user).contains("usage daily")
         assertThat(user).contains("QUESTION: How much on AI?")
-        assertThat(user).doesNotContain("Paused thing")
+        assertThat(user).contains("TOTALS (home currency only, 1 of 1 subscriptions): 1549/month, 18588/year")
+        // Paused subscriptions are named with their status so "what did I pause?" can be answered,
+        // but they stay out of the totals. Notes never leave the device.
+        assertThat(user).contains("INACTIVE (1): Paused thing (paused)")
         assertThat(user).doesNotContain("PIN 1234")
         assertThat(user).doesNotContain("shared with Sam")
 
         val system = transport.lastMessages.first { it.role == "system" }.content
         assertThat(system).contains("Never tell the user what they should definitely cancel")
         assertThat(system).contains("ONLY the DATA block")
+    }
+
+    @Test
+    fun `earlier turns are replayed so follow-ups keep their meaning`() = runTest {
+        val transport = FakeTransport()
+        val withHistory = context.copy(
+            history = listOf(
+                AssistantTurn(fromUser = true, text = "How much on AI?"),
+                AssistantTurn(fromUser = false, text = "You spend about $35 a month on AI."),
+            ),
+        )
+
+        RemoteAssistant(transport).ask("and what about entertainment?", withHistory)
+
+        val roles = transport.lastMessages.map { it.role }
+        assertThat(roles).containsExactly("system", "user", "assistant", "user").inOrder()
+        assertThat(transport.lastMessages[1].content).isEqualTo("How much on AI?")
+        assertThat(transport.lastMessages[2].content).contains("$35 a month")
+        assertThat(transport.lastMessages.last().content).contains("QUESTION: and what about entertainment?")
+    }
+
+    @Test
+    fun `recorded payments are summarized by month`() = runTest {
+        val transport = FakeTransport()
+        val withPayments = context.copy(
+            payments = listOf(
+                paymentRecord(subscriptionId = "n", amount = usd(1549), paidOn = date("2026-08-16")),
+                paymentRecord(subscriptionId = "n", amount = usd(1549), paidOn = date("2026-09-16")),
+            ),
+        )
+
+        RemoteAssistant(transport).ask("what did I pay?", withPayments)
+
+        val user = transport.lastMessages.last().content
+        assertThat(user).contains("RECORDED PAYMENTS (USD, minor units): 2026-08=1549 (1 payments); 2026-09=1549 (1 payments)")
     }
 
     @Test

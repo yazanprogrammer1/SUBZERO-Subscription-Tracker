@@ -27,12 +27,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.subzero.core.designsystem.icon.SubzeroIcons
 import com.subzero.core.designsystem.preview.PreviewTheme
@@ -52,6 +51,11 @@ private val IndicatorWidth = 56.dp
 private val IndicatorHeight = 30.dp
 private val HideLabelsBelow = 320.dp
 
+/** Test tags for the bottom bar; the indicator is checked for position in both directions. */
+object BottomBarTestTags {
+    const val INDICATOR = "bottom_bar_indicator"
+}
+
 /**
  * Bottom navigation for the five top-level destinations (design-system.md §6.3, §7).
  * A pill indicator slides between items; icon and label tint crossfade.
@@ -64,7 +68,6 @@ fun SubzeroBottomBar(
     val colors = SubzeroTheme.colors
     val motion = SubzeroTheme.motion
     val selectedIndex = items.indexOfFirst { it.selected }.coerceAtLeast(0)
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     BoxWithConstraints(
         modifier = modifier
@@ -84,21 +87,16 @@ fun SubzeroBottomBar(
 
         Box(modifier = Modifier.fillMaxWidth().height(BarMinHeight)) {
             // The sliding pill sits behind the icons, aligned with the icon box of the column
-            // (icon 30dp + label 18dp centred in 64dp, or icon alone). Offset mirrors for RTL.
+            // (icon 30dp + label 18dp centred in 64dp, or icon alone). The offset is measured
+            // from the start edge, which mirrors with the row of items in RTL on its own.
             val indicatorTop = if (showLabels) 8.dp else (BarMinHeight - IndicatorHeight) / 2
             Box(
                 modifier = Modifier
-                    .padding(top = indicatorTop)
-                    .then(
-                        if (isRtl) {
-                            Modifier.align(Alignment.TopEnd).padding(end = indicatorOffset.dp)
-                        } else {
-                            Modifier.padding(start = indicatorOffset.dp)
-                        },
-                    )
+                    .padding(top = indicatorTop, start = indicatorOffset.dp)
                     .size(IndicatorWidth, IndicatorHeight)
                     .clip(SubzeroTheme.shapes.full)
-                    .background(colors.accentContainer),
+                    .background(colors.accentContainer)
+                    .testTag(BottomBarTestTags.INDICATOR),
             )
             Row(
                 modifier = Modifier

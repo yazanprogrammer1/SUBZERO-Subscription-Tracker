@@ -58,9 +58,13 @@ import com.subzero.core.designsystem.format.shortDate
 import com.subzero.core.designsystem.icon.SubzeroIcons
 import com.subzero.core.designsystem.theme.SubzeroTheme
 import com.subzero.core.designsystem.theme.SubzeroTone
+import com.subzero.core.designsystem.format.label
 import com.subzero.core.domain.assistant.AnswerItem
 import com.subzero.core.domain.assistant.AnswerKind
 import com.subzero.core.domain.assistant.AssistantAnswer
+import com.subzero.core.domain.assistant.AssistantSuggestion
+import com.subzero.core.domain.assistant.SpendPeriod
+import com.subzero.core.domain.model.DeclaredUsage
 import com.subzero.core.domain.model.SubscriptionId
 import com.subzero.core.navigation.LocalNavigator
 import com.subzero.core.navigation.SubscriptionDetailKey
@@ -72,19 +76,48 @@ internal object AssistantTestTags {
     const val SEND = "assistant_send"
     const val THINKING = "assistant_thinking"
     fun suggestion(index: Int) = "assistant_suggestion_$index"
+    fun followUp(index: Int) = "assistant_followup_$index"
     fun answer(id: Long) = "assistant_answer_$id"
 }
 
 private val ContentMaxWidth = 640.dp
 
 /** The starter questions; every one maps to an intent the local assistant understands. */
-private val suggestionResources = listOf(
-    R.string.feature_assistant_suggestion_ai,
-    R.string.feature_assistant_suggestion_most,
-    R.string.feature_assistant_suggestion_cancel,
-    R.string.feature_assistant_suggestion_next,
-    R.string.feature_assistant_suggestion_total,
-    R.string.feature_assistant_suggestion_increase,
+private val starterSuggestions = listOf(
+    AssistantSuggestion.AI_CATEGORY,
+    AssistantSuggestion.TOP,
+    AssistantSuggestion.CANCEL,
+    AssistantSuggestion.NEXT,
+    AssistantSuggestion.TOTAL,
+    AssistantSuggestion.INCREASES,
+)
+
+/**
+ * The question each follow-up chip asks. The chip's own text is sent verbatim, so a chip tapped
+ * in Arabic asks an Arabic question and the assistant answers in Arabic.
+ */
+private fun AssistantSuggestion.questionRes(): Int = when (this) {
+    AssistantSuggestion.TOTAL -> R.string.feature_assistant_suggestion_total
+    AssistantSuggestion.YEARLY -> R.string.feature_assistant_suggestion_yearly
+    AssistantSuggestion.TOP -> R.string.feature_assistant_suggestion_most
+    AssistantSuggestion.CHEAPEST -> R.string.feature_assistant_suggestion_cheapest
+    AssistantSuggestion.CANCEL -> R.string.feature_assistant_suggestion_cancel
+    AssistantSuggestion.NEXT -> R.string.feature_assistant_suggestion_next
+    AssistantSuggestion.UPCOMING_WEEK -> R.string.feature_assistant_suggestion_week
+    AssistantSuggestion.INCREASES -> R.string.feature_assistant_suggestion_increase
+    AssistantSuggestion.BREAKDOWN -> R.string.feature_assistant_suggestion_breakdown
+    AssistantSuggestion.RECORDED -> R.string.feature_assistant_suggestion_recorded
+    AssistantSuggestion.INACTIVE -> R.string.feature_assistant_suggestion_inactive
+    AssistantSuggestion.AI_CATEGORY -> R.string.feature_assistant_suggestion_ai
+    AssistantSuggestion.HELP -> R.string.feature_assistant_suggestion_help
+}
+
+/** Kinds whose wording already introduces the chips, so they need no "try next" heading. */
+private val suggestionLedKinds = setOf(
+    AnswerKind.UNKNOWN,
+    AnswerKind.CAPABILITIES,
+    AnswerKind.GREETING,
+    AnswerKind.NO_SUBSCRIPTIONS,
 )
 
 @Composable
@@ -184,23 +217,28 @@ private fun Intro(onAsk: (String) -> Unit, showSuggestions: Boolean) {
             }
         }
         AnimatedVisibility(visible = showSuggestions) {
-            Suggestions(onAsk = onAsk, modifier = Modifier.padding(top = spacing.md))
+            Suggestions(suggestions = starterSuggestions, onAsk = onAsk, modifier = Modifier.padding(top = spacing.md))
         }
     }
 }
 
 @Composable
-private fun Suggestions(onAsk: (String) -> Unit, modifier: Modifier = Modifier) {
+private fun Suggestions(
+    suggestions: List<AssistantSuggestion>,
+    onAsk: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    tag: (Int) -> String = AssistantTestTags::suggestion,
+) {
     val spacing = SubzeroTheme.spacing
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(spacing.xs)) {
-        suggestionResources.forEachIndexed { index, res ->
-            val text = stringResource(res)
+        suggestions.forEachIndexed { index, suggestion ->
+            val text = stringResource(suggestion.questionRes())
             SubzeroChip(
                 text = text,
                 selected = false,
                 onClick = { onAsk(text) },
                 icon = SubzeroIcons.Sparkle,
-                modifier = Modifier.testTag(AssistantTestTags.suggestion(index)),
+                modifier = Modifier.testTag(tag(index)),
             )
         }
     }
@@ -256,8 +294,50 @@ private fun AnswerCard(
                 ItemList(answer.items, today, onOpenSubscription)
             }
             AnswerKind.NOTHING_IN_CATEGORY -> Body(stringResource(R.string.feature_assistant_answer_nothing_in_category, answer.category?.label().orEmpty()))
+            AnswerKind.YEARLY_SPEND -> {
+                Lead(stringResource(R.string.feature_assistant_answer_total_lead))
+                HeroAmount(answer)
+                Body(pluralStringResource(R.plurals.feature_assistant_answer_yearly_body, answer.count, answer.count))
+                answer.secondaryAmount?.let { Body(stringResource(R.string.feature_assistant_answer_yearly_monthly, formatter.format(it))) }
+            }
+            AnswerKind.CATEGORY_BREAKDOWN -> {
+                Body(stringResource(R.string.feature_assistant_answer_breakdown))
+                ItemList(answer.items, today, onOpenSubscription)
+                Spacer(Modifier.height(spacing.xs))
+                Body(stringResource(R.string.feature_assistant_answer_breakdown_total, formatter.format(checkNotNull(answer.amount))))
+            }
             AnswerKind.TOP_SUBSCRIPTIONS -> {
                 Body(stringResource(R.string.feature_assistant_answer_top))
+                ItemList(answer.items, today, onOpenSubscription)
+            }
+            AnswerKind.CHEAPEST_SUBSCRIPTIONS -> {
+                Body(stringResource(R.string.feature_assistant_answer_cheapest))
+                ItemList(answer.items, today, onOpenSubscription)
+            }
+            AnswerKind.SUBSCRIPTION_DETAIL -> {
+                val subscription = answer.items.first().subscription
+                Body(
+                    stringResource(
+                        R.string.feature_assistant_answer_detail_price,
+                        subscription.name,
+                        formatter.format(subscription.price),
+                        subscription.billingCycle.cadence(),
+                        formatter.format(checkNotNull(answer.secondaryAmount)),
+                    ),
+                )
+                val next = answer.date
+                if (next != null) {
+                    Body(stringResource(R.string.feature_assistant_answer_detail_next, relativeDate(next, today).lowercase(), shortDate(next, today)))
+                } else {
+                    Body(stringResource(R.string.feature_assistant_answer_detail_inactive, subscription.status.label().lowercase()))
+                }
+                Body(
+                    if (subscription.usage == DeclaredUsage.UNKNOWN) {
+                        stringResource(R.string.feature_assistant_answer_detail_usage_unknown)
+                    } else {
+                        stringResource(R.string.feature_assistant_answer_detail_usage, subscription.usage.label().lowercase())
+                    },
+                )
                 ItemList(answer.items, today, onOpenSubscription)
             }
             AnswerKind.CANCEL_CANDIDATES -> {
@@ -294,12 +374,44 @@ private fun AnswerCard(
                 Body(pluralStringResource(R.plurals.feature_assistant_answer_count, answer.count, answer.count))
                 ItemList(answer.items, today, onOpenSubscription, showCategory = true)
             }
+            AnswerKind.UPCOMING_IN_DAYS -> {
+                Body(pluralStringResource(R.plurals.feature_assistant_answer_upcoming_days, answer.count, answer.count, answer.days))
+                ItemList(answer.items, today, onOpenSubscription)
+                Spacer(Modifier.height(spacing.xs))
+                Body(stringResource(R.string.feature_assistant_answer_upcoming_total, formatter.format(checkNotNull(answer.amount))))
+            }
+            AnswerKind.RECORDED_SPEND -> {
+                Lead(stringResource(answer.period.recordedLeadRes()))
+                HeroAmount(answer)
+                Body(pluralStringResource(R.plurals.feature_assistant_answer_recorded_count, answer.count, answer.count))
+            }
+            AnswerKind.NO_RECORDED_SPEND -> Body(stringResource(R.string.feature_assistant_answer_no_recorded))
+            AnswerKind.INACTIVE -> {
+                Body(pluralStringResource(R.plurals.feature_assistant_answer_inactive, answer.count, answer.count))
+                ItemList(answer.items, today, onOpenSubscription, showStatus = true)
+            }
+            AnswerKind.NO_INACTIVE -> Body(stringResource(R.string.feature_assistant_answer_no_inactive))
+            AnswerKind.CAPABILITIES -> Body(stringResource(R.string.feature_assistant_answer_capabilities))
+            AnswerKind.GREETING -> Body(stringResource(R.string.feature_assistant_answer_greeting))
             AnswerKind.NO_SUBSCRIPTIONS -> Body(stringResource(R.string.feature_assistant_answer_no_subscriptions))
             AnswerKind.TEXT -> Body(answer.text.orEmpty())
-            AnswerKind.UNKNOWN -> {
-                Body(stringResource(R.string.feature_assistant_answer_unknown))
-                Suggestions(onAsk = onAsk, modifier = Modifier.padding(top = spacing.sm))
+            AnswerKind.UNKNOWN -> Body(stringResource(R.string.feature_assistant_answer_unknown))
+        }
+        if (answer.suggestions.isNotEmpty()) {
+            Spacer(Modifier.height(spacing.sm))
+            if (answer.kind !in suggestionLedKinds) {
+                Text(
+                    text = stringResource(R.string.feature_assistant_followups),
+                    style = SubzeroTheme.typography.label,
+                    color = colors.textSecondary,
+                    modifier = Modifier.padding(bottom = spacing.xxs),
+                )
             }
+            Suggestions(
+                suggestions = answer.suggestions,
+                onAsk = onAsk,
+                tag = AssistantTestTags::followUp,
+            )
         }
         if (answer.excludedForeignCurrency > 0) {
             Spacer(Modifier.height(spacing.xs))
@@ -329,6 +441,14 @@ private fun AnswerCard(
     }
 }
 
+/** Which "you have paid" sentence a recorded-spend answer uses. */
+private fun SpendPeriod?.recordedLeadRes(): Int = when (this) {
+    SpendPeriod.LAST_MONTH -> R.string.feature_assistant_answer_recorded_last_month
+    SpendPeriod.THIS_YEAR -> R.string.feature_assistant_answer_recorded_this_year
+    SpendPeriod.ALL_TIME -> R.string.feature_assistant_answer_recorded_all_time
+    else -> R.string.feature_assistant_answer_recorded_this_month
+}
+
 @Composable
 private fun Lead(text: String) {
     Text(text = text, style = SubzeroTheme.typography.label, color = SubzeroTheme.colors.textSecondary)
@@ -350,6 +470,7 @@ private fun ItemList(
     today: LocalDate,
     onOpenSubscription: (SubscriptionId) -> Unit,
     showCategory: Boolean = false,
+    showStatus: Boolean = false,
 ) {
     val colors = SubzeroTheme.colors
     val spacing = SubzeroTheme.spacing
@@ -361,8 +482,16 @@ private fun ItemList(
                     SubzeroServiceIcon(name = item.subscription.name)
                     Spacer(Modifier.width(spacing.sm))
                     Column(modifier = Modifier.weight(1f)) {
-                        Text(text = item.subscription.name, style = SubzeroTheme.typography.body, color = colors.textPrimary, maxLines = 1)
+                        val category = item.category
+                        Text(
+                            text = category?.label() ?: item.subscription.name,
+                            style = SubzeroTheme.typography.body,
+                            color = colors.textPrimary,
+                            maxLines = 1,
+                        )
                         val detail = when {
+                            category != null -> item.subscription.name
+                            showStatus -> item.subscription.status.label()
                             item.previousAmount != null && item.date != null ->
                                 stringResource(R.string.feature_assistant_answer_increase_item, formatter.format(item.previousAmount!!), shortDate(item.date!!, today))
                             item.date != null -> relativeDate(item.date!!, today)

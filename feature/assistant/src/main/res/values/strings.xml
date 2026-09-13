@@ -12,8 +12,49 @@
     <string name="feature_assistant_suggestion_next">When is my next charge?</string>
     <string name="feature_assistant_suggestion_total">How much do I pay per month?</string>
     <string name="feature_assistant_suggestion_increase">Which prices went up?</string>
+    <string name="feature_assistant_suggestion_yearly">How much do I pay a year?</string>
+    <string name="feature_assistant_suggestion_cheapest">What are my cheapest subscriptions?</string>
+    <string name="feature_assistant_suggestion_week">What is charging in the next 7 days?</string>
+    <string name="feature_assistant_suggestion_breakdown">Where does my money go?</string>
+    <string name="feature_assistant_suggestion_recorded">How much did I spend last month?</string>
+    <string name="feature_assistant_suggestion_inactive">What have I paused or canceled?</string>
+    <string name="feature_assistant_suggestion_help">What can you do?</string>
 
     <!-- Answers -->
+    <string name="feature_assistant_followups">Try next</string>
+    <plurals name="feature_assistant_answer_yearly_body">
+        <item quantity="one">a year across %1$d active subscription.</item>
+        <item quantity="other">a year across %1$d active subscriptions.</item>
+    </plurals>
+    <string name="feature_assistant_answer_yearly_monthly">That is %1$s a month.</string>
+    <string name="feature_assistant_answer_breakdown">Where your money goes each month:</string>
+    <string name="feature_assistant_answer_breakdown_total">%1$s a month in total.</string>
+    <string name="feature_assistant_answer_cheapest">Your least expensive subscriptions, by monthly cost:</string>
+    <string name="feature_assistant_answer_detail_price">%1$s costs %2$s %3$s, about %4$s a year.</string>
+    <string name="feature_assistant_answer_detail_next">Next charge %1$s, on %2$s.</string>
+    <string name="feature_assistant_answer_detail_inactive">It is %1$s, so it is not counted in your totals.</string>
+    <string name="feature_assistant_answer_detail_usage">You said you use it %1$s.</string>
+    <string name="feature_assistant_answer_detail_usage_unknown">You have not said how often you use it yet.</string>
+    <plurals name="feature_assistant_answer_upcoming_days">
+        <item quantity="one">%1$d charge in the next %2$d days:</item>
+        <item quantity="other">%1$d charges in the next %2$d days:</item>
+    </plurals>
+    <string name="feature_assistant_answer_recorded_this_month">You have paid, so far this month</string>
+    <string name="feature_assistant_answer_recorded_last_month">You paid, last month</string>
+    <string name="feature_assistant_answer_recorded_this_year">You have paid, so far this year</string>
+    <string name="feature_assistant_answer_recorded_all_time">You have paid, in total</string>
+    <plurals name="feature_assistant_answer_recorded_count">
+        <item quantity="one">Across %1$d recorded payment.</item>
+        <item quantity="other">Across %1$d recorded payments.</item>
+    </plurals>
+    <string name="feature_assistant_answer_no_recorded">Nothing is recorded for that period yet. SUBZERO records a charge when its date passes while the app is installed.</string>
+    <plurals name="feature_assistant_answer_inactive">
+        <item quantity="one">%1$d subscription is paused or canceled:</item>
+        <item quantity="other">%1$d subscriptions are paused or canceled:</item>
+    </plurals>
+    <string name="feature_assistant_answer_no_inactive">Everything you track is active.</string>
+    <string name="feature_assistant_answer_capabilities">I answer from your own data: what you spend a month or a year, where it goes by category, your most and least expensive subscriptions, what you rarely use, price increases, what is charging next, what you have actually paid, and the details of any subscription by name. Try one of these:</string>
+    <string name="feature_assistant_answer_greeting">Hello. Ask me anything about your subscriptions.</string>
     <string name="feature_assistant_answer_total_lead">You spend</string>
     <plurals name="feature_assistant_answer_total_body">
         <item quantity="one">a month across %1$d active subscription.</item>
@@ -48,7 +89,7 @@
         <item quantity="other">You have %1$d active subscriptions. Categories, one example each:</item>
     </plurals>
     <string name="feature_assistant_answer_no_subscriptions">Add a subscription first and I can answer that.</string>
-    <string name="feature_assistant_answer_unknown">I can answer questions about what you spend, by category, your most expensive subscriptions, what you rarely use, price increases and upcoming charges. Try one of these:</string>
+    <string name="feature_assistant_answer_unknown">I did not catch that. I can answer questions about what you spend a month or a year, where it goes by category, your most and least expensive subscriptions, what you rarely use, price increases, upcoming charges, what you have actually paid, and any subscription by name. Try one of these:</string>
     <plurals name="feature_assistant_answer_foreign">
         <item quantity="one">%1$d subscription in another currency is not included.</item>
         <item quantity="other">%1$d subscriptions in other currencies are not included.</item>

@@ -5,6 +5,9 @@ plugins {
 
 android {
     namespace = "com.subzero.core.designsystem"
+
+    // Compose UI tests for direction-sensitive components run on the JVM through Robolectric.
+    testOptions.unitTests.isIncludeAndroidResources = true
 }
 
 dependencies {
@@ -17,4 +20,9 @@ dependencies {
     api(libs.androidx.compose.ui.tooling.preview)
     api(projects.core.domain)
     implementation(libs.androidx.core.ktx)
+
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    testImplementation(libs.androidx.compose.ui.test.manifest)
 }
