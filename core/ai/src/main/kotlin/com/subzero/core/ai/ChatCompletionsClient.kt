@@ -8,6 +8,11 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.jsonObject
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -91,8 +96,10 @@ class HttpChatTransport @Inject constructor(
         // The Messages API takes the system prompt as a top-level field, not as a message.
         val system = messages.filter { it.role == "system" }.joinToString("\n\n") { it.content }.takeIf { it.isNotBlank() }
         val turns = messages.filter { it.role != "system" }
+        // Anthropic documents the endpoint as {host}/v1/messages, so a configured base URL that
+        // already ends in /v1 is a natural mistake; accept it rather than posting to /v1/v1.
         return WireRequest(
-            url = "${config.baseUrl}/v1/messages",
+            url = "${config.baseUrl.removeSuffix("/v1")}/v1/messages",
             headers = mapOf("x-api-key" to config.apiKey, "anthropic-version" to ANTHROPIC_VERSION),
             body = json.encodeToString(AnthropicRequest(model = config.model, maxTokens = MAX_TOKENS, system = system, messages = turns, temperature = TEMPERATURE)),
         )
@@ -119,7 +126,7 @@ class HttpChatTransport @Inject constructor(
             val code = connection.responseCode
             if (code !in 200..299) {
                 val error = connection.errorStream?.bufferedReader()?.use { it.readText() }.orEmpty()
-                throw AiException("Model request failed with HTTP $code${error.take(ERROR_PREVIEW).let { if (it.isBlank()) "" else ": $it" }}")
+                throw AiException("HTTP $code${providerMessage(error)?.let { " — $it" }.orEmpty()}")
             }
             connection.inputStream.bufferedReader().use { it.readText() }
         } catch (e: AiException) {
@@ -130,6 +137,22 @@ class HttpChatTransport @Inject constructor(
             connection.disconnect()
         }
     }
+
+    /**
+     * The sentence a provider puts in its error body, whichever of the two common shapes it uses
+     * ({"error":{"message":…}} or {"message":…}). Falling back to a slice of the raw body keeps
+     * unknown providers diagnosable instead of silently blank.
+     */
+    internal fun providerMessage(errorBody: String): String? {
+        if (errorBody.isBlank()) return null
+        val root = runCatching { json.parseToJsonElement(errorBody).jsonObject }.getOrNull()
+            ?: return errorBody.take(ERROR_PREVIEW)
+        val nested = (root["error"] as? JsonObject)?.get("message")?.jsonPrimitiveOrNull()
+        val message = nested ?: root["message"]?.jsonPrimitiveOrNull()
+        return (message ?: errorBody.take(ERROR_PREVIEW)).takeIf { it.isNotBlank() }
+    }
+
+    private fun JsonElement.jsonPrimitiveOrNull(): String? = (this as? JsonPrimitive)?.contentOrNull
 
     private fun parseAnthropic(responseBody: String): String {
         val response = runCatching { json.decodeFromString<AnthropicResponse>(responseBody) }

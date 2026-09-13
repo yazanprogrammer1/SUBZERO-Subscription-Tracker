@@ -43,6 +43,8 @@ sealed interface SettingsUiState {
         val appVersion: String,
         /** A model key is configured in this build, so the enhanced-answers option can be offered. */
         val aiAvailable: Boolean = false,
+        /** Model and host the assistant is configured to call, so a failure is diagnosable. */
+        val aiTarget: String? = null,
         val isBusy: Boolean = false,
         val message: SettingsMessage? = null,
         /** Provider error text from the last connection test, shown verbatim so setup problems are diagnosable. */
@@ -70,6 +72,8 @@ class SettingsViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val aiAvailable = aiConfig.isAvailable
+    private val aiTarget = aiConfig.takeIf { it.isAvailable }
+        ?.let { "${it.model} · ${it.baseUrl.substringAfter("://").substringBefore('/')}" }
 
     private data class Transient(
         val notificationsAllowed: Boolean,
@@ -88,6 +92,7 @@ class SettingsViewModel @Inject constructor(
             storage = t.storage,
             appVersion = appInfo.versionName,
             aiAvailable = aiAvailable,
+            aiTarget = aiTarget,
             isBusy = t.isBusy,
             message = t.message,
             aiError = t.aiError,

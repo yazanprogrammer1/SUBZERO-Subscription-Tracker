@@ -5,7 +5,9 @@ timing, system integrations. Run on at least one phone (API 26–36) and, if ava
 emulator. Tick each line; anything failing becomes a tracked fix before Phase 13.
 
 Build to test: `./gradlew :app:installDebug` (debug) and the release APK from Phase 13 for the
-final pass. The debug build also installs **SUBZERO Gallery** for component review.
+final pass. The debug build also carries the **SUBZERO Gallery** for component review. It has no
+launcher icon on purpose (one app, one icon); start it with
+`adb shell am start -n com.subzero.app.debug/com.subzero.app.gallery.GalleryActivity`.
 
 ## Visual (compare against the reference image)
 

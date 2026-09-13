@@ -24,6 +24,13 @@ English and Arabic, with right-to-left layout.
 
 The first build downloads Gradle 9.7.1 and all dependencies.
 
+The debug build carries a design-system gallery with no launcher icon of its own, so a debug
+install adds one app icon, not two. Open it with:
+
+```
+adb shell am start -n com.subzero.app.debug/com.subzero.app.gallery.GalleryActivity
+```
+
 ## Structure
 
 Release process: [docs/release/runbook.md](docs/release/runbook.md). QA: [docs/qa/device-checklist.md](docs/qa/device-checklist.md).

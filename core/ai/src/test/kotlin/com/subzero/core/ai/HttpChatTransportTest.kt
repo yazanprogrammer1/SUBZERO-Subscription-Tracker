@@ -40,6 +40,26 @@ class HttpChatTransportTest {
     }
 
     @Test
+    fun `a base url that already ends in v1 is not doubled`() {
+        val request = transport(AiProvider.ANTHROPIC, baseUrl = "https://api.example.com/v1").anthropicRequest(messages)
+
+        assertThat(request.url).isEqualTo("https://api.example.com/v1/messages")
+    }
+
+    @Test
+    fun `the provider error sentence is pulled out of either common body shape`() {
+        val t = transport(AiProvider.ANTHROPIC)
+
+        assertThat(t.providerMessage("""{"error":{"message":"Budget pool quota has been exhausted."}}"""))
+            .isEqualTo("Budget pool quota has been exhausted.")
+        assertThat(t.providerMessage("""{"message":"UNAUTHENTICATED","success":false}"""))
+            .isEqualTo("UNAUTHENTICATED")
+        assertThat(t.providerMessage("")).isNull()
+        // An unknown shape still has to be diagnosable, so the raw body comes through.
+        assertThat(t.providerMessage("<html>502 Bad Gateway</html>")).contains("502 Bad Gateway")
+    }
+
+    @Test
     fun `provider names map to a wire protocol and anything unknown stays openai compatible`() {
         assertThat(AiProvider.parse("anthropic")).isEqualTo(AiProvider.ANTHROPIC)
         assertThat(AiProvider.parse(" Claude ")).isEqualTo(AiProvider.ANTHROPIC)

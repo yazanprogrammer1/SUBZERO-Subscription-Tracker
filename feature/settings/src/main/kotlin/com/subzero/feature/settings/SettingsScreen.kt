@@ -417,6 +417,11 @@ private fun AssistantSection(state: SettingsUiState.Ready, actions: SettingsActi
             enabled = !state.isBusy,
             modifier = Modifier.testTag(SettingsTestTags.AI_TEST),
         )
+        val target = state.aiTarget
+        if (target != null) {
+            Spacer(Modifier.height(SubzeroTheme.spacing.xs))
+            Text(text = target, style = SubzeroTheme.typography.caption, color = colors.textTertiary)
+        }
         val aiError = state.aiError
         if (aiError != null) {
             Spacer(Modifier.height(SubzeroTheme.spacing.xs))
