@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_insights_title">Insights</string>
+    <string name="feature_insights_tab_overview">Overview</string>
+    <string name="feature_insights_tab_spending">Spending</string>
+    <string name="feature_insights_tab_usage">Usage</string>
+    <string name="feature_insights_yearly_title">You spend</string>
+    <string name="feature_insights_yearly_suffix">/ year</string>
+    <string name="feature_insights_yearly_body">on subscriptions.</string>
+    <string name="feature_insights_monthly_equivalent">%1$s a month</string>
+    <string name="feature_insights_no_insights_title">Not enough data yet.</string>
+    <string name="feature_insights_no_insights_body">Insights appear as you add subscriptions and tell SUBZERO how often you use them.</string>
+    <string name="feature_insights_categories">By category</string>
+    <plurals name="feature_insights_category_count">
+        <item quantity="one">%1$d subscription · %2$d%%</item>
+        <item quantity="other">%1$d subscriptions · %2$d%%</item>
+    </plurals>
+    <string name="feature_insights_top_subscriptions">Most expensive</string>
+    <string name="feature_insights_per_year">%1$s / year</string>
+    <string name="feature_insights_usage_intro">Usage is what you tell SUBZERO. Nothing is tracked automatically.</string>
+    <plurals name="feature_insights_usage_unknown">
+        <item quantity="one">%1$d subscription has no usage info yet. Open it to say how often you use it.</item>
+        <item quantity="other">%1$d subscriptions have no usage info yet. Open them to say how often you use them.</item>
+    </plurals>
+    <string name="feature_insights_usage_group_rarely">Rarely used</string>
+    <string name="feature_insights_usage_group_monthly">Used monthly</string>
+    <string name="feature_insights_usage_group_weekly">Used weekly</string>
+    <string name="feature_insights_usage_group_daily">Used daily</string>
+    <string name="feature_insights_usage_group_unknown">Not sure yet</string>
+    <string name="feature_insights_empty_title">Insights need a little data.</string>
+    <string name="feature_insights_empty_body">Add a subscription and SUBZERO will start spotting patterns.</string>
+    <string name="feature_insights_add">Add subscription</string>
+</resources>
