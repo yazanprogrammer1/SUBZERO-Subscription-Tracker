@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -37,10 +36,10 @@ fun SubzeroBottomSheet(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     title: String? = null,
-    sheetState: SheetState = rememberModalBottomSheetState(),
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val colors = SubzeroTheme.colors
+    val sheetState = rememberModalBottomSheetState()
     val shape = SubzeroTheme.shapes.xl.copy(
         bottomStart = androidx.compose.foundation.shape.CornerSize(0.dp),
         bottomEnd = androidx.compose.foundation.shape.CornerSize(0.dp),

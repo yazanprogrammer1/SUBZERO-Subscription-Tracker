@@ -7,4 +7,81 @@
     <string name="core_designsystem_clear_text">Clear text</string>
     <string name="core_designsystem_cancel">Cancel</string>
     <string name="core_designsystem_drag_handle">Drag handle</string>
+
+    <!-- Category labels -->
+    <string name="core_designsystem_category_entertainment">Entertainment</string>
+    <string name="core_designsystem_category_ai">AI</string>
+    <string name="core_designsystem_category_cloud">Cloud</string>
+    <string name="core_designsystem_category_software">Software</string>
+    <string name="core_designsystem_category_fitness">Fitness</string>
+    <string name="core_designsystem_category_education">Education</string>
+    <string name="core_designsystem_category_productivity">Productivity</string>
+    <string name="core_designsystem_category_gaming">Gaming</string>
+    <string name="core_designsystem_category_other">Other</string>
+
+    <!-- Billing cycle labels -->
+    <string name="core_designsystem_cycle_weekly">Weekly</string>
+    <string name="core_designsystem_cycle_monthly">Monthly</string>
+    <string name="core_designsystem_cycle_quarterly">Quarterly</string>
+    <string name="core_designsystem_cycle_yearly">Yearly</string>
+    <string name="core_designsystem_cycle_custom">Custom</string>
+    <plurals name="core_designsystem_cycle_every_days">
+        <item quantity="one">Every day</item>
+        <item quantity="other">Every %d days</item>
+    </plurals>
+    <plurals name="core_designsystem_cycle_every_weeks">
+        <item quantity="one">Every week</item>
+        <item quantity="other">Every %d weeks</item>
+    </plurals>
+    <plurals name="core_designsystem_cycle_every_months">
+        <item quantity="one">Every month</item>
+        <item quantity="other">Every %d months</item>
+    </plurals>
+    <plurals name="core_designsystem_cycle_every_years">
+        <item quantity="one">Every year</item>
+        <item quantity="other">Every %d years</item>
+    </plurals>
+    <string name="core_designsystem_cadence_week">/ week</string>
+    <string name="core_designsystem_cadence_month">/ month</string>
+    <string name="core_designsystem_cadence_quarter">/ quarter</string>
+    <string name="core_designsystem_cadence_year">/ year</string>
+    <plurals name="core_designsystem_cadence_custom_days">
+        <item quantity="one">/ day</item>
+        <item quantity="other">/ %d days</item>
+    </plurals>
+    <plurals name="core_designsystem_cadence_custom_weeks">
+        <item quantity="one">/ week</item>
+        <item quantity="other">/ %d weeks</item>
+    </plurals>
+    <plurals name="core_designsystem_cadence_custom_months">
+        <item quantity="one">/ month</item>
+        <item quantity="other">/ %d months</item>
+    </plurals>
+    <plurals name="core_designsystem_cadence_custom_years">
+        <item quantity="one">/ year</item>
+        <item quantity="other">/ %d years</item>
+    </plurals>
+
+    <!-- Status and usage labels -->
+    <string name="core_designsystem_status_active">Active</string>
+    <string name="core_designsystem_status_paused">Paused</string>
+    <string name="core_designsystem_status_canceled">Canceled</string>
+    <string name="core_designsystem_usage_daily">Daily</string>
+    <string name="core_designsystem_usage_weekly">Weekly</string>
+    <string name="core_designsystem_usage_monthly">Monthly</string>
+    <string name="core_designsystem_usage_rarely">Rarely</string>
+    <string name="core_designsystem_usage_unknown">Not sure</string>
+
+    <!-- Relative dates -->
+    <string name="core_designsystem_date_today">Today</string>
+    <string name="core_designsystem_date_tomorrow">Tomorrow</string>
+    <string name="core_designsystem_date_yesterday">Yesterday</string>
+    <plurals name="core_designsystem_date_in_days">
+        <item quantity="one">In %d day</item>
+        <item quantity="other">In %d days</item>
+    </plurals>
+    <plurals name="core_designsystem_date_days_ago">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
 </resources>

@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.error
 import androidx.compose.ui.semantics.semantics
@@ -67,6 +68,8 @@ fun SubzeroTextField(
     leading: (@Composable () -> Unit)? = null,
     trailing: (@Composable () -> Unit)? = null,
     showClearButton: Boolean = false,
+    /** Test tag applied to the editable node itself (the outer [modifier] wraps label and helper). */
+    inputTag: String? = null,
 ) {
     val colors = SubzeroTheme.colors
     val interactionSource = remember { MutableInteractionSource() }
@@ -120,7 +123,9 @@ fun SubzeroTextField(
                     keyboardActions = keyboardActions,
                     visualTransformation = visualTransformation,
                     interactionSource = interactionSource,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .then(if (inputTag != null) Modifier.testTag(inputTag) else Modifier),
                 )
             }
             if (showClearButton && value.isNotEmpty() && enabled) {

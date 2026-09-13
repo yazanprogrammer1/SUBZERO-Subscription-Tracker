@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- List -->
+    <string name="feature_subscriptions_title">Subscriptions</string>
+    <string name="feature_subscriptions_search">Search</string>
+    <string name="feature_subscriptions_search_hint">Search by name, category or amount</string>
+    <string name="feature_subscriptions_close_search">Close search</string>
+    <string name="feature_subscriptions_sort">Sort</string>
+    <string name="feature_subscriptions_sort_title">Sort by</string>
+    <string name="feature_subscriptions_sort_highest_cost">Highest cost</string>
+    <string name="feature_subscriptions_sort_lowest_cost">Lowest cost</string>
+    <string name="feature_subscriptions_sort_next_payment">Next payment</string>
+    <string name="feature_subscriptions_sort_alphabetical">Alphabetical</string>
+    <string name="feature_subscriptions_filter_all">All</string>
+    <string name="feature_subscriptions_filter_monthly">Monthly</string>
+    <string name="feature_subscriptions_filter_yearly">Yearly</string>
+    <string name="feature_subscriptions_filter_upcoming">Upcoming</string>
+    <string name="feature_subscriptions_filter_high_cost">High cost</string>
+    <string name="feature_subscriptions_filter_category">Category</string>
+    <string name="feature_subscriptions_filter_category_title">Filter by category</string>
+    <string name="feature_subscriptions_add">Add subscription</string>
+    <string name="feature_subscriptions_next_prefix">Next: %1$s</string>
+    <string name="feature_subscriptions_empty_title">Your recurring spending starts here.</string>
+    <string name="feature_subscriptions_empty_body">Add your first subscription and SUBZERO will take care of the rest.</string>
+    <string name="feature_subscriptions_no_matches_title">Nothing matches.</string>
+    <string name="feature_subscriptions_no_matches_body">Try a different search or clear the filter.</string>
+    <string name="feature_subscriptions_clear_filters">Clear filters</string>
+    <plurals name="feature_subscriptions_count">
+        <item quantity="one">%1$d subscription</item>
+        <item quantity="other">%1$d subscriptions</item>
+    </plurals>
+
+    <!-- Form -->
+    <string name="feature_subscriptions_form_add_title">Add subscription</string>
+    <string name="feature_subscriptions_form_edit_title">Edit subscription</string>
+    <string name="feature_subscriptions_form_name">Service name</string>
+    <string name="feature_subscriptions_form_name_hint">e.g. Netflix</string>
+    <string name="feature_subscriptions_form_price">Price</string>
+    <string name="feature_subscriptions_form_price_hint">0.00</string>
+    <string name="feature_subscriptions_form_currency_title">Choose currency</string>
+    <string name="feature_subscriptions_form_currency_search">Search currencies</string>
+    <string name="feature_subscriptions_form_cycle">Billing cycle</string>
+    <string name="feature_subscriptions_form_custom_every">Every</string>
+    <string name="feature_subscriptions_form_unit_days">Days</string>
+    <string name="feature_subscriptions_form_unit_weeks">Weeks</string>
+    <string name="feature_subscriptions_form_unit_months">Months</string>
+    <string name="feature_subscriptions_form_unit_years">Years</string>
+    <string name="feature_subscriptions_form_next_payment">Next payment date</string>
+    <string name="feature_subscriptions_form_first_payment">First payment date</string>
+    <string name="feature_subscriptions_form_first_payment_toggle">I know when it started</string>
+    <string name="feature_subscriptions_form_first_payment_help">Lets SUBZERO estimate what you have spent so far.</string>
+    <string name="feature_subscriptions_form_projected_next">Next charge on this schedule: %1$s</string>
+    <string name="feature_subscriptions_form_category">Category</string>
+    <string name="feature_subscriptions_form_usage">How often do you use it?</string>
+    <string name="feature_subscriptions_form_notes">Notes</string>
+    <string name="feature_subscriptions_form_notes_hint">e.g. Family plan</string>
+    <string name="feature_subscriptions_form_optional">Optional</string>
+    <string name="feature_subscriptions_form_save">Save</string>
+    <string name="feature_subscriptions_form_ok">OK</string>
+    <string name="feature_subscriptions_form_error_name_blank">Enter the service name</string>
+    <plurals name="feature_subscriptions_form_error_name_long">
+        <item quantity="one">Keep the name under %1$d character</item>
+        <item quantity="other">Keep the name under %1$d characters</item>
+    </plurals>
+    <string name="feature_subscriptions_form_error_price">Enter a valid price</string>
+    <plurals name="feature_subscriptions_form_error_notes_long">
+        <item quantity="one">Keep notes under %1$d character</item>
+        <item quantity="other">Keep notes under %1$d characters</item>
+    </plurals>
+    <string name="feature_subscriptions_form_error_first_after_next">The first payment cannot be after the next one</string>
+    <string name="feature_subscriptions_form_error_not_found">This subscription no longer exists.</string>
+    <string name="feature_subscriptions_form_error_save">Your subscription could not be saved.</string>
+    <string name="feature_subscriptions_form_saved_added">Subscription added</string>
+    <string name="feature_subscriptions_form_saved_updated">Changes saved</string>
+    <string name="feature_subscriptions_form_saved_next">Next charge: %1$s</string>
+</resources>

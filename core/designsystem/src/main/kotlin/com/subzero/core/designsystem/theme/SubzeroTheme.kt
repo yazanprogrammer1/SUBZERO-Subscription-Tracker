@@ -10,7 +10,6 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.core.os.ConfigurationCompat
 import com.subzero.core.domain.format.MoneyFormatter
 import java.util.Locale
 
@@ -27,9 +26,7 @@ fun SubzeroTheme(
     val typography = remember { subzeroTypography() }
     val motion = SubzeroMotion(reduceMotion = rememberReduceMotion())
     val configuration = LocalConfiguration.current
-    val moneyFormatter = remember(configuration) {
-        MoneyFormatter(ConfigurationCompat.getLocales(configuration)[0] ?: Locale.getDefault())
-    }
+    val moneyFormatter = remember(configuration) { MoneyFormatter(configuration.locales[0]) }
 
     val materialColors = if (darkTheme) {
         darkColorScheme(
