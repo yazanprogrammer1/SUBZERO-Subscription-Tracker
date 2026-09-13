@@ -32,6 +32,7 @@ class DataStoreUserPreferencesRepository @Inject constructor(
         val NOTIFY_SAVINGS = booleanPreferencesKey("notify_savings")
         val ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
         val DISPLAY_NAME = stringPreferencesKey("display_name")
+        val AI_ENHANCED = booleanPreferencesKey("ai_enhanced_enabled")
     }
 
     override val preferences: Flow<UserPreferences> = dataStore.data.map { prefs ->
@@ -49,6 +50,7 @@ class DataStoreUserPreferencesRepository @Inject constructor(
             ),
             onboardingCompleted = prefs[Keys.ONBOARDING_COMPLETED] ?: false,
             displayName = prefs[Keys.DISPLAY_NAME],
+            aiEnhancedEnabled = prefs[Keys.AI_ENHANCED] ?: false,
         )
     }
 
@@ -78,6 +80,10 @@ class DataStoreUserPreferencesRepository @Inject constructor(
             val trimmed = name?.trim()
             if (trimmed.isNullOrEmpty()) it.remove(Keys.DISPLAY_NAME) else it[Keys.DISPLAY_NAME] = trimmed
         }
+    }
+
+    override suspend fun setAiEnhancedEnabled(enabled: Boolean) {
+        dataStore.edit { it[Keys.AI_ENHANCED] = enabled }
     }
 
     override suspend fun clear() {

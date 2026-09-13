@@ -295,6 +295,7 @@ private fun AnswerCard(
                 ItemList(answer.items, today, onOpenSubscription, showCategory = true)
             }
             AnswerKind.NO_SUBSCRIPTIONS -> Body(stringResource(R.string.feature_assistant_answer_no_subscriptions))
+            AnswerKind.TEXT -> Body(answer.text.orEmpty())
             AnswerKind.UNKNOWN -> {
                 Body(stringResource(R.string.feature_assistant_answer_unknown))
                 Suggestions(onAsk = onAsk, modifier = Modifier.padding(top = spacing.sm))
@@ -307,6 +308,23 @@ private fun AnswerCard(
                 style = SubzeroTheme.typography.caption,
                 color = colors.warning,
             )
+        }
+        if (answer.isRemote || answer.fellBack) {
+            Spacer(Modifier.height(spacing.xs))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                SubzeroTag(
+                    text = stringResource(if (answer.isRemote) R.string.feature_assistant_tag_ai else R.string.feature_assistant_tag_on_device),
+                    tone = if (answer.isRemote) SubzeroTone.Accent else SubzeroTone.Neutral,
+                )
+                if (answer.fellBack) {
+                    Spacer(Modifier.width(spacing.xs))
+                    Text(
+                        text = stringResource(R.string.feature_assistant_fell_back),
+                        style = SubzeroTheme.typography.caption,
+                        color = colors.textTertiary,
+                    )
+                }
+            }
         }
     }
 }

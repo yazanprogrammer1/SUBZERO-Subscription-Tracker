@@ -45,6 +45,12 @@ data class AssistantAnswer(
     val date: LocalDate? = null,
     /** True when some subscriptions were left out because they are in another currency. */
     val excludedForeignCurrency: Int = 0,
+    /** Free text, only for [AnswerKind.TEXT] answers produced by a hosted model. */
+    val text: String? = null,
+    /** Whether a hosted model produced this answer (shown to the user). */
+    val isRemote: Boolean = false,
+    /** True when the hosted model was requested but the on-device assistant answered instead. */
+    val fellBack: Boolean = false,
 )
 
 data class AnswerItem(
@@ -71,6 +77,9 @@ enum class AnswerKind {
     COUNT_BY_CATEGORY,
     NO_SUBSCRIPTIONS,
     UNKNOWN,
+
+    /** A free-text answer from a hosted model; see [AssistantAnswer.text]. */
+    TEXT,
 }
 
 /**

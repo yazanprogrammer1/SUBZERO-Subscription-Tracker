@@ -127,6 +127,8 @@ class FakeUserPreferencesRepository(
 
     override suspend fun setDisplayName(name: String?) = state.update { it.copy(displayName = name) }
 
+    override suspend fun setAiEnhancedEnabled(enabled: Boolean) = state.update { it.copy(aiEnhancedEnabled = enabled) }
+
     override suspend fun clear() = state.update {
         UserPreferences(
             homeCurrency = it.homeCurrency,

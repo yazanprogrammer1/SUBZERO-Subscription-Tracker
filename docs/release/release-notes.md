@@ -12,7 +12,10 @@ First release.
 - Optional reminders before a charge, a monthly summary and a savings note — all off by default
 - SUBZERO Assistant (beta): ask about your spending in plain words, answered on-device from your data
 - Export to JSON or CSV; delete everything with one tap
-- Dark and light themes; no account, no analytics, no internet permission
+- Dark and light themes; no account and no analytics
+- English and Arabic, with right-to-left layout; per-app language picker on Android 13+
+- Optional enhanced assistant answers through an AI model, off by default — the only feature
+  that uses the network
 
 ### Play Console "What's new" (500 characters)
 Know what you pay, before it charges you. Track every subscription, see monthly and yearly totals,

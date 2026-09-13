@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- List -->
+    <string name="feature_subscriptions_title">الاشتراكات</string>
+    <string name="feature_subscriptions_search">بحث</string>
+    <string name="feature_subscriptions_search_hint">ابحث بالاسم أو الفئة أو المبلغ</string>
+    <string name="feature_subscriptions_close_search">إغلاق البحث</string>
+    <string name="feature_subscriptions_sort">ترتيب</string>
+    <string name="feature_subscriptions_sort_title">ترتيب حسب</string>
+    <string name="feature_subscriptions_sort_highest_cost">الأعلى تكلفة</string>
+    <string name="feature_subscriptions_sort_lowest_cost">الأقل تكلفة</string>
+    <string name="feature_subscriptions_sort_next_payment">الدفعة القادمة</string>
+    <string name="feature_subscriptions_sort_alphabetical">أبجديًا</string>
+    <string name="feature_subscriptions_filter_all">الكل</string>
+    <string name="feature_subscriptions_filter_monthly">شهري</string>
+    <string name="feature_subscriptions_filter_yearly">سنوي</string>
+    <string name="feature_subscriptions_filter_upcoming">قادم</string>
+    <string name="feature_subscriptions_filter_high_cost">مرتفع التكلفة</string>
+    <string name="feature_subscriptions_filter_category">الفئة</string>
+    <string name="feature_subscriptions_filter_category_title">تصفية حسب الفئة</string>
+    <string name="feature_subscriptions_add">إضافة اشتراك</string>
+    <string name="feature_subscriptions_next_prefix">التالي: %1$s</string>
+    <string name="feature_subscriptions_empty_title">إنفاقك المتكرر يبدأ من هنا.</string>
+    <string name="feature_subscriptions_empty_body">أضف اشتراكك الأول وسيتولى SUBZERO الباقي.</string>
+    <string name="feature_subscriptions_no_matches_title">لا توجد نتائج مطابقة.</string>
+    <string name="feature_subscriptions_no_matches_body">جرّب بحثًا آخر أو أزل التصفية.</string>
+    <string name="feature_subscriptions_clear_filters">مسح عوامل التصفية</string>
+    <plurals name="feature_subscriptions_count">
+        <item quantity="zero">%1$d اشتراك</item>
+        <item quantity="one">اشتراك واحد</item>
+        <item quantity="two">اشتراكان</item>
+        <item quantity="few">%1$d اشتراكات</item>
+        <item quantity="many">%1$d اشتراكًا</item>
+        <item quantity="other">%1$d اشتراك</item>
+    </plurals>
+
+    <!-- Form -->
+    <string name="feature_subscriptions_form_add_title">إضافة اشتراك</string>
+    <string name="feature_subscriptions_form_edit_title">تعديل الاشتراك</string>
+    <string name="feature_subscriptions_form_name">اسم الخدمة</string>
+    <string name="feature_subscriptions_form_name_hint">مثال: Netflix</string>
+    <string name="feature_subscriptions_form_price">السعر</string>
+    <string name="feature_subscriptions_form_price_hint">0.00</string>
+    <string name="feature_subscriptions_form_cycle">دورة الفوترة</string>
+    <string name="feature_subscriptions_form_custom_every">كل</string>
+    <string name="feature_subscriptions_form_unit_days">أيام</string>
+    <string name="feature_subscriptions_form_unit_weeks">أسابيع</string>
+    <string name="feature_subscriptions_form_unit_months">أشهر</string>
+    <string name="feature_subscriptions_form_unit_years">سنوات</string>
+    <string name="feature_subscriptions_form_next_payment">تاريخ الدفعة القادمة</string>
+    <string name="feature_subscriptions_form_first_payment">تاريخ أول دفعة</string>
+    <string name="feature_subscriptions_form_first_payment_toggle">أعرف متى بدأ</string>
+    <string name="feature_subscriptions_form_first_payment_help">يتيح لـ SUBZERO تقدير ما أنفقته حتى الآن.</string>
+    <string name="feature_subscriptions_form_projected_next">الخصم القادم وفق هذه الدورة: %1$s</string>
+    <string name="feature_subscriptions_form_category">الفئة</string>
+    <string name="feature_subscriptions_form_usage">كم مرة تستخدمه؟</string>
+    <string name="feature_subscriptions_form_notes">ملاحظات</string>
+    <string name="feature_subscriptions_form_notes_hint">مثال: خطة عائلية</string>
+    <string name="feature_subscriptions_form_optional">اختياري</string>
+    <string name="feature_subscriptions_form_save">حفظ</string>
+    <string name="feature_subscriptions_form_ok">حسنًا</string>
+    <string name="feature_subscriptions_form_duplicate_name">لديك اشتراك بهذا الاسم بالفعل. الحفظ سيضيف اشتراكًا ثانيًا.</string>
+    <string name="feature_subscriptions_form_error_name_blank">أدخل اسم الخدمة</string>
+    <plurals name="feature_subscriptions_form_error_name_long">
+        <item quantity="zero">اجعل الاسم أقل من %1$d حرف</item>
+        <item quantity="one">اجعل الاسم أقل من حرف واحد</item>
+        <item quantity="two">اجعل الاسم أقل من حرفين</item>
+        <item quantity="few">اجعل الاسم أقل من %1$d أحرف</item>
+        <item quantity="many">اجعل الاسم أقل من %1$d حرفًا</item>
+        <item quantity="other">اجعل الاسم أقل من %1$d حرف</item>
+    </plurals>
+    <string name="feature_subscriptions_form_error_price">أدخل سعرًا صحيحًا</string>
+    <plurals name="feature_subscriptions_form_error_notes_long">
+        <item quantity="zero">اجعل الملاحظات أقل من %1$d حرف</item>
+        <item quantity="one">اجعل الملاحظات أقل من حرف واحد</item>
+        <item quantity="two">اجعل الملاحظات أقل من حرفين</item>
+        <item quantity="few">اجعل الملاحظات أقل من %1$d أحرف</item>
+        <item quantity="many">اجعل الملاحظات أقل من %1$d حرفًا</item>
+        <item quantity="other">اجعل الملاحظات أقل من %1$d حرف</item>
+    </plurals>
+    <string name="feature_subscriptions_form_error_first_after_next">لا يمكن أن تكون أول دفعة بعد الدفعة القادمة</string>
+    <string name="feature_subscriptions_form_error_not_found">لم يعد هذا الاشتراك موجودًا.</string>
+    <string name="feature_subscriptions_form_error_save">تعذّر حفظ اشتراكك.</string>
+    <string name="feature_subscriptions_form_saved_added">تمت إضافة الاشتراك</string>
+    <string name="feature_subscriptions_form_saved_updated">تم حفظ التغييرات</string>
+    <string name="feature_subscriptions_form_saved_next">الخصم القادم: %1$s</string>
+
+    <!-- Detail -->
+    <string name="feature_subscriptions_detail_edit">تعديل</string>
+    <string name="feature_subscriptions_detail_next_payment">الدفعة القادمة</string>
+    <string name="feature_subscriptions_detail_equivalent">%1$s / شهر  ·  %2$s / سنة</string>
+    <string name="feature_subscriptions_detail_history_title">سجل الإنفاق</string>
+    <string name="feature_subscriptions_detail_history_subtitle">آخر 12 شهرًا</string>
+    <string name="feature_subscriptions_detail_history_total">إجمالي المنفَق</string>
+    <string name="feature_subscriptions_detail_history_estimated">يشمل تقديرات لما قبل إضافته</string>
+    <string name="feature_subscriptions_detail_history_empty">لا توجد خصومات مسجلة بعد.</string>
+    <string name="feature_subscriptions_detail_history_chart">الإنفاق شهريًا خلال آخر 12 شهرًا، الإجمالي %1$s</string>
+    <string name="feature_subscriptions_detail_price_title">سجل الأسعار</string>
+    <string name="feature_subscriptions_detail_price_current">الحالي</string>
+    <string name="feature_subscriptions_detail_price_since">منذ %1$s</string>
+    <string name="feature_subscriptions_detail_price_no_changes">لا تغييرات في السعر بعد.</string>
+    <string name="feature_subscriptions_detail_usage_title">كم مرة تستخدمه؟</string>
+    <string name="feature_subscriptions_detail_usage_help">إجابتك تغذّي تحليلات التوفير. لا شيء يُتتبع تلقائيًا.</string>
+    <string name="feature_subscriptions_detail_notes_title">ملاحظات</string>
+    <string name="feature_subscriptions_detail_pause">إيقاف مؤقت</string>
+    <string name="feature_subscriptions_detail_resume">استئناف</string>
+    <string name="feature_subscriptions_detail_mark_canceled">وضع علامة ملغى</string>
+    <string name="feature_subscriptions_detail_delete">حذف</string>
+    <string name="feature_subscriptions_detail_delete_title">حذف %1$s؟</string>
+    <string name="feature_subscriptions_detail_delete_message">سيؤدي هذا إلى حذف الاشتراك وسجله. لا يمكن التراجع عن هذا.</string>
+    <string name="feature_subscriptions_detail_cancel_title">وضع علامة ملغى على %1$s؟</string>
+    <string name="feature_subscriptions_detail_cancel_message">سيتوقف SUBZERO عن احتسابه ولن يذكّرك به. يمكنك استئنافه في أي وقت.</string>
+    <string name="feature_subscriptions_detail_action_failed">تعذّر حفظ هذا التغيير.</string>
+    <string name="feature_subscriptions_detail_status_paused_help">متوقف مؤقتًا: لا يُحتسب في الإجماليات ولا تصل عنه تذكيرات.</string>
+    <string name="feature_subscriptions_detail_status_canceled_help">ملغى: محفوظ لسجلاتك فقط.</string>
+</resources>

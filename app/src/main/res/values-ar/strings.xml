@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SUBZERO</string>
+
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_subscriptions">الاشتراكات</string>
+    <string name="nav_calendar">التقويم</string>
+    <string name="nav_insights">التحليلات</string>
+    <string name="nav_settings">الإعدادات</string>
+</resources>

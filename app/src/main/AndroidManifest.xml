@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Deliberately no INTERNET permission: the MVP cannot send data anywhere. -->
+    <!-- INTERNET is merged in from :core:ai. It is used only when the user turns on enhanced
+         assistant answers in Settings; every other feature works fully offline. -->
 
     <!-- WorkManager declares these for features SUBZERO does not use (network constraints,
          foreground work). Removed so the manifest stays the minimum for a daily local job. -->
@@ -21,6 +22,7 @@
         android:enableOnBackInvokedCallback="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
         android:supportsRtl="true"
         android:theme="@style/Theme.Subzero.Starting"
         tools:targetApi="33">

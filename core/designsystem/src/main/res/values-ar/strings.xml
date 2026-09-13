@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="core_designsystem_retry">حاول مرة أخرى</string>
+    <string name="core_designsystem_something_went_wrong">حدث خطأ ما.</string>
+    <string name="core_designsystem_loading">جارٍ التحميل</string>
+    <string name="core_designsystem_back">رجوع</string>
+    <string name="core_designsystem_clear_text">مسح النص</string>
+    <string name="core_designsystem_cancel">إلغاء</string>
+    <string name="core_designsystem_drag_handle">مقبض السحب</string>
+
+    <!-- Category labels -->
+    <string name="core_designsystem_category_entertainment">ترفيه</string>
+    <string name="core_designsystem_category_ai">ذكاء اصطناعي</string>
+    <string name="core_designsystem_category_cloud">تخزين سحابي</string>
+    <string name="core_designsystem_category_software">برمجيات</string>
+    <string name="core_designsystem_category_fitness">لياقة</string>
+    <string name="core_designsystem_category_education">تعليم</string>
+    <string name="core_designsystem_category_productivity">إنتاجية</string>
+    <string name="core_designsystem_category_gaming">ألعاب</string>
+    <string name="core_designsystem_category_other">أخرى</string>
+
+    <!-- Billing cycle labels -->
+    <string name="core_designsystem_cycle_weekly">أسبوعي</string>
+    <string name="core_designsystem_cycle_monthly">شهري</string>
+    <string name="core_designsystem_cycle_quarterly">ربع سنوي</string>
+    <string name="core_designsystem_cycle_yearly">سنوي</string>
+    <string name="core_designsystem_cycle_custom">مخصص</string>
+    <plurals name="core_designsystem_cycle_every_days">
+        <item quantity="zero">كل %d يوم</item>
+        <item quantity="one">كل يوم</item>
+        <item quantity="two">كل يومين</item>
+        <item quantity="few">كل %d أيام</item>
+        <item quantity="many">كل %d يومًا</item>
+        <item quantity="other">كل %d يوم</item>
+    </plurals>
+    <plurals name="core_designsystem_cycle_every_weeks">
+        <item quantity="zero">كل %d أسبوع</item>
+        <item quantity="one">كل أسبوع</item>
+        <item quantity="two">كل أسبوعين</item>
+        <item quantity="few">كل %d أسابيع</item>
+        <item quantity="many">كل %d أسبوعًا</item>
+        <item quantity="other">كل %d أسبوع</item>
+    </plurals>
+    <plurals name="core_designsystem_cycle_every_months">
+        <item quantity="zero">كل %d شهر</item>
+        <item quantity="one">كل شهر</item>
+        <item quantity="two">كل شهرين</item>
+        <item quantity="few">كل %d أشهر</item>
+        <item quantity="many">كل %d شهرًا</item>
+        <item quantity="other">كل %d شهر</item>
+    </plurals>
+    <plurals name="core_designsystem_cycle_every_years">
+        <item quantity="zero">كل %d سنة</item>
+        <item quantity="one">كل سنة</item>
+        <item quantity="two">كل سنتين</item>
+        <item quantity="few">كل %d سنوات</item>
+        <item quantity="many">كل %d سنة</item>
+        <item quantity="other">كل %d سنة</item>
+    </plurals>
+    <string name="core_designsystem_cadence_week">/ أسبوع</string>
+    <string name="core_designsystem_cadence_month">/ شهر</string>
+    <string name="core_designsystem_cadence_quarter">/ ربع سنة</string>
+    <string name="core_designsystem_cadence_year">/ سنة</string>
+    <plurals name="core_designsystem_cadence_custom_days">
+        <item quantity="zero">/ %d يوم</item>
+        <item quantity="one">/ يوم</item>
+        <item quantity="two">/ يومين</item>
+        <item quantity="few">/ %d أيام</item>
+        <item quantity="many">/ %d يومًا</item>
+        <item quantity="other">/ %d يوم</item>
+    </plurals>
+    <plurals name="core_designsystem_cadence_custom_weeks">
+        <item quantity="zero">/ %d أسبوع</item>
+        <item quantity="one">/ أسبوع</item>
+        <item quantity="two">/ أسبوعين</item>
+        <item quantity="few">/ %d أسابيع</item>
+        <item quantity="many">/ %d أسبوعًا</item>
+        <item quantity="other">/ %d أسبوع</item>
+    </plurals>
+    <plurals name="core_designsystem_cadence_custom_months">
+        <item quantity="zero">/ %d شهر</item>
+        <item quantity="one">/ شهر</item>
+        <item quantity="two">/ شهرين</item>
+        <item quantity="few">/ %d أشهر</item>
+        <item quantity="many">/ %d شهرًا</item>
+        <item quantity="other">/ %d شهر</item>
+    </plurals>
+    <plurals name="core_designsystem_cadence_custom_years">
+        <item quantity="zero">/ %d سنة</item>
+        <item quantity="one">/ سنة</item>
+        <item quantity="two">/ سنتين</item>
+        <item quantity="few">/ %d سنوات</item>
+        <item quantity="many">/ %d سنة</item>
+        <item quantity="other">/ %d سنة</item>
+    </plurals>
+
+    <!-- Status and usage labels -->
+    <string name="core_designsystem_status_active">نشط</string>
+    <string name="core_designsystem_status_paused">متوقف مؤقتًا</string>
+    <string name="core_designsystem_status_canceled">ملغى</string>
+    <string name="core_designsystem_usage_daily">يوميًا</string>
+    <string name="core_designsystem_usage_weekly">أسبوعيًا</string>
+    <string name="core_designsystem_usage_monthly">شهريًا</string>
+    <string name="core_designsystem_usage_rarely">نادرًا</string>
+    <string name="core_designsystem_usage_unknown">غير متأكد</string>
+
+    <!-- Relative dates -->
+    <string name="core_designsystem_date_today">اليوم</string>
+    <string name="core_designsystem_date_tomorrow">غدًا</string>
+    <string name="core_designsystem_date_yesterday">أمس</string>
+    <plurals name="core_designsystem_date_in_days">
+        <item quantity="zero">خلال %d يوم</item>
+        <item quantity="one">خلال يوم</item>
+        <item quantity="two">خلال يومين</item>
+        <item quantity="few">خلال %d أيام</item>
+        <item quantity="many">خلال %d يومًا</item>
+        <item quantity="other">خلال %d يوم</item>
+    </plurals>
+    <plurals name="core_designsystem_date_days_ago">
+        <item quantity="zero">قبل %d يوم</item>
+        <item quantity="one">قبل يوم</item>
+        <item quantity="two">قبل يومين</item>
+        <item quantity="few">قبل %d أيام</item>
+        <item quantity="many">قبل %d يومًا</item>
+        <item quantity="other">قبل %d يوم</item>
+    </plurals>
+
+    <!-- Insight wording. Careful phrasing: data-backed observations, never instructions to cancel. -->
+    <string name="core_designsystem_insight_yearly_title">تنفق %1$s سنويًا على الاشتراكات.</string>
+    <plurals name="core_designsystem_insight_yearly_body">
+        <item quantity="zero">هذا %1$s شهريًا عبر %2$d اشتراك نشط.</item>
+        <item quantity="one">هذا %1$s شهريًا عبر اشتراك نشط واحد.</item>
+        <item quantity="two">هذا %1$s شهريًا عبر اشتراكين نشطين.</item>
+        <item quantity="few">هذا %1$s شهريًا عبر %2$d اشتراكات نشطة.</item>
+        <item quantity="many">هذا %1$s شهريًا عبر %2$d اشتراكًا نشطًا.</item>
+        <item quantity="other">هذا %1$s شهريًا عبر %2$d اشتراك نشط.</item>
+    </plurals>
+    <string name="core_designsystem_insight_largest_title">%1$s هو اشتراكك الأكبر.</string>
+    <string name="core_designsystem_insight_largest_body">%1$s سنويًا، أي نحو %2$d%% من إجمالي ما تدفعه.</string>
+    <plurals name="core_designsystem_insight_category_title">
+        <item quantity="zero">لديك %1$d اشتراك في فئة %2$s.</item>
+        <item quantity="one">لديك اشتراك واحد في فئة %2$s.</item>
+        <item quantity="two">لديك اشتراكان في فئة %2$s.</item>
+        <item quantity="few">لديك %1$d اشتراكات في فئة %2$s.</item>
+        <item quantity="many">لديك %1$d اشتراكًا في فئة %2$s.</item>
+        <item quantity="other">لديك %1$d اشتراك في فئة %2$s.</item>
+    </plurals>
+    <string name="core_designsystem_insight_category_body">%1$s شهريًا مجتمعة.</string>
+    <plurals name="core_designsystem_insight_category_body_rarely">
+        <item quantity="zero">%1$s شهريًا مجتمعة. قلت إنك نادرًا ما تستخدم %2$d منها.</item>
+        <item quantity="one">%1$s شهريًا مجتمعة. قلت إنك نادرًا ما تستخدم واحدًا منها.</item>
+        <item quantity="two">%1$s شهريًا مجتمعة. قلت إنك نادرًا ما تستخدم اثنين منها.</item>
+        <item quantity="few">%1$s شهريًا مجتمعة. قلت إنك نادرًا ما تستخدم %2$d منها.</item>
+        <item quantity="many">%1$s شهريًا مجتمعة. قلت إنك نادرًا ما تستخدم %2$d منها.</item>
+        <item quantity="other">%1$s شهريًا مجتمعة. قلت إنك نادرًا ما تستخدم %2$d منها.</item>
+    </plurals>
+    <string name="core_designsystem_insight_low_usage_title">نادرًا ما تستخدم %1$s.</string>
+    <string name="core_designsystem_insight_low_usage_body">بحسب ما أخبرتنا به، يكلفك %1$s سنويًا. هل يستحق المراجعة؟</string>
+    <string name="core_designsystem_insight_savings_title">يمكنك توفير نحو %1$s شهريًا.</string>
+    <plurals name="core_designsystem_insight_savings_body">
+        <item quantity="zero">%1$d اشتراك نادرًا ما تستخدمه يكلفك %2$s سنويًا.</item>
+        <item quantity="one">اشتراك واحد نادرًا ما تستخدمه يكلفك %2$s سنويًا.</item>
+        <item quantity="two">اشتراكان نادرًا ما تستخدمهما يكلفانك %2$s سنويًا.</item>
+        <item quantity="few">%1$d اشتراكات نادرًا ما تستخدمها تكلفك %2$s سنويًا.</item>
+        <item quantity="many">%1$d اشتراكًا نادرًا ما تستخدمها تكلفك %2$s سنويًا.</item>
+        <item quantity="other">%1$d اشتراك نادرًا ما تستخدمه يكلفك %2$s سنويًا.</item>
+    </plurals>
+    <string name="core_designsystem_insight_price_title">ارتفع سعر %1$s.</string>
+    <string name="core_designsystem_insight_price_body">من %1$s إلى %2$s، بزيادة %3$s%%.</string>
+    <string name="core_designsystem_insight_large_title">هناك خصم كبير قادم: %1$s.</string>
+    <string name="core_designsystem_insight_large_body">%1$s يخصم %2$s.</string>
+
+    <string name="core_designsystem_currency_title">اختر العملة</string>
+    <string name="core_designsystem_currency_search">ابحث عن عملة</string>
+</resources>

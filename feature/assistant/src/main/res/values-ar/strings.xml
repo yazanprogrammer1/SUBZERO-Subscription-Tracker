@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_assistant_title">مساعد SUBZERO</string>
+    <string name="feature_assistant_beta">تجريبي</string>
+    <string name="feature_assistant_offline_note">يعمل دون إنترنت. الإجابات تأتي من بياناتك ولا تغادر هاتفك ما لم تُفعّل الإجابات المحسّنة في الإعدادات.</string>
+    <string name="feature_assistant_welcome">اسألني عن اشتراكاتك.</string>
+    <string name="feature_assistant_input_hint">اكتب سؤالك</string>
+    <string name="feature_assistant_send">إرسال</string>
+    <string name="feature_assistant_suggestion_ai">كم أنفق على الذكاء الاصطناعي؟</string>
+    <string name="feature_assistant_suggestion_most">ما الأغلى تكلفة عليّ؟</string>
+    <string name="feature_assistant_suggestion_cancel">ما الذي يمكنني إلغاؤه؟</string>
+    <string name="feature_assistant_suggestion_next">متى الخصم القادم؟</string>
+    <string name="feature_assistant_suggestion_total">كم أدفع شهريًا؟</string>
+    <string name="feature_assistant_suggestion_increase">أي الأسعار ارتفعت؟</string>
+
+    <!-- Answers -->
+    <string name="feature_assistant_answer_total_lead">أنت تنفق</string>
+    <plurals name="feature_assistant_answer_total_body">
+        <item quantity="zero">شهريًا عبر %1$d اشتراك نشط.</item>
+        <item quantity="one">شهريًا عبر اشتراك نشط واحد.</item>
+        <item quantity="two">شهريًا عبر اشتراكين نشطين.</item>
+        <item quantity="few">شهريًا عبر %1$d اشتراكات نشطة.</item>
+        <item quantity="many">شهريًا عبر %1$d اشتراكًا نشطًا.</item>
+        <item quantity="other">شهريًا عبر %1$d اشتراك نشط.</item>
+    </plurals>
+    <plurals name="feature_assistant_answer_category_body">
+        <item quantity="zero">شهريًا على %2$s، عبر %1$d اشتراك.</item>
+        <item quantity="one">شهريًا على %2$s، عبر اشتراك واحد.</item>
+        <item quantity="two">شهريًا على %2$s، عبر اشتراكين.</item>
+        <item quantity="few">شهريًا على %2$s، عبر %1$d اشتراكات.</item>
+        <item quantity="many">شهريًا على %2$s، عبر %1$d اشتراكًا.</item>
+        <item quantity="other">شهريًا على %2$s، عبر %1$d اشتراك.</item>
+    </plurals>
+    <string name="feature_assistant_answer_nothing_in_category">ليس لديك اشتراكات نشطة في فئة %1$s.</string>
+    <string name="feature_assistant_answer_top">أغلى اشتراكاتك حسب التكلفة الشهرية:</string>
+    <string name="feature_assistant_answer_cancel_lead">بحسب ما أخبرتني به، هذه قليلة الاستخدام:</string>
+    <string name="feature_assistant_answer_cancel_body">تكلفتها معًا %1$s شهريًا. هل تود مراجعتها؟</string>
+    <string name="feature_assistant_answer_no_cancel">لا شيء يلفت الانتباه. لم تضع علامة نادر الاستخدام على أي اشتراك.</string>
+    <plurals name="feature_assistant_answer_no_cancel_hint">
+        <item quantity="zero">%1$d اشتراك بلا معلومات استخدام بعد؛ أخبرني كم مرة تستخدمه لأقول المزيد.</item>
+        <item quantity="one">اشتراك واحد بلا معلومات استخدام بعد؛ أخبرني كم مرة تستخدمه لأقول المزيد.</item>
+        <item quantity="two">اشتراكان بلا معلومات استخدام بعد؛ أخبرني كم مرة تستخدمهما لأقول المزيد.</item>
+        <item quantity="few">%1$d اشتراكات بلا معلومات استخدام بعد؛ أخبرني كم مرة تستخدمها لأقول المزيد.</item>
+        <item quantity="many">%1$d اشتراكًا بلا معلومات استخدام بعد؛ أخبرني كم مرة تستخدمها لأقول المزيد.</item>
+        <item quantity="other">%1$d اشتراك بلا معلومات استخدام بعد؛ أخبرني كم مرة تستخدمها لأقول المزيد.</item>
+    </plurals>
+    <string name="feature_assistant_answer_no_usage">ليس لديّ بيانات استخدام كافية للإجابة. افتح اشتراكًا وأخبرني كم مرة تستخدمه.</string>
+    <string name="feature_assistant_answer_next">خصمك القادم هو %1$s، %2$s:</string>
+    <string name="feature_assistant_answer_no_upcoming">لا شيء مجدول. كل اشتراكاتك متوقفة مؤقتًا أو ملغاة.</string>
+    <plurals name="feature_assistant_answer_upcoming">
+        <item quantity="zero">%1$d خصم ما زال قادمًا هذا الشهر:</item>
+        <item quantity="one">خصم واحد ما زال قادمًا هذا الشهر:</item>
+        <item quantity="two">خصمان ما زالا قادمين هذا الشهر:</item>
+        <item quantity="few">%1$d خصوم ما زالت قادمة هذا الشهر:</item>
+        <item quantity="many">%1$d خصمًا ما زالت قادمة هذا الشهر:</item>
+        <item quantity="other">%1$d خصم ما زال قادمًا هذا الشهر:</item>
+    </plurals>
+    <string name="feature_assistant_answer_upcoming_total">أي %1$s في المجموع.</string>
+    <string name="feature_assistant_answer_increases">هذه الاشتراكات رفعت أسعارها:</string>
+    <string name="feature_assistant_answer_increase_item">من %1$s، منذ %2$s</string>
+    <string name="feature_assistant_answer_no_increases">لا توجد زيادات أسعار مسجلة.</string>
+    <plurals name="feature_assistant_answer_count">
+        <item quantity="zero">لديك %1$d اشتراك نشط. الفئات، مثال واحد لكل فئة:</item>
+        <item quantity="one">لديك اشتراك نشط واحد. الفئات، مثال واحد لكل فئة:</item>
+        <item quantity="two">لديك اشتراكان نشطان. الفئات، مثال واحد لكل فئة:</item>
+        <item quantity="few">لديك %1$d اشتراكات نشطة. الفئات، مثال واحد لكل فئة:</item>
+        <item quantity="many">لديك %1$d اشتراكًا نشطًا. الفئات، مثال واحد لكل فئة:</item>
+        <item quantity="other">لديك %1$d اشتراك نشط. الفئات، مثال واحد لكل فئة:</item>
+    </plurals>
+    <string name="feature_assistant_answer_no_subscriptions">أضف اشتراكًا أولًا لأتمكن من الإجابة.</string>
+    <string name="feature_assistant_answer_unknown">يمكنني الإجابة عن أسئلة حول ما تنفقه، وحسب الفئة، وأغلى اشتراكاتك، وما نادرًا ما تستخدمه، وزيادات الأسعار، والخصومات القادمة. جرّب أحد هذه:</string>
+    <plurals name="feature_assistant_answer_foreign">
+        <item quantity="zero">%1$d اشتراك بعملة أخرى غير مُدرج.</item>
+        <item quantity="one">اشتراك واحد بعملة أخرى غير مُدرج.</item>
+        <item quantity="two">اشتراكان بعملات أخرى غير مُدرجين.</item>
+        <item quantity="few">%1$d اشتراكات بعملات أخرى غير مُدرجة.</item>
+        <item quantity="many">%1$d اشتراكًا بعملات أخرى غير مُدرجة.</item>
+        <item quantity="other">%1$d اشتراك بعملات أخرى غير مُدرج.</item>
+    </plurals>
+    <string name="feature_assistant_review">مراجعة الاشتراكات</string>
+    <string name="feature_assistant_tag_ai">ذكاء اصطناعي</string>
+    <string name="feature_assistant_tag_on_device">على الجهاز</string>
+    <string name="feature_assistant_fell_back">تعذّر الوصول إلى نموذج الذكاء الاصطناعي، لذا جاءت هذه الإجابة من بياناتك على الجهاز.</string>
+</resources>

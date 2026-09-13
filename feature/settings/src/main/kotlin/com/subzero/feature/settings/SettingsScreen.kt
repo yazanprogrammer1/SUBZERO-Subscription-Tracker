@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import androidx.annotation.RequiresApi
 import android.text.format.Formatter
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -76,6 +77,9 @@ internal object SettingsTestTags {
     const val EXPORT_CSV = "settings_export_csv"
     const val DELETE = "settings_delete"
     const val CONFIRM_DELETE = "settings_confirm_delete"
+    const val AI_ENHANCED = "settings_ai_enhanced"
+    const val AI_TEST = "settings_ai_test"
+    const val LANGUAGE = "settings_language"
     fun days(days: Int) = "settings_days_$days"
     fun theme(mode: ThemeMode) = "settings_theme_${mode.name}"
 }
@@ -94,6 +98,9 @@ data class SettingsActions(
     val onName: (String?) -> Unit,
     val onCurrency: (CurrencyCode) -> Unit,
     val onTheme: (ThemeMode) -> Unit,
+    val onOpenLanguageSettings: () -> Unit,
+    val onAiEnhanced: (Boolean) -> Unit,
+    val onTestAi: () -> Unit,
     val onExport: (ExportFormat) -> Unit,
     val onDeleteAll: () -> Unit,
     val onMessageShown: () -> Unit,
@@ -132,6 +139,18 @@ fun SettingsRoute(viewModel: SettingsViewModel = hiltViewModel()) {
             onName = viewModel::setDisplayName,
             onCurrency = viewModel::setHomeCurrency,
             onTheme = viewModel::setThemeMode,
+            onOpenLanguageSettings = {
+                // Android 13+ owns the per-app language picker; below that the app follows the system language.
+                runCatching {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        context.startActivity(appLanguageSettingsIntent(context.packageName))
+                    } else {
+                        context.startActivity(appDetailsSettingsIntent(context.packageName))
+                    }
+                }.onFailure { context.startActivity(appDetailsSettingsIntent(context.packageName)) }
+            },
+            onAiEnhanced = viewModel::setAiEnhancedEnabled,
+            onTestAi = viewModel::testAiConnection,
             onExport = { format ->
                 pendingFormat = format
                 exportLauncher.launch("subzero-export.${format.extension}")
@@ -141,6 +160,16 @@ fun SettingsRoute(viewModel: SettingsViewModel = hiltViewModel()) {
         ),
     )
 }
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+private fun appLanguageSettingsIntent(packageName: String): Intent =
+    Intent(Settings.ACTION_APP_LOCALE_SETTINGS, Uri.fromParts("package", packageName, null))
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+/** Fallback when the device has no per-app language screen: the app's own settings page. */
+private fun appDetailsSettingsIntent(packageName: String): Intent =
+    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", packageName, null))
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
 private fun appNotificationSettingsIntent(packageName: String): Intent =
     Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
@@ -189,7 +218,8 @@ fun SettingsScreen(
                     ProfileSection(state, actions)
                     PreferencesSection(state, actions)
                     NotificationsSection(state, actions)
-                    PrivacySection()
+                    AssistantSection(state, actions)
+                    PrivacySection(state)
                     DataSection(state, actions)
                     AboutSection(state)
                     Spacer(Modifier.height(spacing.xxl))
@@ -255,6 +285,21 @@ private fun PreferencesSection(state: SettingsUiState.Ready, actions: SettingsAc
                         .weight(1f)
                         .testTag(SettingsTestTags.theme(mode)),
                 )
+            }
+        }
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        SubzeroCard(
+            onClick = actions.onOpenLanguageSettings,
+            modifier = Modifier.fillMaxWidth().testTag(SettingsTestTags.LANGUAGE),
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(text = stringResource(R.string.feature_settings_language), style = SubzeroTheme.typography.body, color = colors.textPrimary)
+                    Text(text = stringResource(R.string.feature_settings_language_body), style = SubzeroTheme.typography.caption, color = colors.textSecondary)
+                }
+                Spacer(Modifier.width(spacing.sm))
+                Text(text = stringResource(R.string.feature_settings_language_action), style = SubzeroTheme.typography.caption, color = colors.accent)
             }
         }
     }
@@ -344,14 +389,53 @@ private fun NotificationsSection(state: SettingsUiState.Ready, actions: Settings
 }
 
 @Composable
-private fun PrivacySection() {
+private fun AssistantSection(state: SettingsUiState.Ready, actions: SettingsActions) {
+    if (!state.aiAvailable) return
+    val colors = SubzeroTheme.colors
+    SectionHeader(title = stringResource(R.string.feature_settings_assistant))
+    SubzeroCard(modifier = Modifier.fillMaxWidth()) {
+        ToggleRow(
+            title = stringResource(R.string.feature_settings_ai_enhanced_title),
+            body = stringResource(R.string.feature_settings_ai_enhanced_body),
+            checked = state.preferences.aiEnhancedEnabled,
+            onChecked = actions.onAiEnhanced,
+            tag = SettingsTestTags.AI_ENHANCED,
+        )
+        Spacer(Modifier.height(SubzeroTheme.spacing.xs))
+        Text(
+            text = stringResource(R.string.feature_settings_ai_enhanced_privacy),
+            style = SubzeroTheme.typography.caption,
+            color = colors.textTertiary,
+        )
+        Spacer(Modifier.height(SubzeroTheme.spacing.sm))
+        SubzeroButton(
+            text = stringResource(R.string.feature_settings_ai_test),
+            onClick = actions.onTestAi,
+            style = SubzeroButtonStyle.Secondary,
+            compact = true,
+            loading = state.isBusy,
+            enabled = !state.isBusy,
+            modifier = Modifier.testTag(SettingsTestTags.AI_TEST),
+        )
+        val aiError = state.aiError
+        if (aiError != null) {
+            Spacer(Modifier.height(SubzeroTheme.spacing.xs))
+            Text(text = aiError, style = SubzeroTheme.typography.caption, color = colors.danger)
+        }
+    }
+}
+
+@Composable
+private fun PrivacySection(state: SettingsUiState.Ready) {
     SectionHeader(title = stringResource(R.string.feature_settings_privacy))
     SubzeroCard(modifier = Modifier.fillMaxWidth()) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             androidx.compose.material3.Icon(SubzeroIcons.Lock, contentDescription = null, tint = SubzeroTheme.colors.positive)
             Spacer(Modifier.width(SubzeroTheme.spacing.sm))
             Text(
-                text = stringResource(R.string.feature_settings_privacy_body),
+                text = stringResource(
+                    if (state.preferences.aiEnhancedEnabled) R.string.feature_settings_privacy_body_ai else R.string.feature_settings_privacy_body,
+                ),
                 style = SubzeroTheme.typography.bodySmall,
                 color = SubzeroTheme.colors.textSecondary,
             )
@@ -479,4 +563,6 @@ private fun SettingsMessage.text(): Int = when (this) {
     SettingsMessage.EXPORT_FAILED -> R.string.feature_settings_message_export_failed
     SettingsMessage.DATA_DELETED -> R.string.feature_settings_message_deleted
     SettingsMessage.DELETE_FAILED -> R.string.feature_settings_message_delete_failed
+    SettingsMessage.AI_OK -> R.string.feature_settings_message_ai_ok
+    SettingsMessage.AI_FAILED -> R.string.feature_settings_message_ai_failed
 }

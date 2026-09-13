@@ -9,5 +9,6 @@ android {
 dependencies {
     implementation(projects.core.data)
     implementation(projects.core.notifications)
+    implementation(projects.core.ai)
     implementation(libs.androidx.activity.compose)
 }

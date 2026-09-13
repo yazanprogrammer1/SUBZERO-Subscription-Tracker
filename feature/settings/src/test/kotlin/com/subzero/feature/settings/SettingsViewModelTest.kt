@@ -3,6 +3,10 @@ package com.subzero.feature.settings
 import android.net.Uri
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import com.subzero.core.ai.AiConfig
+import com.subzero.core.ai.AiException
+import com.subzero.core.ai.ChatMessage
+import com.subzero.core.ai.ChatTransport
 import com.subzero.core.data.export.DataManager
 import com.subzero.core.data.export.ExportFormat
 import com.subzero.core.data.export.StorageInfo
@@ -71,6 +75,10 @@ class SettingsViewModelTest {
         ledger = ledger,
         dataManager = dataManager,
         appInfo = AppInfo("0.1.0"),
+        aiConfig = AiConfig(apiKey = "", baseUrl = "https://example.invalid", model = "m"),
+        chatTransport = object : ChatTransport {
+            override suspend fun complete(messages: List<ChatMessage>): String = throw AiException("no network in tests")
+        },
     )
 
     @Test

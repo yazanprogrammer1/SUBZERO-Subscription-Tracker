@@ -2,7 +2,7 @@
 <resources>
     <string name="feature_assistant_title">SUBZERO Assistant</string>
     <string name="feature_assistant_beta">Beta</string>
-    <string name="feature_assistant_offline_note">Works offline. Answers come only from your data and never leave your phone.</string>
+    <string name="feature_assistant_offline_note">Works offline. Answers come from your data and never leave your phone unless you turn on enhanced answers in Settings.</string>
     <string name="feature_assistant_welcome">Ask me about your subscriptions.</string>
     <string name="feature_assistant_input_hint">Ask a question</string>
     <string name="feature_assistant_send">Send</string>
@@ -54,4 +54,7 @@
         <item quantity="other">%1$d subscriptions in other currencies are not included.</item>
     </plurals>
     <string name="feature_assistant_review">Review subscriptions</string>
+    <string name="feature_assistant_tag_ai">AI</string>
+    <string name="feature_assistant_tag_on_device">On device</string>
+    <string name="feature_assistant_fell_back">The AI model could not be reached, so this answer comes from your data on the device.</string>
 </resources>

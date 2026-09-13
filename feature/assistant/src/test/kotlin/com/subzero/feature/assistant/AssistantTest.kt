@@ -100,7 +100,7 @@ class AssistantTest {
     @Test
     fun `suggestions ask the question`() {
         setContent(AssistantUiState())
-        compose.onNodeWithText("Works offline. Answers come only from your data and never leave your phone.").assertIsDisplayed()
+        compose.onNodeWithText("Works offline.", substring = true).assertIsDisplayed()
         compose.onNodeWithTag(AssistantTestTags.suggestion(2)).performClick()
         assertThat(asked).isEqualTo("What can I cancel?")
     }

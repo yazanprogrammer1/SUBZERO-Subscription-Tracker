@@ -33,10 +33,23 @@
     <string name="feature_settings_theme_system">System</string>
     <string name="feature_settings_theme_dark">Dark</string>
     <string name="feature_settings_theme_light">Light</string>
+    <string name="feature_settings_language">Language</string>
+    <string name="feature_settings_language_body">SUBZERO follows your phone language. You can pick a different one for this app alone.</string>
+    <string name="feature_settings_language_action">Change language</string>
 
     <!-- Privacy -->
     <string name="feature_settings_privacy">Privacy &amp; security</string>
-    <string name="feature_settings_privacy_body">Everything you enter stays on this device. SUBZERO has no account, no analytics and no internet permission. Your data is included in your Android backup, encrypted by Google.</string>
+    <string name="feature_settings_privacy_body">Everything you enter stays on this device. SUBZERO has no account and no analytics, and connects to the internet only if you turn on enhanced answers. Your data is included in your Android backup, encrypted by Google.</string>
+    <string name="feature_settings_privacy_body_ai">Enhanced answers is on: when you ask the assistant, a summary of your subscriptions (names, amounts, cycles, usage) is sent to the AI provider. Notes and your name are never sent. Turn it off any time; everything else stays on this device.</string>
+
+    <!-- Assistant -->
+    <string name="feature_settings_assistant">Assistant</string>
+    <string name="feature_settings_ai_enhanced_title">Enhanced answers</string>
+    <string name="feature_settings_ai_enhanced_body">Use an AI model for questions the on-device assistant cannot answer.</string>
+    <string name="feature_settings_ai_test">Test connection</string>
+    <string name="feature_settings_message_ai_ok">The AI model answered. Enhanced answers are ready.</string>
+    <string name="feature_settings_message_ai_failed">The AI model could not be reached. Check the key, endpoint and model.</string>
+    <string name="feature_settings_ai_enhanced_privacy">Sends a summary of your subscriptions (names, amounts, cycles, usage) to the AI provider for each question. Notes and your name are never sent. Off by default.</string>
 
     <!-- Data -->
     <string name="feature_settings_data">Data &amp; storage</string>

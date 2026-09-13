@@ -119,6 +119,33 @@ class LocalAssistantTest {
     }
 
     @Test
+    fun `parses the same questions in Arabic`() {
+        assertThat(assistant.parse("كم أنفق على الذكاء الاصطناعي؟")).isEqualTo(AssistantIntent.SpendInCategory(Category.AI))
+        assertThat(assistant.parse("ما هو الاشتراك الأغلى؟")).isEqualTo(AssistantIntent.TopSubscriptions(3))
+        assertThat(assistant.parse("ما الذي يمكنني إلغاؤه؟")).isEqualTo(AssistantIntent.CancelCandidates)
+        assertThat(assistant.parse("كم أدفع شهريًا؟")).isEqualTo(AssistantIntent.TotalSpend)
+        assertThat(assistant.parse("متى الخصم القادم؟")).isEqualTo(AssistantIntent.NextCharge)
+        assertThat(assistant.parse("أي الأسعار ارتفعت؟")).isEqualTo(AssistantIntent.PriceIncreases)
+        assertThat(assistant.parse("كم عدد اشتراكاتي؟")).isEqualTo(AssistantIntent.CountByCategory)
+        assertThat(assistant.parse("احكِ لي نكتة")).isEqualTo(AssistantIntent.Unknown)
+    }
+
+    @Test
+    fun `normalizing folds diacritics, letter variants and Arabic-Indic digits`() {
+        assertThat(assistant.normalize("أَغْلَى")).isEqualTo("اغلي")
+        assertThat(assistant.normalize("الدفعة")).isEqualTo("الدفعه")
+        assertThat(assistant.normalize("أعلى ٥ اشتراكات")).isEqualTo("اعلي 5 اشتراكات")
+    }
+
+    @Test
+    fun `answers an Arabic question from the data`() = runTest {
+        val answer = assistant.ask("كم أنفق على الذكاء الاصطناعي؟", context(netflix, chatgpt, claude))
+        assertThat(answer.kind).isEqualTo(AnswerKind.SPEND_IN_CATEGORY)
+        assertThat(answer.category).isEqualTo(Category.AI)
+        assertThat(answer.amount).isEqualTo(usd(3500))
+    }
+
+    @Test
     fun `empty data and unknown questions are honest`() = runTest {
         assertThat(assistant.ask("how much", context()).kind).isEqualTo(AnswerKind.NO_SUBSCRIPTIONS)
         assertThat(assistant.ask("tell me a joke", context(netflix)).kind).isEqualTo(AnswerKind.UNKNOWN)

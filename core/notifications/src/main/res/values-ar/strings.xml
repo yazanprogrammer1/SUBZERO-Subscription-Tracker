@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="core_notifications_channel_upcoming">الخصومات القادمة</string>
+    <string name="core_notifications_channel_upcoming_description">تذكيرات قبل أن يخصم اشتراك مبلغًا منك.</string>
+    <string name="core_notifications_channel_summary">الملخص الشهري</string>
+    <string name="core_notifications_channel_summary_description">ما أنفقته على الاشتراكات الشهر الماضي.</string>
+    <string name="core_notifications_channel_insights">تحليلات التوفير</string>
+    <string name="core_notifications_channel_insights_description">ملاحظات من حين لآخر عما يمكنك توفيره.</string>
+
+    <string name="core_notifications_upcoming_title">%1$s يخصم %2$s %3$s</string>
+    <string name="core_notifications_upcoming_today">اليوم</string>
+    <string name="core_notifications_upcoming_tomorrow">غدًا</string>
+    <plurals name="core_notifications_upcoming_in_days">
+        <item quantity="zero">خلال %d يوم</item>
+        <item quantity="one">خلال يوم</item>
+        <item quantity="two">خلال يومين</item>
+        <item quantity="few">خلال %d أيام</item>
+        <item quantity="many">خلال %d يومًا</item>
+        <item quantity="other">خلال %d يوم</item>
+    </plurals>
+    <string name="core_notifications_upcoming_body">اضغط لعرض التفاصيل.</string>
+    <plurals name="core_notifications_upcoming_group_title">
+        <item quantity="zero">%1$d خصم قادم</item>
+        <item quantity="one">خصم واحد قادم</item>
+        <item quantity="two">خصمان قادمان</item>
+        <item quantity="few">%1$d خصوم قادمة</item>
+        <item quantity="many">%1$d خصمًا قادمًا</item>
+        <item quantity="other">%1$d خصم قادم</item>
+    </plurals>
+    <string name="core_notifications_summary_title">أنفقت %1$s على الاشتراكات في %2$s.</string>
+    <plurals name="core_notifications_summary_body">
+        <item quantity="zero">عبر %1$d اشتراك.</item>
+        <item quantity="one">عبر اشتراك واحد.</item>
+        <item quantity="two">عبر اشتراكين.</item>
+        <item quantity="few">عبر %1$d اشتراكات.</item>
+        <item quantity="many">عبر %1$d اشتراكًا.</item>
+        <item quantity="other">عبر %1$d اشتراك.</item>
+    </plurals>
+    <string name="core_notifications_savings_title">قد تتمكن من توفير نحو %1$s شهريًا.</string>
+    <plurals name="core_notifications_savings_body">
+        <item quantity="zero">%1$d اشتراك قلت إنك نادرًا ما تستخدمه. هل يستحق المراجعة؟</item>
+        <item quantity="one">اشتراك واحد قلت إنك نادرًا ما تستخدمه. هل يستحق المراجعة؟</item>
+        <item quantity="two">اشتراكان قلت إنك نادرًا ما تستخدمهما. هل يستحق المراجعة؟</item>
+        <item quantity="few">%1$d اشتراكات قلت إنك نادرًا ما تستخدمها. هل تستحق المراجعة؟</item>
+        <item quantity="many">%1$d اشتراكًا قلت إنك نادرًا ما تستخدمها. هل تستحق المراجعة؟</item>
+        <item quantity="other">%1$d اشتراك قلت إنك نادرًا ما تستخدمه. هل يستحق المراجعة؟</item>
+    </plurals>
+</resources>

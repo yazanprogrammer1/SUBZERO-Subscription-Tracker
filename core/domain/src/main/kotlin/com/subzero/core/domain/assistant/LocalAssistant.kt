@@ -14,7 +14,8 @@ import javax.inject.Inject
  *
  * Parsing is keyword based and deliberately conservative: anything it does not recognise
  * becomes [AnswerKind.UNKNOWN] with the supported questions offered, rather than a guess.
- * Category words are matched in English; localized synonyms can be added per language.
+ * English and Arabic keywords are recognised; Arabic text is normalized first (diacritics
+ * removed, alef and ya variants folded, Arabic-Indic digits converted) so spelling variants match.
  */
 class LocalAssistant @Inject constructor(
     private val getUpcomingPayments: GetUpcomingPaymentsUseCase,
@@ -24,23 +25,56 @@ class LocalAssistant @Inject constructor(
         answer(parse(question), context)
 
     fun parse(question: String): AssistantIntent {
-        val q = question.lowercase().trim()
+        val q = normalize(question)
         if (q.isBlank()) return AssistantIntent.Unknown
-        val category = Category.entries.firstOrNull { c -> categoryWords.getValue(c).any { it in q } }
+        val category = Category.entries.firstOrNull { c -> categoryWords.getValue(c).any { normalize(it) in q } }
         return when {
-            q.containsAny("cancel", "waste", "wasting", "rarely", "don't use", "not using", "drop", "save") -> AssistantIntent.CancelCandidates
-            q.containsAny("increase", "went up", "go up", "gone up", "raised", "price change", "more expensive", "higher") -> AssistantIntent.PriceIncreases
-            q.containsAny("next charge", "next payment", "when is", "when's", "charged next", "due next", "coming up next") -> AssistantIntent.NextCharge
-            q.containsAny("this month", "coming up", "upcoming", "due this") -> AssistantIntent.UpcomingThisMonth
-            q.containsAny("most expensive", "cost me the most", "costs me the most", "biggest", "largest", "top ") ->
-                AssistantIntent.TopSubscriptions(count = numberIn(q) ?: DEFAULT_TOP)
-            q.containsAny("how many") && category == null -> AssistantIntent.CountByCategory
-            category != null && q.containsAny("how many") -> AssistantIntent.SpendInCategory(category)
+            q.containsAny(
+                "cancel", "waste", "wasting", "rarely", "don't use", "not using", "drop", "save",
+                // "الغ" covers إلغاء / إلغاؤه / ألغي once hamza and waw variants are folded.
+                "الغ", "اوقف", "اهدر", "نادرا", "لا استخدم", "توفير", "اوفر", "استغني",
+            ) -> AssistantIntent.CancelCandidates
+            q.containsAny(
+                "increase", "went up", "go up", "gone up", "raised", "price change", "more expensive", "higher",
+                "ارتفع", "ارتفعت", "زاد", "زادت", "زياده", "رفع السعر", "تغير السعر",
+            ) -> AssistantIntent.PriceIncreases
+            q.containsAny(
+                "next charge", "next payment", "when is", "when's", "charged next", "due next", "coming up next",
+                "متى", "الخصم القادم", "الدفعه القادمه", "الدفعه التاليه",
+            ) -> AssistantIntent.NextCharge
+            q.containsAny("this month", "coming up", "upcoming", "due this", "هذا الشهر", "الشهر الحالي", "القادمه") ->
+                AssistantIntent.UpcomingThisMonth
+            q.containsAny(
+                "most expensive", "cost me the most", "costs me the most", "biggest", "largest", "top ",
+                "اغلى", "الاكبر", "اكثر تكلفه", "اعلى تكلفه",
+            ) -> AssistantIntent.TopSubscriptions(count = numberIn(q) ?: DEFAULT_TOP)
+            q.containsAny(*countWords) && category == null -> AssistantIntent.CountByCategory
+            category != null && q.containsAny(*countWords) -> AssistantIntent.SpendInCategory(category)
             category != null -> AssistantIntent.SpendInCategory(category)
-            q.containsAny("how much", "spend", "spending", "pay", "total", "per month", "per year", "a month", "a year", "monthly", "yearly", "annual") ->
-                AssistantIntent.TotalSpend
+            q.containsAny(
+                "how much", "spend", "spending", "pay", "total", "per month", "per year", "a month", "a year",
+                "monthly", "yearly", "annual",
+                "كم ادفع", "كم انفق", "كم اصرف", "اجمالي", "المجموع", "شهريا", "سنويا", "في الشهر", "في السنه",
+            ) -> AssistantIntent.TotalSpend
             else -> AssistantIntent.Unknown
         }
+    }
+
+    /**
+     * Folds a question into a form keywords can be matched against: lowercase, no Arabic
+     * diacritics or tatweel, alef/ya/ta-marbuta variants unified, Arabic-Indic digits as ASCII.
+     */
+    internal fun normalize(text: String): String {
+        val builder = StringBuilder(text.length)
+        for (char in text.lowercase()) {
+            when {
+                char in '\u064B'..'\u0652' || char == '\u0640' -> Unit // diacritics and tatweel
+                char in '\u0660'..'\u0669' -> builder.append('0' + (char - '\u0660')) // ٠-٩
+                char in '\u06F0'..'\u06F9' -> builder.append('0' + (char - '\u06F0')) // ۰-۹
+                else -> builder.append(arabicFolding[char] ?: char)
+            }
+        }
+        return builder.toString().trim()
     }
 
     fun answer(intent: AssistantIntent, context: AssistantContext): AssistantAnswer {
@@ -146,7 +180,7 @@ class LocalAssistant @Inject constructor(
     private fun List<Subscription>.sumMonthly(context: AssistantContext): Money =
         fold(Money.zero(context.homeCurrency)) { acc, s -> acc + s.monthly() }
 
-    private fun String.containsAny(vararg needles: String): Boolean = needles.any { it in this }
+    private fun String.containsAny(vararg needles: String): Boolean = needles.any { normalize(it) in this }
 
     private fun numberIn(q: String): Int? = Regex("\\b(\\d{1,2})\\b").find(q)?.groupValues?.get(1)?.toIntOrNull()?.coerceIn(1, MAX_TOP)
 
@@ -154,17 +188,26 @@ class LocalAssistant @Inject constructor(
         const val DEFAULT_TOP = 3
         const val MAX_TOP = 10
 
-        /** English words that identify a category in a question. */
+        /** Words that identify a category in a question, in English and Arabic. */
         val categoryWords: Map<Category, List<String>> = mapOf(
-            Category.ENTERTAINMENT to listOf("entertainment", "streaming", "video", "music", "tv"),
-            Category.AI to listOf(" ai", "ai ", "artificial", "chatgpt", "claude", "gemini", "copilot"),
-            Category.CLOUD to listOf("cloud", "storage", "backup"),
-            Category.SOFTWARE to listOf("software", "apps", "tools"),
-            Category.FITNESS to listOf("fitness", "gym", "health", "workout"),
-            Category.EDUCATION to listOf("education", "learning", "courses", "course"),
-            Category.PRODUCTIVITY to listOf("productivity", "notes", "tasks"),
-            Category.GAMING to listOf("gaming", "games", "game"),
-            Category.OTHER to listOf("other"),
+            Category.ENTERTAINMENT to listOf("entertainment", "streaming", "video", "music", "tv", "ترفيه", "افلام", "موسيقى", "تلفزيون", "مسلسلات"),
+            Category.AI to listOf(" ai", "ai ", "artificial", "chatgpt", "claude", "gemini", "copilot", "ذكاء", "اصطناعي", "كلود", "جيميني"),
+            Category.CLOUD to listOf("cloud", "storage", "backup", "سحاب", "سحابي", "تخزين", "نسخ احتياطي"),
+            Category.SOFTWARE to listOf("software", "apps", "tools", "برمجيات", "برامج", "ادوات"),
+            Category.FITNESS to listOf("fitness", "gym", "health", "workout", "لياقه", "رياضه", "صحه", "نادي"),
+            Category.EDUCATION to listOf("education", "learning", "courses", "course", "تعليم", "دورات", "دوره", "تعلم"),
+            Category.PRODUCTIVITY to listOf("productivity", "notes", "tasks", "انتاجيه", "ملاحظات", "مهام"),
+            Category.GAMING to listOf("gaming", "games", "game", "العاب", "لعبه"),
+            Category.OTHER to listOf("other", "اخرى"),
+        )
+
+        /** "How many" in both languages, used twice in [parse]. */
+        private val countWords = arrayOf("how many", "كم عدد", "عدد الاشتراكات")
+
+        /** Arabic letters folded to one spelling before matching. */
+        private val arabicFolding = mapOf(
+            'أ' to 'ا', 'إ' to 'ا', 'آ' to 'ا', 'ٱ' to 'ا',
+            'ة' to 'ه', 'ى' to 'ي', 'ئ' to 'ي', 'ؤ' to 'و',
         )
     }
 }

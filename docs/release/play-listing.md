@@ -24,10 +24,11 @@ what you could save. It never tells you what to cancel; it shows you the numbers
 
 Private by design
 Everything stays on your phone. No account, no sign-up, no analytics, and the app does not even
-ask for internet access. Export your data any time as JSON or CSV, or delete it with one tap.
+connect to the internet unless you turn on enhanced assistant answers. Export your data any time as JSON or CSV, or delete it with one tap.
 
 Built for clarity
-A calm, dark interface designed around your numbers. Fast, offline, and respectful of your
+A calm, dark interface designed around your numbers, in English and Arabic with full
+right-to-left support. Fast, offline, and respectful of your
 attention: nothing is on by default.
 
 ## Category

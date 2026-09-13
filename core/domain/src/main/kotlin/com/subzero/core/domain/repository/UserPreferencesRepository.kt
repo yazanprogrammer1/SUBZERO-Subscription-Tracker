@@ -20,6 +20,8 @@ interface UserPreferencesRepository {
 
     suspend fun setDisplayName(name: String?)
 
+    suspend fun setAiEnhancedEnabled(enabled: Boolean)
+
     /** Wipes every preference. Used by "Delete all data". */
     suspend fun clear()
 }

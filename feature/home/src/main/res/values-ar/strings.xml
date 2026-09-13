@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_home_ask">اسأل SUBZERO</string>
+    <string name="feature_home_greeting_morning">صباح الخير</string>
+    <string name="feature_home_greeting_afternoon">مساء الخير</string>
+    <string name="feature_home_greeting_evening">مساء الخير</string>
+    <string name="feature_home_greeting_named">%1$s يا %2$s</string>
+    <string name="feature_home_monthly_spending">الإنفاق الشهري</string>
+    <string name="feature_home_per_month">شهريًا</string>
+    <string name="feature_home_per_year">%1$s / سنة</string>
+    <plurals name="feature_home_active_count">
+        <item quantity="zero">%1$d اشتراك نشط</item>
+        <item quantity="one">اشتراك نشط واحد</item>
+        <item quantity="two">اشتراكان نشطان</item>
+        <item quantity="few">%1$d اشتراكات نشطة</item>
+        <item quantity="many">%1$d اشتراكًا نشطًا</item>
+        <item quantity="other">%1$d اشتراك نشط</item>
+    </plurals>
+    <plurals name="feature_home_foreign_excluded">
+        <item quantity="zero">%1$d اشتراك بعملة أخرى غير مُدرج.</item>
+        <item quantity="one">اشتراك واحد بعملة أخرى غير مُدرج.</item>
+        <item quantity="two">اشتراكان بعملات أخرى غير مُدرجين.</item>
+        <item quantity="few">%1$d اشتراكات بعملات أخرى غير مُدرجة.</item>
+        <item quantity="many">%1$d اشتراكًا بعملات أخرى غير مُدرجة.</item>
+        <item quantity="other">%1$d اشتراك بعملات أخرى غير مُدرج.</item>
+    </plurals>
+    <string name="feature_home_upcoming">القادمة</string>
+    <string name="feature_home_next_charge">الخصم القادم</string>
+    <string name="feature_home_no_upcoming">لا شيء مجدول. كل اشتراكاتك متوقفة مؤقتًا أو ملغاة.</string>
+    <string name="feature_home_see_all">عرض الكل</string>
+    <string name="feature_home_spending_overview">نظرة على الإنفاق</string>
+    <string name="feature_home_this_month">هذا الشهر</string>
+    <string name="feature_home_vs_last_month">مقارنة بالشهر الماضي</string>
+    <string name="feature_home_change_up">+%1$s%%</string>
+    <string name="feature_home_change_down">−%1$s%%</string>
+    <string name="feature_home_change_none">لا تغيير</string>
+    <string name="feature_home_change_new">الشهر الأول</string>
+    <string name="feature_home_projected_note">يشمل %1$s ما زالت مجدولة هذا الشهر.</string>
+    <plurals name="feature_home_trend_chart">
+        <item quantity="zero">الإنفاق الشهري خلال آخر %1$d شهر، هذا الشهر %2$s</item>
+        <item quantity="one">الإنفاق الشهري خلال الشهر الماضي، هذا الشهر %2$s</item>
+        <item quantity="two">الإنفاق الشهري خلال الشهرين الماضيين، هذا الشهر %2$s</item>
+        <item quantity="few">الإنفاق الشهري خلال آخر %1$d أشهر، هذا الشهر %2$s</item>
+        <item quantity="many">الإنفاق الشهري خلال آخر %1$d شهرًا، هذا الشهر %2$s</item>
+        <item quantity="other">الإنفاق الشهري خلال آخر %1$d شهر، هذا الشهر %2$s</item>
+    </plurals>
+    <string name="feature_home_savings_title">توفير محتمل</string>
+    <plurals name="feature_home_savings_detail">
+        <item quantity="zero">بناءً على %1$d اشتراك قلت إنك نادرًا ما تستخدمه.</item>
+        <item quantity="one">بناءً على اشتراك واحد قلت إنك نادرًا ما تستخدمه.</item>
+        <item quantity="two">بناءً على اشتراكين قلت إنك نادرًا ما تستخدمهما.</item>
+        <item quantity="few">بناءً على %1$d اشتراكات قلت إنك نادرًا ما تستخدمها.</item>
+        <item quantity="many">بناءً على %1$d اشتراكًا قلت إنك نادرًا ما تستخدمها.</item>
+        <item quantity="other">بناءً على %1$d اشتراك قلت إنك نادرًا ما تستخدمه.</item>
+    </plurals>
+    <string name="feature_home_savings_none_title">لم نرصد أي توفير بعد</string>
+    <string name="feature_home_savings_none_body">أخبر SUBZERO كم مرة تستخدم كل اشتراك وسيبحث لك عن فرص التوفير.</string>
+    <string name="feature_home_insight">ملاحظة ذكية</string>
+    <string name="feature_home_review">مراجعة الاشتراكات</string>
+    <string name="feature_home_empty_title">إنفاقك المتكرر يبدأ من هنا.</string>
+    <string name="feature_home_empty_body">أضف اشتراكك الأول وسيبني SUBZERO لوحتك.</string>
+    <string name="feature_home_add">إضافة اشتراك</string>
+</resources>

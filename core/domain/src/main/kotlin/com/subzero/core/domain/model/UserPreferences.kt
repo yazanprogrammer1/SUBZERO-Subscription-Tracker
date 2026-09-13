@@ -7,6 +7,8 @@ data class UserPreferences(
     val notifications: NotificationPreferences,
     val onboardingCompleted: Boolean,
     val displayName: String?,
+    /** Opt-in: send an anonymized subscription summary to a hosted model for richer answers. Off by default. */
+    val aiEnhancedEnabled: Boolean = false,
 )
 
 data class NotificationPreferences(

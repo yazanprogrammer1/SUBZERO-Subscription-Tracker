@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_insights_title">التحليلات</string>
+    <string name="feature_insights_ask">اسأل SUBZERO</string>
+    <string name="feature_insights_tab_overview">نظرة عامة</string>
+    <string name="feature_insights_tab_spending">الإنفاق</string>
+    <string name="feature_insights_tab_usage">الاستخدام</string>
+    <string name="feature_insights_yearly_title">أنت تنفق</string>
+    <string name="feature_insights_yearly_suffix">/ سنة</string>
+    <string name="feature_insights_yearly_body">على الاشتراكات.</string>
+    <string name="feature_insights_monthly_equivalent">%1$s شهريًا</string>
+    <string name="feature_insights_no_insights_title">لا توجد بيانات كافية بعد.</string>
+    <string name="feature_insights_no_insights_body">تظهر التحليلات كلما أضفت اشتراكات وأخبرت SUBZERO كم مرة تستخدمها.</string>
+    <string name="feature_insights_categories">حسب الفئة</string>
+    <plurals name="feature_insights_category_count">
+        <item quantity="zero">%1$d اشتراك · %2$d%%</item>
+        <item quantity="one">اشتراك واحد · %2$d%%</item>
+        <item quantity="two">اشتراكان · %2$d%%</item>
+        <item quantity="few">%1$d اشتراكات · %2$d%%</item>
+        <item quantity="many">%1$d اشتراكًا · %2$d%%</item>
+        <item quantity="other">%1$d اشتراك · %2$d%%</item>
+    </plurals>
+    <string name="feature_insights_top_subscriptions">الأغلى</string>
+    <string name="feature_insights_per_year">%1$s / سنة</string>
+    <string name="feature_insights_usage_intro">الاستخدام هو ما تخبر به SUBZERO. لا شيء يُتتبع تلقائيًا.</string>
+    <plurals name="feature_insights_usage_unknown">
+        <item quantity="zero">%1$d اشتراك بلا معلومات استخدام بعد. افتحه وأخبرنا كم مرة تستخدمه.</item>
+        <item quantity="one">اشتراك واحد بلا معلومات استخدام بعد. افتحه وأخبرنا كم مرة تستخدمه.</item>
+        <item quantity="two">اشتراكان بلا معلومات استخدام بعد. افتحهما وأخبرنا كم مرة تستخدمهما.</item>
+        <item quantity="few">%1$d اشتراكات بلا معلومات استخدام بعد. افتحها وأخبرنا كم مرة تستخدمها.</item>
+        <item quantity="many">%1$d اشتراكًا بلا معلومات استخدام بعد. افتحها وأخبرنا كم مرة تستخدمها.</item>
+        <item quantity="other">%1$d اشتراك بلا معلومات استخدام بعد. افتحها وأخبرنا كم مرة تستخدمها.</item>
+    </plurals>
+    <string name="feature_insights_usage_group_rarely">نادر الاستخدام</string>
+    <string name="feature_insights_usage_group_monthly">يُستخدم شهريًا</string>
+    <string name="feature_insights_usage_group_weekly">يُستخدم أسبوعيًا</string>
+    <string name="feature_insights_usage_group_daily">يُستخدم يوميًا</string>
+    <string name="feature_insights_usage_group_unknown">غير محدد بعد</string>
+    <string name="feature_insights_empty_title">التحليلات تحتاج بعض البيانات.</string>
+    <string name="feature_insights_empty_body">أضف اشتراكًا وسيبدأ SUBZERO في رصد الأنماط.</string>
+    <string name="feature_insights_add">إضافة اشتراك</string>
+</resources>

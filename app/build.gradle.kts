@@ -73,6 +73,7 @@ dependencies {
     implementation(projects.core.designsystem)
     implementation(projects.core.navigation)
     implementation(projects.core.notifications)
+    implementation(projects.core.ai)
 
     implementation(projects.feature.onboarding)
     implementation(projects.feature.home)

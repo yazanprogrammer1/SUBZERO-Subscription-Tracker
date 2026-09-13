@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_calendar_title">التقويم</string>
+    <string name="feature_calendar_scheduled_this_month">مجدولة هذا الشهر</string>
+    <string name="feature_calendar_scheduled_in_month">مجدولة في %1$s</string>
+    <plurals name="feature_calendar_foreign_excluded">
+        <item quantity="zero">%1$d خصم بعملة أخرى غير مُدرج.</item>
+        <item quantity="one">خصم واحد بعملة أخرى غير مُدرج.</item>
+        <item quantity="two">خصمان بعملات أخرى غير مُدرجين.</item>
+        <item quantity="few">%1$d خصوم بعملات أخرى غير مُدرجة.</item>
+        <item quantity="many">%1$d خصمًا بعملات أخرى غير مُدرجة.</item>
+        <item quantity="other">%1$d خصم بعملات أخرى غير مُدرج.</item>
+    </plurals>
+    <string name="feature_calendar_previous_month">الشهر السابق</string>
+    <string name="feature_calendar_next_month">الشهر التالي</string>
+    <string name="feature_calendar_today">اليوم</string>
+    <string name="feature_calendar_no_charges_month">لا توجد خصومات مجدولة في %1$s.</string>
+    <string name="feature_calendar_no_charges_day">لا شيء مجدول في %1$s.</string>
+    <string name="feature_calendar_whole_month">كل خصومات هذا الشهر</string>
+    <plurals name="feature_calendar_day_description">
+        <item quantity="zero">%1$s، %2$d خصم</item>
+        <item quantity="one">%1$s، خصم واحد</item>
+        <item quantity="two">%1$s، خصمان</item>
+        <item quantity="few">%1$s، %2$d خصوم</item>
+        <item quantity="many">%1$s، %2$d خصمًا</item>
+        <item quantity="other">%1$s، %2$d خصم</item>
+    </plurals>
+    <string name="feature_calendar_day_no_charges">%1$s، لا خصومات</string>
+    <string name="feature_calendar_empty_title">لا شيء في التقويم بعد.</string>
+    <string name="feature_calendar_empty_body">أضف اشتراكًا وستظهر خصوماته هنا.</string>
+    <string name="feature_calendar_add">إضافة اشتراك</string>
+</resources>

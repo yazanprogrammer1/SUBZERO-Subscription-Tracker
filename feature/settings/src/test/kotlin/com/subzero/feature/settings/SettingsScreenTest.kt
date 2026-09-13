@@ -23,6 +23,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 class SettingsScreenTest {
@@ -37,6 +38,7 @@ class SettingsScreenTest {
     private var name: String? = "unset"
     private var theme: ThemeMode? = null
     private var export: ExportFormat? = null
+    private var languageSettingsOpened = false
     private var deleted = false
 
     private fun ready(notifications: NotificationPreferences = NotificationPreferences.Default, allowed: Boolean = true) = SettingsUiState.Ready(
@@ -61,6 +63,9 @@ class SettingsScreenTest {
                         onName = { name = it },
                         onCurrency = {},
                         onTheme = { theme = it },
+                        onOpenLanguageSettings = { languageSettingsOpened = true },
+                        onAiEnhanced = {},
+                        onTestAi = {},
                         onExport = { export = it },
                         onDeleteAll = { deleted = true },
                         onMessageShown = {},
@@ -131,6 +136,16 @@ class SettingsScreenTest {
         compose.onNodeWithText("Delete everything?").assertIsDisplayed()
         compose.onAllNodesWithText("Delete all data").filterToOne(hasAnyAncestor(hasTestTag(SettingsTestTags.CONFIRM_DELETE))).performClick()
         assertThat(deleted).isTrue()
+    }
+
+    @Test
+    @Config(qualifiers = "ar")
+    fun `renders Arabic when the device language is Arabic`() {
+        setContent(ready())
+        compose.onNodeWithText("الإعدادات").assertIsDisplayed()
+        compose.onNodeWithText("الملف الشخصي").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithTag(SettingsTestTags.LANGUAGE).performScrollTo().performClick()
+        assertThat(languageSettingsOpened).isTrue()
     }
 
     @Test
