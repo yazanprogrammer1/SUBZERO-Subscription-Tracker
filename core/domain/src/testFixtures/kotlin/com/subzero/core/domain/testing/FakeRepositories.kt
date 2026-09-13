@@ -1,5 +1,6 @@
 package com.subzero.core.domain.testing
 
+import com.subzero.core.domain.model.AiSettings
 import com.subzero.core.domain.model.CurrencyCode
 import com.subzero.core.domain.model.NotificationPreferences
 import com.subzero.core.domain.model.PaymentRecord
@@ -8,6 +9,7 @@ import com.subzero.core.domain.model.Subscription
 import com.subzero.core.domain.model.SubscriptionId
 import com.subzero.core.domain.model.ThemeMode
 import com.subzero.core.domain.model.UserPreferences
+import com.subzero.core.domain.repository.AiSettingsRepository
 import com.subzero.core.domain.repository.SubscriptionRepository
 import com.subzero.core.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.flow.Flow
@@ -138,4 +140,18 @@ class FakeUserPreferencesRepository(
             displayName = null,
         )
     }
+}
+
+/** In-memory [AiSettingsRepository]; a blank key on update keeps the stored one, like the real one. */
+class FakeAiSettingsRepository(initial: AiSettings = AiSettings.Empty) : AiSettingsRepository {
+
+    private val state = MutableStateFlow(initial)
+
+    override val settings: Flow<AiSettings> = state
+
+    override suspend fun update(settings: AiSettings) = state.update { stored ->
+        settings.copy(apiKey = settings.apiKey.ifBlank { stored.apiKey })
+    }
+
+    override suspend fun clear() = state.update { AiSettings.Empty }
 }

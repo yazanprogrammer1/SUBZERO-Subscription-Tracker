@@ -5,9 +5,11 @@ import com.subzero.core.domain.assistant.AnswerKind
 import com.subzero.core.domain.assistant.AssistantContext
 import com.subzero.core.domain.assistant.AssistantTurn
 import com.subzero.core.domain.assistant.LocalAssistant
+import com.subzero.core.domain.model.AiSettings
 import com.subzero.core.domain.model.CurrencyCode
 import com.subzero.core.domain.model.DeclaredUsage
 import com.subzero.core.domain.model.SubscriptionStatus
+import com.subzero.core.domain.testing.FakeAiSettingsRepository
 import com.subzero.core.domain.testing.FakeUserPreferencesRepository
 import com.subzero.core.domain.testing.date
 import com.subzero.core.domain.testing.paymentRecord
@@ -110,7 +112,7 @@ class RemoteAssistantTest {
         val local = LocalAssistant(GetUpcomingPaymentsUseCase(fixedClock(today)))
         val prefs = FakeUserPreferencesRepository()
         val transport = FakeTransport()
-        val configured = AiConfig(apiKey = "k", baseUrl = "https://example.invalid", model = "m")
+        val configured = configSource(AiSettings(apiKey = "k", baseUrl = "https://example.invalid", model = "m"))
 
         val off = CompositeAssistant(local, RemoteAssistant(transport), configured, prefs).ask("how much", context)
         assertThat(off.isRemote).isFalse()
@@ -120,7 +122,7 @@ class RemoteAssistantTest {
         val on = CompositeAssistant(local, RemoteAssistant(transport), configured, prefs).ask("how much", context)
         assertThat(on.isRemote).isTrue()
 
-        val unconfigured = AiConfig(apiKey = "", baseUrl = "https://example.invalid", model = "m")
+        val unconfigured = configSource(AiSettings(baseUrl = "https://example.invalid", model = "m"))
         val noKey = CompositeAssistant(local, RemoteAssistant(transport), unconfigured, prefs).ask("how much", context)
         assertThat(noKey.isRemote).isFalse()
     }
@@ -129,7 +131,7 @@ class RemoteAssistantTest {
     fun `composite falls back to local when the model fails and says so`() = runTest {
         val local = LocalAssistant(GetUpcomingPaymentsUseCase(fixedClock(today)))
         val prefs = FakeUserPreferencesRepository().apply { setAiEnhancedEnabled(true) }
-        val configured = AiConfig(apiKey = "k", baseUrl = "https://example.invalid", model = "m")
+        val configured = configSource(AiSettings(apiKey = "k", baseUrl = "https://example.invalid", model = "m"))
 
         val answer = CompositeAssistant(local, RemoteAssistant(FakeTransport(reply = null)), configured, prefs).ask("how much", context)
 
@@ -139,10 +141,8 @@ class RemoteAssistantTest {
         assertThat(answer.amount).isEqualTo(usd(1549))
     }
 
-    @Test
-    fun `config requires a key and https`() {
-        assertThat(AiConfig("", "https://api.example.com", "m").isAvailable).isFalse()
-        assertThat(AiConfig("k", "http://api.example.com", "m").isAvailable).isFalse()
-        assertThat(AiConfig("k", "https://api.example.com", "m").isAvailable).isTrue()
-    }
 }
+
+/** An [AiConfigSource] over settings held in memory; the build defaults are empty under test. */
+private fun configSource(settings: AiSettings) =
+    AiConfigSource(FakeAiSettingsRepository(settings), defaults = AiConfig(apiKey = "", baseUrl = "", model = ""))

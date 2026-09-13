@@ -2,7 +2,13 @@ package com.subzero.core.ai
 
 import com.subzero.core.common.coroutines.Dispatcher
 import com.subzero.core.common.coroutines.SubzeroDispatcher
+import com.subzero.core.domain.model.AiProvider
+import com.subzero.core.domain.model.AiSettings
+import com.subzero.core.domain.repository.AiSettingsRepository
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -19,31 +25,22 @@ import java.net.URL
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/** Which wire protocol the configured endpoint speaks. */
-enum class AiProvider {
-    /** Anthropic Messages API (`POST {baseUrl}/v1/messages`, `x-api-key`). */
-    ANTHROPIC,
-
-    /** OpenAI-style chat completions (`POST {baseUrl}/chat/completions`, `Authorization: Bearer`). */
-    OPENAI_COMPATIBLE,
-    ;
-
-    companion object {
-        fun parse(raw: String): AiProvider = when (raw.trim().lowercase()) {
-            "anthropic", "claude" -> ANTHROPIC
-            else -> OPENAI_COMPATIBLE
-        }
-    }
-}
-
-/** Where the model lives. Built from BuildConfig; [isAvailable] is false without a key. */
+/** Where the model lives, after the user's settings are laid over the build defaults. */
 data class AiConfig(
     val apiKey: String,
     val baseUrl: String,
     val model: String,
     val provider: AiProvider = AiProvider.ANTHROPIC,
 ) {
-    val isAvailable: Boolean get() = apiKey.isNotBlank() && baseUrl.startsWith("https://")
+    val isAvailable: Boolean get() = apiKey.isNotBlank() && baseUrl.startsWith("https://") && model.isNotBlank()
+
+    /** Each non-blank field of [settings] wins; the rest stay as the build shipped them. */
+    fun overlaidWith(settings: AiSettings) = AiConfig(
+        apiKey = settings.apiKey.ifBlank { apiKey },
+        baseUrl = settings.baseUrl.ifBlank { baseUrl }.trimEnd('/'),
+        model = settings.model.ifBlank { model },
+        provider = settings.provider ?: provider,
+    )
 
     companion object {
         fun fromBuildConfig() = AiConfig(
@@ -53,6 +50,21 @@ data class AiConfig(
             provider = AiProvider.parse(BuildConfig.AI_PROVIDER),
         )
     }
+}
+
+/**
+ * The endpoint in force right now: what the build shipped, overlaid with what the user typed in
+ * Settings. Read per request, so changing a key takes effect on the next question, no rebuild.
+ */
+@Singleton
+class AiConfigSource @Inject constructor(
+    repository: AiSettingsRepository,
+    /** What the build shipped, if anything. Injected so tests never inherit a developer's key. */
+    private val defaults: AiConfig,
+) {
+    val config: Flow<AiConfig> = repository.settings.map { defaults.overlaidWith(it) }
+
+    suspend fun current(): AiConfig = config.first()
 }
 
 /** One turn of the conversation; `role` is `system`, `user` or `assistant`. */
@@ -65,7 +77,17 @@ interface ChatTransport {
     suspend fun complete(messages: List<ChatMessage>): String
 }
 
-class AiException(message: String, cause: Throwable? = null) : IOException(message, cause)
+/**
+ * A request that produced no answer. [status] is the HTTP code when the provider replied and null
+ * when it could not be reached; [providerMessage] is the provider's own sentence, so the UI can
+ * explain the failure in the user's language without losing the original text.
+ */
+class AiException(
+    message: String,
+    val status: Int? = null,
+    val providerMessage: String? = null,
+    cause: Throwable? = null,
+) : IOException(message, cause)
 
 /**
  * HTTPS-only chat over HttpURLConnection: one endpoint per provider, one JSON shape each, no SDK.
@@ -73,15 +95,16 @@ class AiException(message: String, cause: Throwable? = null) : IOException(messa
  */
 @Singleton
 class HttpChatTransport @Inject constructor(
-    private val config: AiConfig,
+    private val configSource: AiConfigSource,
     @Dispatcher(SubzeroDispatcher.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : ChatTransport {
 
     override suspend fun complete(messages: List<ChatMessage>): String = withContext(ioDispatcher) {
+        val config = configSource.current()
         if (!config.isAvailable) throw AiException("Assistant is not configured")
         val request = when (config.provider) {
-            AiProvider.ANTHROPIC -> anthropicRequest(messages)
-            AiProvider.OPENAI_COMPATIBLE -> openAiRequest(messages)
+            AiProvider.ANTHROPIC -> anthropicRequest(config, messages)
+            AiProvider.OPENAI_COMPATIBLE -> openAiRequest(config, messages)
         }
         val responseBody = post(request)
         when (config.provider) {
@@ -92,7 +115,7 @@ class HttpChatTransport @Inject constructor(
 
     internal class WireRequest(val url: String, val headers: Map<String, String>, val body: String)
 
-    internal fun anthropicRequest(messages: List<ChatMessage>): WireRequest {
+    internal fun anthropicRequest(config: AiConfig, messages: List<ChatMessage>): WireRequest {
         // The Messages API takes the system prompt as a top-level field, not as a message.
         val system = messages.filter { it.role == "system" }.joinToString("\n\n") { it.content }.takeIf { it.isNotBlank() }
         val turns = messages.filter { it.role != "system" }
@@ -101,11 +124,13 @@ class HttpChatTransport @Inject constructor(
         return WireRequest(
             url = "${config.baseUrl.removeSuffix("/v1")}/v1/messages",
             headers = mapOf("x-api-key" to config.apiKey, "anthropic-version" to ANTHROPIC_VERSION),
-            body = json.encodeToString(AnthropicRequest(model = config.model, maxTokens = MAX_TOKENS, system = system, messages = turns, temperature = TEMPERATURE)),
+            body = json.encodeToString(
+                AnthropicRequest(model = config.model, maxTokens = MAX_TOKENS, system = system, messages = turns, temperature = TEMPERATURE),
+            ),
         )
     }
 
-    internal fun openAiRequest(messages: List<ChatMessage>): WireRequest = WireRequest(
+    internal fun openAiRequest(config: AiConfig, messages: List<ChatMessage>): WireRequest = WireRequest(
         url = "${config.baseUrl}/chat/completions",
         headers = mapOf("Authorization" to "Bearer ${config.apiKey}"),
         body = json.encodeToString(OpenAiRequest(model = config.model, messages = messages, temperature = TEMPERATURE, maxTokens = MAX_TOKENS)),
@@ -119,20 +144,27 @@ class HttpChatTransport @Inject constructor(
             doOutput = true
             setRequestProperty("Content-Type", "application/json")
             setRequestProperty("Accept", "application/json")
+            // SUBZERO identifies itself honestly; it never claims to be another vendor's client.
+            setRequestProperty("User-Agent", USER_AGENT)
             request.headers.forEach { (name, value) -> setRequestProperty(name, value) }
         }
         return try {
             connection.outputStream.use { it.write(request.body.toByteArray()) }
             val code = connection.responseCode
             if (code !in 200..299) {
-                val error = connection.errorStream?.bufferedReader()?.use { it.readText() }.orEmpty()
-                throw AiException("HTTP $code${providerMessage(error)?.let { " — $it" }.orEmpty()}")
+                val body = connection.errorStream?.bufferedReader()?.use { it.readText() }.orEmpty()
+                val detail = providerMessage(body)
+                throw AiException(
+                    message = "HTTP $code${detail?.let { " — $it" }.orEmpty()}",
+                    status = code,
+                    providerMessage = detail,
+                )
             }
             connection.inputStream.bufferedReader().use { it.readText() }
         } catch (e: AiException) {
             throw e
         } catch (e: IOException) {
-            throw AiException("Could not reach the model", e)
+            throw AiException("Could not reach the model", cause = e)
         } finally {
             connection.disconnect()
         }
@@ -156,14 +188,14 @@ class HttpChatTransport @Inject constructor(
 
     private fun parseAnthropic(responseBody: String): String {
         val response = runCatching { json.decodeFromString<AnthropicResponse>(responseBody) }
-            .getOrElse { throw AiException("Unexpected model response", it) }
+            .getOrElse { throw AiException("Unexpected model response", cause = it) }
         return response.content.filter { it.type == "text" }.joinToString("") { it.text.orEmpty() }.trim().takeIf { it.isNotEmpty() }
             ?: throw AiException("Empty model response")
     }
 
     private fun parseOpenAi(responseBody: String): String {
         val response = runCatching { json.decodeFromString<OpenAiResponse>(responseBody) }
-            .getOrElse { throw AiException("Unexpected model response", it) }
+            .getOrElse { throw AiException("Unexpected model response", cause = it) }
         return response.choices.firstOrNull()?.message?.content?.trim()?.takeIf { it.isNotEmpty() }
             ?: throw AiException("Empty model response")
     }
@@ -199,6 +231,7 @@ class HttpChatTransport @Inject constructor(
 
     private companion object {
         const val ANTHROPIC_VERSION = "2023-06-01"
+        const val USER_AGENT = "SUBZERO (Android)"
         const val TIMEOUT_MS = 20_000
         const val MAX_TOKENS = 400
         const val TEMPERATURE = 0.2

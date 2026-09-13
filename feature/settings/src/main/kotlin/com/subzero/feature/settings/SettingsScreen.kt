@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -40,6 +41,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -62,6 +67,7 @@ import com.subzero.core.designsystem.component.SubzeroWordmark
 import com.subzero.core.designsystem.icon.SubzeroIcons
 import com.subzero.core.designsystem.theme.SubzeroTheme
 import com.subzero.core.designsystem.theme.SubzeroTone
+import com.subzero.core.domain.model.AiProvider
 import com.subzero.core.domain.model.CurrencyCode
 import com.subzero.core.domain.model.ThemeMode
 
@@ -79,6 +85,13 @@ internal object SettingsTestTags {
     const val CONFIRM_DELETE = "settings_confirm_delete"
     const val AI_ENHANCED = "settings_ai_enhanced"
     const val AI_TEST = "settings_ai_test"
+    const val AI_EDIT = "settings_ai_edit"
+    const val AI_ENDPOINT = "settings_ai_endpoint"
+    const val AI_MODEL = "settings_ai_model"
+    const val AI_KEY = "settings_ai_key"
+    const val AI_SAVE = "settings_ai_save"
+    const val AI_CLEAR = "settings_ai_clear"
+    fun aiProvider(provider: AiProvider) = "settings_ai_provider_${provider.name}"
     const val LANGUAGE = "settings_language"
     fun days(days: Int) = "settings_days_$days"
     fun theme(mode: ThemeMode) = "settings_theme_${mode.name}"
@@ -86,6 +99,15 @@ internal object SettingsTestTags {
 
 private val ContentMaxWidth = 640.dp
 private val daysOptions = listOf(1, 2, 3, 7)
+
+/** What the endpoint form hands back when the user saves. */
+data class AiEndpointDraft(
+    val provider: AiProvider,
+    val baseUrl: String,
+    val model: String,
+    /** Blank means "keep the key already stored". */
+    val apiKey: String,
+)
 
 /** Every callback the screen needs. */
 data class SettingsActions(
@@ -101,6 +123,8 @@ data class SettingsActions(
     val onOpenLanguageSettings: () -> Unit,
     val onAiEnhanced: (Boolean) -> Unit,
     val onTestAi: () -> Unit,
+    val onSaveAi: (AiEndpointDraft) -> Unit,
+    val onClearAi: () -> Unit,
     val onExport: (ExportFormat) -> Unit,
     val onDeleteAll: () -> Unit,
     val onMessageShown: () -> Unit,
@@ -151,6 +175,8 @@ fun SettingsRoute(viewModel: SettingsViewModel = hiltViewModel()) {
             },
             onAiEnhanced = viewModel::setAiEnhancedEnabled,
             onTestAi = viewModel::testAiConnection,
+            onSaveAi = { draft -> viewModel.saveAiSettings(draft.provider, draft.baseUrl, draft.model, draft.apiKey) },
+            onClearAi = viewModel::clearAiSettings,
             onExport = { format ->
                 pendingFormat = format
                 exportLauncher.launch("subzero-export.${format.extension}")
@@ -390,44 +416,205 @@ private fun NotificationsSection(state: SettingsUiState.Ready, actions: Settings
 
 @Composable
 private fun AssistantSection(state: SettingsUiState.Ready, actions: SettingsActions) {
-    if (!state.aiAvailable) return
     val colors = SubzeroTheme.colors
+    val spacing = SubzeroTheme.spacing
+    val ai = state.ai
+    var editing by rememberSaveable { mutableStateOf(!ai.available) }
+
     SectionHeader(title = stringResource(R.string.feature_settings_assistant))
     SubzeroCard(modifier = Modifier.fillMaxWidth()) {
-        ToggleRow(
-            title = stringResource(R.string.feature_settings_ai_enhanced_title),
-            body = stringResource(R.string.feature_settings_ai_enhanced_body),
-            checked = state.preferences.aiEnhancedEnabled,
-            onChecked = actions.onAiEnhanced,
-            tag = SettingsTestTags.AI_ENHANCED,
-        )
-        Spacer(Modifier.height(SubzeroTheme.spacing.xs))
-        Text(
-            text = stringResource(R.string.feature_settings_ai_enhanced_privacy),
-            style = SubzeroTheme.typography.caption,
-            color = colors.textTertiary,
-        )
-        Spacer(Modifier.height(SubzeroTheme.spacing.sm))
-        SubzeroButton(
-            text = stringResource(R.string.feature_settings_ai_test),
-            onClick = actions.onTestAi,
-            style = SubzeroButtonStyle.Secondary,
-            compact = true,
-            loading = state.isBusy,
-            enabled = !state.isBusy,
-            modifier = Modifier.testTag(SettingsTestTags.AI_TEST),
-        )
-        val target = state.aiTarget
+        if (ai.available) {
+            ToggleRow(
+                title = stringResource(R.string.feature_settings_ai_enhanced_title),
+                body = stringResource(R.string.feature_settings_ai_enhanced_body),
+                checked = state.preferences.aiEnhancedEnabled,
+                onChecked = actions.onAiEnhanced,
+                tag = SettingsTestTags.AI_ENHANCED,
+            )
+            Spacer(Modifier.height(spacing.xs))
+            Text(
+                text = stringResource(R.string.feature_settings_ai_enhanced_privacy),
+                style = SubzeroTheme.typography.caption,
+                color = colors.textTertiary,
+            )
+        } else {
+            Text(
+                text = stringResource(R.string.feature_settings_ai_setup_title),
+                style = SubzeroTheme.typography.body,
+                color = colors.textPrimary,
+            )
+            Text(
+                text = stringResource(R.string.feature_settings_ai_setup_body),
+                style = SubzeroTheme.typography.caption,
+                color = colors.textSecondary,
+            )
+        }
+
+        val target = ai.target
         if (target != null) {
-            Spacer(Modifier.height(SubzeroTheme.spacing.xs))
+            Spacer(Modifier.height(spacing.xs))
             Text(text = target, style = SubzeroTheme.typography.caption, color = colors.textTertiary)
         }
-        val aiError = state.aiError
-        if (aiError != null) {
-            Spacer(Modifier.height(SubzeroTheme.spacing.xs))
-            Text(text = aiError, style = SubzeroTheme.typography.caption, color = colors.danger)
+
+        Spacer(Modifier.height(spacing.sm))
+        Row(horizontalArrangement = Arrangement.spacedBy(spacing.xs), verticalAlignment = Alignment.CenterVertically) {
+            if (ai.available) {
+                SubzeroButton(
+                    text = stringResource(R.string.feature_settings_ai_test),
+                    onClick = actions.onTestAi,
+                    style = SubzeroButtonStyle.Secondary,
+                    compact = true,
+                    loading = state.isBusy,
+                    enabled = !state.isBusy,
+                    modifier = Modifier.testTag(SettingsTestTags.AI_TEST),
+                )
+            }
+            SubzeroButton(
+                text = stringResource(if (editing) R.string.feature_settings_ai_hide else R.string.feature_settings_ai_edit),
+                onClick = { editing = !editing },
+                style = SubzeroButtonStyle.Ghost,
+                compact = true,
+                modifier = Modifier.testTag(SettingsTestTags.AI_EDIT),
+            )
+        }
+
+        val failure = ai.failure
+        if (failure != null) {
+            Spacer(Modifier.height(spacing.xs))
+            Text(
+                text = stringResource(failure.kind.messageRes()),
+                style = SubzeroTheme.typography.caption,
+                color = colors.danger,
+            )
+            val detail = failure.providerMessage
+            if (detail != null) {
+                Text(text = detail, style = SubzeroTheme.typography.caption, color = colors.textTertiary)
+            }
+        }
+
+        if (editing) {
+            Spacer(Modifier.height(spacing.sm))
+            AiEndpointForm(state = state, actions = actions)
         }
     }
+}
+
+/**
+ * The endpoint the user brings. The key is write-only here: the stored one is never read back
+ * into the field, and leaving the field empty keeps it.
+ */
+@Composable
+private fun AiEndpointForm(state: SettingsUiState.Ready, actions: SettingsActions) {
+    val colors = SubzeroTheme.colors
+    val spacing = SubzeroTheme.spacing
+    val ai = state.ai
+    var provider by rememberSaveable(ai.provider) { mutableStateOf(ai.provider) }
+    var baseUrl by rememberSaveable(ai.baseUrl) { mutableStateOf(ai.baseUrl) }
+    var model by rememberSaveable(ai.model) { mutableStateOf(ai.model) }
+    var key by rememberSaveable { mutableStateOf("") }
+    var keyVisible by rememberSaveable { mutableStateOf(false) }
+
+    Column(verticalArrangement = Arrangement.spacedBy(spacing.xs)) {
+        Text(
+            text = stringResource(R.string.feature_settings_ai_provider),
+            style = SubzeroTheme.typography.label,
+            color = colors.textSecondary,
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(spacing.xs)) {
+            AiProvider.entries.forEach { entry ->
+                SubzeroChip(
+                    text = stringResource(entry.labelRes()),
+                    selected = provider == entry,
+                    onClick = { provider = entry },
+                    modifier = Modifier
+                        .weight(1f)
+                        .testTag(SettingsTestTags.aiProvider(entry)),
+                )
+            }
+        }
+        SubzeroTextField(
+            value = baseUrl,
+            onValueChange = { baseUrl = it },
+            label = stringResource(R.string.feature_settings_ai_endpoint),
+            placeholder = stringResource(provider.endpointHintRes()),
+            helper = stringResource(R.string.feature_settings_ai_endpoint_help),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri, imeAction = ImeAction.Next),
+            inputTag = SettingsTestTags.AI_ENDPOINT,
+        )
+        SubzeroTextField(
+            value = model,
+            onValueChange = { model = it },
+            label = stringResource(R.string.feature_settings_ai_model),
+            placeholder = stringResource(provider.modelHintRes()),
+            inputTag = SettingsTestTags.AI_MODEL,
+        )
+        SubzeroTextField(
+            value = key,
+            onValueChange = { key = it },
+            label = stringResource(R.string.feature_settings_ai_key),
+            placeholder = stringResource(
+                if (ai.keySet) R.string.feature_settings_ai_key_stored else R.string.feature_settings_ai_key_hint,
+            ),
+            helper = stringResource(R.string.feature_settings_ai_key_help),
+            visualTransformation = if (keyVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+            trailing = {
+                SubzeroButton(
+                    text = stringResource(if (keyVisible) R.string.feature_settings_ai_key_hide else R.string.feature_settings_ai_key_show),
+                    onClick = { keyVisible = !keyVisible },
+                    style = SubzeroButtonStyle.Ghost,
+                    compact = true,
+                )
+            },
+            inputTag = SettingsTestTags.AI_KEY,
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(spacing.xs)) {
+            SubzeroButton(
+                text = stringResource(R.string.feature_settings_ai_save),
+                onClick = {
+                    actions.onSaveAi(AiEndpointDraft(provider = provider, baseUrl = baseUrl, model = model, apiKey = key))
+                    key = ""
+                },
+                style = SubzeroButtonStyle.Primary,
+                compact = true,
+                enabled = !state.isBusy,
+                modifier = Modifier.testTag(SettingsTestTags.AI_SAVE),
+            )
+            SubzeroButton(
+                text = stringResource(R.string.feature_settings_ai_clear),
+                onClick = { key = ""; actions.onClearAi() },
+                style = SubzeroButtonStyle.Ghost,
+                compact = true,
+                enabled = !state.isBusy,
+                modifier = Modifier.testTag(SettingsTestTags.AI_CLEAR),
+            )
+        }
+    }
+}
+
+private fun AiProvider.labelRes(): Int = when (this) {
+    AiProvider.ANTHROPIC -> R.string.feature_settings_ai_provider_anthropic
+    AiProvider.OPENAI_COMPATIBLE -> R.string.feature_settings_ai_provider_openai
+}
+
+private fun AiProvider.endpointHintRes(): Int = when (this) {
+    AiProvider.ANTHROPIC -> R.string.feature_settings_ai_endpoint_hint_anthropic
+    AiProvider.OPENAI_COMPATIBLE -> R.string.feature_settings_ai_endpoint_hint_openai
+}
+
+private fun AiProvider.modelHintRes(): Int = when (this) {
+    AiProvider.ANTHROPIC -> R.string.feature_settings_ai_model_hint_anthropic
+    AiProvider.OPENAI_COMPATIBLE -> R.string.feature_settings_ai_model_hint_openai
+}
+
+private fun AiFailureKind.messageRes(): Int = when (this) {
+    AiFailureKind.REJECTED -> R.string.feature_settings_ai_error_rejected
+    AiFailureKind.NO_CREDIT -> R.string.feature_settings_ai_error_no_credit
+    AiFailureKind.NOT_FOUND -> R.string.feature_settings_ai_error_not_found
+    AiFailureKind.RATE_LIMITED -> R.string.feature_settings_ai_error_rate_limited
+    AiFailureKind.PROVIDER_ERROR -> R.string.feature_settings_ai_error_provider
+    AiFailureKind.UNREACHABLE -> R.string.feature_settings_ai_error_unreachable
+    AiFailureKind.UNKNOWN -> R.string.feature_settings_ai_error_unknown
 }
 
 @Composable
@@ -570,4 +757,7 @@ private fun SettingsMessage.text(): Int = when (this) {
     SettingsMessage.DELETE_FAILED -> R.string.feature_settings_message_delete_failed
     SettingsMessage.AI_OK -> R.string.feature_settings_message_ai_ok
     SettingsMessage.AI_FAILED -> R.string.feature_settings_message_ai_failed
+    SettingsMessage.AI_SAVED -> R.string.feature_settings_message_ai_saved
+    SettingsMessage.AI_SAVE_FAILED -> R.string.feature_settings_message_ai_save_failed
+    SettingsMessage.AI_CLEARED -> R.string.feature_settings_message_ai_cleared
 }

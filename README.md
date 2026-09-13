@@ -65,8 +65,13 @@ Assistant → Enhanced answers, off by default, and the row only appears when a 
 The model gets the earlier turns of the conversation, the subscription summary, the totals, price
 changes and payments summarized by month.
 
-Configure the provider in `local.properties` (git-ignored, never committed) or through the
-matching environment variables for CI:
+**In the app** (no rebuild): Settings → Assistant → Set up provider. Pick Anthropic or an
+OpenAI-compatible provider, paste the endpoint, model and your own key, then Test connection. The
+key is encrypted with a key held in the Android Keystore and stored on the device only; it is sent
+as a header to the endpoint you entered and nowhere else. "Forget key" clears it.
+
+**At build time** (optional default for your own builds), in `local.properties` (git-ignored,
+never committed) or the matching environment variables for CI:
 
 ```
 subzero.ai.apiKey=...            # SUBZERO_AI_API_KEY
@@ -75,9 +80,19 @@ subzero.ai.model=claude-opus-5   # SUBZERO_AI_MODEL
 subzero.ai.provider=anthropic    # SUBZERO_AI_PROVIDER  (anthropic | openai)
 ```
 
+Anything set in the app wins field by field over the build default, so a build with no key at all
+is fine: the user brings their own.
+
 `anthropic` posts to `{baseUrl}/v1/messages` with `x-api-key`; `openai` posts to
-`{baseUrl}/chat/completions` with a bearer token. Settings → Assistant → **Test connection**
-sends one request and shows the provider's error verbatim if it fails.
+`{baseUrl}/chat/completions` with a bearer token. SUBZERO identifies itself honestly in the
+`User-Agent`; it never claims to be another vendor's client, so a relay that only serves one
+particular client will refuse it — use a provider that accepts API clients. **Test connection**
+sends one request and maps the reply to a reason: key refused (401/403), no credit (402), no such
+endpoint or model (404), rate limited (429), provider failing (5xx), or unreachable — always with
+the provider's own sentence underneath.
+
+A key is never read back into the UI: the field shows whether one is stored, and leaving it empty
+keeps it. If a device cannot encrypt, the save fails loudly instead of dropping the key.
 
 What leaves the device is a summary of the subscriptions (name, amount, cycle, category, declared
 usage, next date; paused ones by name and status), the totals, price changes, monthly payment

@@ -19,8 +19,9 @@ internal abstract class AiModule {
     abstract fun bindsTransport(impl: HttpChatTransport): ChatTransport
 
     companion object {
+        /** The endpoint baked into this build, if the build had one; the user can override it. */
         @Provides
         @Singleton
-        fun providesAiConfig(): AiConfig = AiConfig.fromBuildConfig()
+        fun providesDefaultAiConfig(): AiConfig = AiConfig.fromBuildConfig()
     }
 }

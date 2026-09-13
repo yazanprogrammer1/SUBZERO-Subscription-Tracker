@@ -1,18 +1,23 @@
 package com.subzero.feature.settings
 
 import android.net.Uri
+import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.subzero.core.ai.AiConfig
+import com.subzero.core.ai.AiConfigSource
 import com.subzero.core.ai.AiException
 import com.subzero.core.ai.ChatMessage
 import com.subzero.core.ai.ChatTransport
 import com.subzero.core.data.export.DataManager
 import com.subzero.core.data.export.ExportFormat
 import com.subzero.core.data.export.StorageInfo
+import com.subzero.core.domain.model.AiProvider
+import com.subzero.core.domain.model.AiSettings
 import com.subzero.core.domain.model.CurrencyCode
 import com.subzero.core.domain.model.ThemeMode
 import com.subzero.core.domain.model.UpcomingPayment
+import com.subzero.core.domain.testing.FakeAiSettingsRepository
 import com.subzero.core.domain.testing.FakeSubscriptionRepository
 import com.subzero.core.domain.testing.FakeUserPreferencesRepository
 import com.subzero.core.domain.testing.subscription
@@ -75,11 +80,15 @@ class SettingsViewModelTest {
         ledger = ledger,
         dataManager = dataManager,
         appInfo = AppInfo("0.1.0"),
-        aiConfig = AiConfig(apiKey = "", baseUrl = "https://example.invalid", model = "m"),
-        chatTransport = object : ChatTransport {
-            override suspend fun complete(messages: List<ChatMessage>): String = throw AiException("no network in tests")
-        },
+        aiConfigSource = AiConfigSource(aiSettings, defaults = AiConfig(apiKey = "", baseUrl = "", model = "")),
+        aiSettings = aiSettings,
+        chatTransport = transport,
     )
+
+    private val aiSettings = FakeAiSettingsRepository()
+    private var transport: ChatTransport = object : ChatTransport {
+        override suspend fun complete(messages: List<ChatMessage>): String = throw AiException("no network in tests")
+    }
 
     @Test
     fun `ready state carries preferences storage and version`() = runTest {
@@ -149,6 +158,84 @@ class SettingsViewModelTest {
             assertThat(preferences.preferences.first().onboardingCompleted).isFalse()
             assertThat((expectMostRecentItem() as SettingsUiState.Ready).message).isEqualTo(SettingsMessage.DATA_DELETED)
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `saving a provider makes the assistant available without a rebuild`() = runTest {
+        val vm = viewModel()
+        vm.uiState.test {
+            assertThat((awaitItem() as SettingsUiState.Ready).ai.available).isFalse()
+
+            vm.saveAiSettings(AiProvider.ANTHROPIC, "https://api.example.com/", "claude-opus-5", "sk-test")
+
+            val ready = awaitUntil { it.ai.available }
+            assertThat(ready.ai.available).isTrue()
+            assertThat(ready.ai.keySet).isTrue()
+            assertThat(ready.ai.model).isEqualTo("claude-opus-5")
+            assertThat(ready.ai.target).isEqualTo("claude-opus-5 · api.example.com")
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `editing the model keeps the stored key and clearing forgets everything`() = runTest {
+        val vm = viewModel()
+        vm.saveAiSettings(AiProvider.ANTHROPIC, "https://api.example.com", "claude-opus-5", "sk-test")
+
+        vm.saveAiSettings(AiProvider.ANTHROPIC, "https://api.example.com", "claude-haiku-4-5", "")
+        assertThat(aiSettings.settings.first().apiKey).isEqualTo("sk-test")
+        assertThat(aiSettings.settings.first().model).isEqualTo("claude-haiku-4-5")
+
+        vm.clearAiSettings()
+        assertThat(aiSettings.settings.first()).isEqualTo(AiSettings.Empty)
+    }
+
+    @Test
+    fun `a failed test maps the provider status to a reason the screen can word`() = runTest {
+        transport = object : ChatTransport {
+            override suspend fun complete(messages: List<ChatMessage>): String =
+                throw AiException("HTTP 401", status = 401, providerMessage = "unauthorized client detected")
+        }
+        val vm = viewModel()
+        vm.saveAiSettings(AiProvider.ANTHROPIC, "https://api.example.com", "claude-opus-5", "sk-test")
+
+        vm.uiState.test {
+            awaitItem()
+            vm.testAiConnection()
+
+            val ready = awaitUntil { it.ai.failure != null }
+            assertThat(ready.ai.failure?.kind).isEqualTo(AiFailureKind.REJECTED)
+            assertThat(ready.ai.failure?.providerMessage).isEqualTo("unauthorized client detected")
+            assertThat(ready.message).isEqualTo(SettingsMessage.AI_FAILED)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `no reply at all reads as unreachable, not as a rejected key`() = runTest {
+        transport = object : ChatTransport {
+            override suspend fun complete(messages: List<ChatMessage>): String = throw AiException("Could not reach the model")
+        }
+        val vm = viewModel()
+        vm.saveAiSettings(AiProvider.ANTHROPIC, "https://api.example.com", "claude-opus-5", "sk-test")
+
+        vm.uiState.test {
+            awaitItem()
+            vm.testAiConnection()
+
+            assertThat(awaitUntil { it.ai.failure != null }.ai.failure?.kind).isEqualTo(AiFailureKind.UNREACHABLE)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    /** Waits for the first Ready state matching [predicate]; states before it are intermediate. */
+    private suspend fun ReceiveTurbine<SettingsUiState>.awaitUntil(
+        predicate: (SettingsUiState.Ready) -> Boolean,
+    ): SettingsUiState.Ready {
+        while (true) {
+            val state = awaitItem()
+            if (state is SettingsUiState.Ready && predicate(state)) return state
         }
     }
 }

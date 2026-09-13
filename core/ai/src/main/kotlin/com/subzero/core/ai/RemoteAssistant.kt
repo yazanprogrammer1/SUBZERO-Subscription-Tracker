@@ -156,13 +156,13 @@ class RemoteAssistant @Inject constructor(
 class CompositeAssistant @Inject constructor(
     private val local: LocalAssistant,
     private val remote: RemoteAssistant,
-    private val config: AiConfig,
+    private val configSource: AiConfigSource,
     private val preferences: UserPreferencesRepository,
 ) : Assistant {
 
     override suspend fun ask(question: String, context: AssistantContext): AssistantAnswer {
         val enhanced = preferences.preferences.first().aiEnhancedEnabled
-        if (!enhanced || !config.isAvailable) return local.ask(question, context)
+        if (!enhanced || !configSource.current().isAvailable) return local.ask(question, context)
         return runCatching { remote.ask(question, context) }
             .getOrElse { local.ask(question, context).copy(fellBack = true) }
     }

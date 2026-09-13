@@ -13,9 +13,13 @@ import com.subzero.core.data.database.SubzeroDatabase
 import com.subzero.core.data.database.dao.SubscriptionDao
 import com.subzero.core.data.export.DataManager
 import com.subzero.core.data.export.LocalDataManager
+import com.subzero.core.data.preferences.AndroidKeyStoreCipher
+import com.subzero.core.data.preferences.DataStoreAiSettingsRepository
 import com.subzero.core.data.preferences.DataStoreUserPreferencesRepository
+import com.subzero.core.data.preferences.KeyCipher
 import com.subzero.core.data.repository.RoomSubscriptionRepository
 import com.subzero.core.domain.repository.SubscriptionRepository
+import com.subzero.core.domain.repository.AiSettingsRepository
 import com.subzero.core.domain.repository.UserPreferencesRepository
 import dagger.Binds
 import dagger.Module
@@ -37,6 +41,12 @@ internal abstract class DataModule {
 
     @Binds
     abstract fun bindsUserPreferencesRepository(impl: DataStoreUserPreferencesRepository): UserPreferencesRepository
+
+    @Binds
+    abstract fun bindsAiSettingsRepository(impl: DataStoreAiSettingsRepository): AiSettingsRepository
+
+    @Binds
+    abstract fun bindsKeyCipher(impl: AndroidKeyStoreCipher): KeyCipher
 
     @Binds
     abstract fun bindsDataManager(impl: LocalDataManager): DataManager

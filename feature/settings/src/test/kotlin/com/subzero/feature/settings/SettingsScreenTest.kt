@@ -39,6 +39,7 @@ class SettingsScreenTest {
     private var theme: ThemeMode? = null
     private var export: ExportFormat? = null
     private var languageSettingsOpened = false
+    private var savedAi: AiEndpointDraft? = null
     private var deleted = false
 
     private fun ready(notifications: NotificationPreferences = NotificationPreferences.Default, allowed: Boolean = true) = SettingsUiState.Ready(
@@ -66,6 +67,8 @@ class SettingsScreenTest {
                         onOpenLanguageSettings = { languageSettingsOpened = true },
                         onAiEnhanced = {},
                         onTestAi = {},
+                        onSaveAi = { savedAi = it },
+                        onClearAi = {},
                         onExport = { export = it },
                         onDeleteAll = { deleted = true },
                         onMessageShown = {},
