@@ -185,6 +185,7 @@ private fun FormContent(state: SubscriptionFormState, actions: FormActions, onBa
                     onValueChange = actions.onName,
                     label = stringResource(R.string.feature_subscriptions_form_name),
                     placeholder = stringResource(R.string.feature_subscriptions_form_name_hint),
+                    helper = if (state.isDuplicateName) stringResource(R.string.feature_subscriptions_form_duplicate_name) else null,
                     error = state.errors.nameError(),
                     inputTag = FormTestTags.NAME,
                 )

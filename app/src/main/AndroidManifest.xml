@@ -4,6 +4,15 @@
 
     <!-- Deliberately no INTERNET permission: the MVP cannot send data anywhere. -->
 
+    <!-- WorkManager declares these for features SUBZERO does not use (network constraints,
+         foreground work). Removed so the manifest stays the minimum for a daily local job. -->
+    <uses-permission
+        android:name="android.permission.ACCESS_NETWORK_STATE"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.FOREGROUND_SERVICE"
+        tools:node="remove" />
+
     <application
         android:name=".SubzeroApplication"
         android:allowBackup="true"

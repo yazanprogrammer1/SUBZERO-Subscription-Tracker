@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.Icon
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -62,6 +63,8 @@ fun SubzeroChip(
 
     Row(
         modifier = modifier
+            // Visually 36dp tall; the touch target still meets the 48dp minimum.
+            .minimumInteractiveComponentSize()
             .pressScale(interactionSource, SubzeroMotion.PRESS_SCALE_BUTTON, enabled)
             .heightIn(min = ChipHeight)
             .clip(SubzeroTheme.shapes.full)

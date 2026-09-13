@@ -55,6 +55,7 @@
     <string name="feature_subscriptions_form_optional">Optional</string>
     <string name="feature_subscriptions_form_save">Save</string>
     <string name="feature_subscriptions_form_ok">OK</string>
+    <string name="feature_subscriptions_form_duplicate_name">You already have a subscription with this name. Saving adds a second one.</string>
     <string name="feature_subscriptions_form_error_name_blank">Enter the service name</string>
     <plurals name="feature_subscriptions_form_error_name_long">
         <item quantity="one">Keep the name under %1$d character</item>

@@ -58,7 +58,12 @@ data class SubscriptionFormState(
     val isSaving: Boolean = false,
     val saved: Subscription? = null,
     val failure: FormFailure? = null,
+    /** Lower-cased names of the other subscriptions, to warn (not block) about duplicates. */
+    val otherNames: Set<String> = emptySet(),
 ) {
+    /** True when another subscription already carries this name; adding twice is allowed but worth a heads-up. */
+    val isDuplicateName: Boolean get() = name.trim().lowercase() in otherNames
+
     /** The effective cycle: the custom editor values when in custom mode, else the chip. */
     val cycle: BillingCycle get() = if (customMode) BillingCycle.of(customEvery, customUnit) else standardCycle
 
@@ -102,6 +107,10 @@ class SubscriptionFormViewModel @AssistedInject constructor(
         val today = LocalDate.now(clock)
         val homeCurrency = preferences.preferences.first().homeCurrency
         val existing = editingId?.let { repository.getSubscription(it) }
+        val otherNames = repository.getSubscriptions()
+            .filter { it.id != editingId }
+            .map { it.name.trim().lowercase() }
+            .toSet()
         _state.update { current ->
             when {
                 editingId == null -> current.copy(
@@ -109,6 +118,7 @@ class SubscriptionFormViewModel @AssistedInject constructor(
                     currency = homeCurrency,
                     nextPaymentDate = today,
                     today = today,
+                    otherNames = otherNames,
                 )
                 existing == null -> current.copy(isLoading = false, today = today, failure = FormFailure.NOT_FOUND)
                 else -> current.copy(
@@ -126,6 +136,7 @@ class SubscriptionFormViewModel @AssistedInject constructor(
                     usage = existing.usage,
                     notes = existing.notes.orEmpty(),
                     today = today,
+                    otherNames = otherNames,
                 )
             }
         }

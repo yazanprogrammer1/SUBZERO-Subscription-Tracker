@@ -158,6 +158,21 @@ class SubscriptionFormViewModelTest {
     }
 
     @Test
+    fun `a name that already exists is flagged but not blocked`() = runTest {
+        repository.seed(subscription(id = "existing", name = "Netflix"))
+        // Editing the existing one does not flag itself.
+        assertThat(viewModel(id = "existing").state.value.isDuplicateName).isFalse()
+
+        val vm = viewModel()
+        vm.setName("  netflix ")
+        assertThat(vm.state.value.isDuplicateName).isTrue()
+        vm.setPriceText("1")
+        vm.save()
+        assertThat(vm.state.value.saved).isNotNull()
+        assertThat(repository.subscriptionsSnapshot).hasSize(2)
+    }
+
+    @Test
     fun `editing a missing subscription reports not found`() = runTest {
         val state = viewModel(id = "ghost").state.value
         assertThat(state.failure).isEqualTo(FormFailure.NOT_FOUND)

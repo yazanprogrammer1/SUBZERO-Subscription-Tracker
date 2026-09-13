@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.error
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
@@ -125,6 +126,8 @@ fun SubzeroTextField(
                     interactionSource = interactionSource,
                     modifier = Modifier
                         .fillMaxWidth()
+                        // TalkBack announces the label with the field: "Service name, edit box".
+                        .semantics { contentDescription = label }
                         .then(if (inputTag != null) Modifier.testTag(inputTag) else Modifier),
                 )
             }
