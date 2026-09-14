@@ -54,3 +54,11 @@ Privacy policy URL: host docs/release/privacy-policy.md at a public URL (e.g. Gi
 7. Onboarding page 1 (optional, for the feature graphic)
 
 Feature graphic 1024×500: wordmark on the background gradient with the tagline.
+
+## Store graphics
+
+- **App icon (512 × 512 PNG, 32-bit, full-bleed square):** `docs/release/assets/play-icon-512.png`.
+  It is rendered from the same geometry as the adaptive launcher icon, so the listing shows what
+  lands on the home screen. Regenerate after any change to `ic_launcher_*.xml` with
+  `java tools/RenderPlayIcon.java` from the repository root (JDK 11+, no build step). Play applies
+  its own corner mask; do not round the corners or add transparency.
