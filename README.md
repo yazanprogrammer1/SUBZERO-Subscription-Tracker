@@ -34,6 +34,8 @@ adb shell am start -n com.yazanprogrammer.subzero.debug/com.subzero.app.gallery.
 ## Structure
 
 Release process: [docs/release/runbook.md](docs/release/runbook.md). QA: [docs/qa/device-checklist.md](docs/qa/device-checklist.md).
+Privacy policy (English and Arabic, the page Google Play links to): [docs/privacy-policy.html](docs/privacy-policy.html),
+served by GitHub Pages from the `docs/` folder.
 
 See [docs/architecture/00-kickoff.md](docs/architecture/00-kickoff.md) for the architecture,
 module layout, data model, decisions and roadmap.

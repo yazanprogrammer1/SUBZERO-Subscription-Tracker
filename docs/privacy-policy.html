@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Privacy policy for SUBZERO, the subscription tracker. Your data stays on your device; the only online feature is optional and off by default.">
+<title>SUBZERO — Privacy Policy</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f6f7f9;
+    --surface: #ffffff;
+    --text: #12141a;
+    --muted: #5b6270;
+    --line: #e3e6eb;
+    --accent: #2f6df6;
+    --accent-soft: #e8efff;
+    --ok: #1a7f4b;
+    --ok-soft: #e6f5ec;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b0d12;
+      --surface: #14171f;
+      --text: #eef1f6;
+      --muted: #9aa3b2;
+      --line: #252a35;
+      --accent: #7aa2ff;
+      --accent-soft: #172038;
+      --ok: #5fd39a;
+      --ok-soft: #10261b;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.65 -apple-system, "Segoe UI", Inter, Roboto, "Noto Sans", "Noto Sans Arabic", "Helvetica Neue", Arial, sans-serif;
+    padding: 24px 16px 64px;
+  }
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 32px 28px;
+  }
+  @media (max-width: 480px) { main { padding: 24px 18px; border-radius: 12px; } }
+  header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+  .brand { font-weight: 700; letter-spacing: 0.12em; font-size: 14px; color: var(--muted); }
+  .lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+  .lang button {
+    font: inherit; font-size: 14px; padding: 6px 14px; border: 0; background: transparent; color: var(--muted); cursor: pointer;
+  }
+  .lang button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  h1 { font-size: 30px; line-height: 1.2; margin: 8px 0 4px; letter-spacing: -0.01em; }
+  .meta { color: var(--muted); font-size: 14px; margin: 0 0 24px; }
+  h2 { font-size: 19px; margin: 32px 0 8px; }
+  p, li { margin: 0 0 12px; }
+  ul { padding-inline-start: 22px; }
+  .summary {
+    background: var(--ok-soft); color: var(--ok); border-radius: 12px; padding: 14px 16px; font-weight: 600; margin: 0 0 8px;
+  }
+  .note { background: var(--accent-soft); border-radius: 12px; padding: 14px 16px; margin: 12px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 16px; font-size: 15px; }
+  th, td { text-align: start; vertical-align: top; padding: 10px 8px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .wrap { overflow-x: auto; }
+  a { color: var(--accent); }
+  code { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: 0.92em; background: var(--accent-soft); padding: 1px 6px; border-radius: 6px; }
+  footer { color: var(--muted); font-size: 13px; margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line); }
+  [hidden] { display: none !important; }
+  /* Arabic section: larger leading so descenders are never clipped, no letter-spacing. */
+  section[lang="ar"] { line-height: 1.9; }
+  section[lang="ar"] h1, section[lang="ar"] h2 { letter-spacing: 0; line-height: 1.5; }
+  section[lang="ar"] th { letter-spacing: 0; text-transform: none; }
+  @media print { body { padding: 0; background: #fff; } main { border: 0; } .lang { display: none; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="brand">SUBZERO</div>
+    <div class="lang" role="group" aria-label="Language / اللغة">
+      <button type="button" id="btn-en" aria-pressed="true" onclick="setLang('en')">English</button>
+      <button type="button" id="btn-ar" aria-pressed="false" onclick="setLang('ar')">العربية</button>
+    </div>
+  </header>
+
+  <!-- ============================ ENGLISH ============================ -->
+  <section id="en" lang="en" dir="ltr">
+    <h1>Privacy Policy</h1>
+    <p class="meta">SUBZERO — Subscription Tracker for Android · Effective 14 September 2026</p>
+
+    <p class="summary">SUBZERO runs on your device. It has no accounts, no analytics, no advertising and no crash reporting. The only feature that uses the internet is optional, off by default, and sends data only to a provider you choose yourself.</p>
+
+    <h2>1. What we collect</h2>
+    <p>Nothing. The developer of SUBZERO does not operate any server, does not receive any data from the app, and cannot see what you enter into it.</p>
+
+    <h2>2. What stays on your device</h2>
+    <p>Everything you enter is stored in the app's private storage on your phone:</p>
+    <ul>
+      <li>The subscriptions you add: service name, price, billing cycle and dates, category, notes, and how often you say you use each one.</li>
+      <li>Payment records the app derives from your subscriptions' schedules, and price changes you record.</li>
+      <li>Your preferences: home currency, theme, notification choices, language, and an optional display name used only for the greeting.</li>
+      <li>If you set one up, the AI provider settings from section 4 — endpoint, model and API key. The key is encrypted with a key held in the Android Keystore before it is stored.</li>
+    </ul>
+    <p>This data may be included in your Android backup, which Google encrypts and stores under your Google account according to Google's own policies. The encrypted AI key cannot be read from a backup restored to another device.</p>
+
+    <h2>3. Notifications</h2>
+    <p>Reminders are off by default. If you turn them on, SUBZERO asks for the notification permission and schedules reminders locally on your device. Notifications are generated from your own data and involve no network use.</p>
+
+    <h2>4. Enhanced answers (optional, off by default)</h2>
+    <p>The assistant answers your questions from the data on your device and needs no internet. You may optionally connect it to an AI model provider of your choice under <strong>Settings → Assistant</strong>, using an API key that you obtain from that provider yourself. The developer of SUBZERO is not that provider and never receives this data.</p>
+    <p>When, and only when, enhanced answers are switched on, each question you ask the assistant sends the following over an encrypted (HTTPS) connection to the endpoint you configured:</p>
+    <ul>
+      <li>Your question and the earlier turns of the same conversation.</li>
+      <li>A summary of your subscriptions: service names, amounts, billing cycles, categories, the usage you declared, next payment dates, and whether each is active, paused or canceled.</li>
+      <li>Your monthly and yearly totals, recorded price changes, and your recorded payments summed by month.</li>
+    </ul>
+    <p>The following is <strong>never</strong> sent: your notes, your display name, and any internal identifiers.</p>
+    <div class="note">Data sent to a provider you configure is handled under that provider's privacy policy, not this one. Please read it before entering a key. You can turn enhanced answers off, or remove the key with "Forget key", at any time; the app then stops all network use immediately.</div>
+
+    <h2>5. Permissions</h2>
+    <div class="wrap">
+    <table>
+      <thead><tr><th>Permission</th><th>Why SUBZERO asks for it</th></tr></thead>
+      <tbody>
+        <tr><td><code>POST_NOTIFICATIONS</code></td><td>Only if you turn on reminders. Used to show them.</td></tr>
+        <tr><td><code>INTERNET</code></td><td>Only used by enhanced answers (section 4). With that switch off, no request is ever made.</td></tr>
+        <tr><td><code>WAKE_LOCK</code>, <code>RECEIVE_BOOT_COMPLETED</code></td><td>Required by Android's WorkManager to run the daily local job that updates billing dates and schedules reminders.</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>SUBZERO does not request access to your location, contacts, camera, microphone, files, or other apps.</p>
+
+    <h2>6. Third parties and SDKs</h2>
+    <p>SUBZERO contains no analytics, advertising or crash-reporting SDKs. Its dependencies are Android and Kotlin platform libraries only. The single network call in the app is made by the app's own code to the endpoint you configure.</p>
+
+    <h2>7. Your control</h2>
+    <ul>
+      <li><strong>Export:</strong> Settings → Data &amp; storage lets you save all your data as JSON or CSV to a place you choose.</li>
+      <li><strong>Delete:</strong> Settings → Data &amp; storage → Delete all data removes every subscription, record and setting from the device.</li>
+      <li><strong>Uninstall:</strong> removes all of the app's data from the device.</li>
+    </ul>
+    <p>Because the developer holds none of your data, there is nothing for us to delete on your behalf; the controls above are complete.</p>
+
+    <h2>8. Children</h2>
+    <p>SUBZERO is not directed at children under 13 and collects no personal data from anyone.</p>
+
+    <h2>9. Changes to this policy</h2>
+    <p>If a future version changes what is stored, or what enhanced answers send, this policy will be updated before that version is released, and the effective date above will change.</p>
+
+    <h2>10. Contact</h2>
+    <p>Questions about this policy: open an issue on the project's GitHub page, <a href="https://github.com/yazanprogrammer1/SUBZERO-Subscription-Tracker/issues">github.com/yazanprogrammer1/SUBZERO-Subscription-Tracker</a>.</p>
+  </section>
+
+  <!-- ============================ ARABIC ============================ -->
+  <section id="ar" lang="ar" dir="rtl" hidden>
+    <h1>سياسة الخصوصية</h1>
+    <p class="meta">SUBZERO — متتبع الاشتراكات لنظام أندرويد · سارية اعتبارًا من 14 سبتمبر 2026</p>
+
+    <p class="summary">يعمل SUBZERO على جهازك. لا حسابات، ولا تحليلات، ولا إعلانات، ولا تقارير أعطال. الميزة الوحيدة التي تستخدم الإنترنت اختيارية، ومعطّلة افتراضيًا، ولا ترسل البيانات إلا إلى مزوّد تختاره أنت بنفسك.</p>
+
+    <h2>1. ما الذي نجمعه</h2>
+    <p>لا شيء. لا يشغّل مطوّر SUBZERO أي خادم، ولا يستلم أي بيانات من التطبيق، ولا يمكنه الاطلاع على ما تُدخله فيه.</p>
+
+    <h2>2. ما الذي يبقى على جهازك</h2>
+    <p>كل ما تُدخله يُحفظ في التخزين الخاص بالتطبيق على هاتفك:</p>
+    <ul>
+      <li>الاشتراكات التي تضيفها: اسم الخدمة، والسعر، ودورة الفوترة وتواريخها، والفئة، والملاحظات، وكم مرة تقول إنك تستخدم كل اشتراك.</li>
+      <li>سجلات الدفع التي يشتقها التطبيق من جداول اشتراكاتك، وتغييرات الأسعار التي تسجّلها.</li>
+      <li>تفضيلاتك: العملة الأساسية، والمظهر، وخيارات الإشعارات، واللغة، واسم عرض اختياري يُستخدم في التحية فقط.</li>
+      <li>إن قمت بإعدادها، إعدادات مزوّد الذكاء الاصطناعي الواردة في البند 4: العنوان والنموذج ومفتاح الواجهة البرمجية. يُشفّر المفتاح بمفتاح محفوظ في Android Keystore قبل تخزينه.</li>
+    </ul>
+    <p>قد تُضمَّن هذه البيانات في نسخة أندرويد الاحتياطية، التي تشفّرها Google وتخزّنها في حسابك لديها وفق سياساتها. ولا يمكن قراءة مفتاح الذكاء الاصطناعي المشفّر من نسخة احتياطية مُستعادة على جهاز آخر.</p>
+
+    <h2>3. الإشعارات</h2>
+    <p>التذكيرات معطّلة افتراضيًا. إن فعّلتها، يطلب SUBZERO إذن الإشعارات ويجدول التذكيرات محليًا على جهازك. تُنشأ الإشعارات من بياناتك أنت ولا تتضمن أي استخدام للشبكة.</p>
+
+    <h2>4. الإجابات المحسّنة (اختيارية، معطّلة افتراضيًا)</h2>
+    <p>يجيب المساعد عن أسئلتك من البيانات الموجودة على جهازك ولا يحتاج إلى إنترنت. يمكنك اختياريًا ربطه بمزوّد نماذج ذكاء اصطناعي من اختيارك عبر <strong>الإعدادات ← المساعد</strong>، باستخدام مفتاح واجهة برمجية تحصل عليه بنفسك من ذلك المزوّد. مطوّر SUBZERO ليس هو ذلك المزوّد ولا يستلم هذه البيانات أبدًا.</p>
+    <p>عندما تكون الإجابات المحسّنة مفعّلة، وفي هذه الحالة فقط، يُرسل مع كل سؤال تطرحه على المساعد ما يلي عبر اتصال مشفّر (HTTPS) إلى العنوان الذي أعددته:</p>
+    <ul>
+      <li>سؤالك والأدوار السابقة من المحادثة نفسها.</li>
+      <li>ملخص لاشتراكاتك: أسماء الخدمات، والمبالغ، ودورات الفوترة، والفئات، والاستخدام الذي صرّحت به، وتواريخ الدفع القادمة، وما إذا كان كل اشتراك نشطًا أو متوقفًا أو ملغى.</li>
+      <li>إجمالياتك الشهرية والسنوية، وتغييرات الأسعار المسجلة، ومدفوعاتك المسجلة مجموعةً حسب الشهر.</li>
+    </ul>
+    <p>ما يلي <strong>لا يُرسل أبدًا</strong>: ملاحظاتك، واسم العرض، وأي معرّفات داخلية.</p>
+    <div class="note">البيانات المرسلة إلى مزوّد تُعدّه بنفسك تخضع لسياسة خصوصية ذلك المزوّد لا لهذه السياسة. يُرجى قراءتها قبل إدخال المفتاح. يمكنك تعطيل الإجابات المحسّنة أو إزالة المفتاح عبر «نسيان المفتاح» في أي وقت؛ وعندها يتوقف التطبيق فورًا عن أي استخدام للشبكة.</div>
+
+    <h2>5. الأذونات</h2>
+    <div class="wrap">
+    <table>
+      <thead><tr><th>الإذن</th><th>لماذا يطلبه SUBZERO</th></tr></thead>
+      <tbody>
+        <tr><td><code>POST_NOTIFICATIONS</code></td><td>فقط إن فعّلت التذكيرات. يُستخدم لعرضها.</td></tr>
+        <tr><td><code>INTERNET</code></td><td>تستخدمه الإجابات المحسّنة فقط (البند 4). مع تعطيل هذا الخيار لا يُرسل أي طلب على الإطلاق.</td></tr>
+        <tr><td><code>WAKE_LOCK</code>، <code>RECEIVE_BOOT_COMPLETED</code></td><td>يتطلبها WorkManager في أندرويد لتشغيل المهمة المحلية اليومية التي تحدّث تواريخ الفوترة وتجدول التذكيرات.</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>لا يطلب SUBZERO الوصول إلى موقعك، أو جهات اتصالك، أو الكاميرا، أو الميكروفون، أو ملفاتك، أو التطبيقات الأخرى.</p>
+
+    <h2>6. الأطراف الثالثة وحزم التطوير</h2>
+    <p>لا يحتوي SUBZERO على أي حزم تحليلات أو إعلانات أو تقارير أعطال. اعتمادياته مكتبات منصة أندرويد وKotlin فقط. والاتصال الشبكي الوحيد في التطبيق يُجريه كود التطبيق نفسه إلى العنوان الذي تُعدّه أنت.</p>
+
+    <h2>7. تحكّمك ببياناتك</h2>
+    <ul>
+      <li><strong>التصدير:</strong> الإعدادات ← البيانات والتخزين يتيح لك حفظ كل بياناتك بصيغة JSON أو CSV في المكان الذي تختاره.</li>
+      <li><strong>الحذف:</strong> الإعدادات ← البيانات والتخزين ← حذف كل البيانات يزيل كل اشتراك وسجل وإعداد من الجهاز.</li>
+      <li><strong>إلغاء التثبيت:</strong> يزيل كل بيانات التطبيق من الجهاز.</li>
+    </ul>
+    <p>ولأن المطوّر لا يحتفظ بأي من بياناتك، فلا يوجد ما يمكننا حذفه نيابةً عنك؛ وأدوات التحكم أعلاه كاملة.</p>
+
+    <h2>8. الأطفال</h2>
+    <p>SUBZERO غير موجّه للأطفال دون 13 عامًا ولا يجمع بيانات شخصية من أي أحد.</p>
+
+    <h2>9. التغييرات على هذه السياسة</h2>
+    <p>إذا غيّر إصدار مستقبلي ما يُخزَّن أو ما ترسله الإجابات المحسّنة، ستُحدَّث هذه السياسة قبل إصدار ذلك الإصدار، وسيتغير تاريخ السريان أعلاه.</p>
+
+    <h2>10. التواصل</h2>
+    <p>للأسئلة حول هذه السياسة: افتح مشكلة (Issue) على صفحة المشروع في GitHub: <a href="https://github.com/yazanprogrammer1/SUBZERO-Subscription-Tracker/issues" dir="ltr">github.com/yazanprogrammer1/SUBZERO-Subscription-Tracker</a>.</p>
+  </section>
+
+  <footer>SUBZERO · <span id="footer-text">Know what you pay. Before it charges you.</span></footer>
+</main>
+
+<script>
+  // Language is a display choice only; both texts are in the page and nothing is loaded or sent.
+  function setLang(lang) {
+    var isAr = lang === 'ar';
+    document.getElementById('en').hidden = isAr;
+    document.getElementById('ar').hidden = !isAr;
+    document.getElementById('btn-en').setAttribute('aria-pressed', String(!isAr));
+    document.getElementById('btn-ar').setAttribute('aria-pressed', String(isAr));
+    document.documentElement.lang = lang;
+    document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+    document.title = isAr ? 'SUBZERO — سياسة الخصوصية' : 'SUBZERO — Privacy Policy';
+    document.getElementById('footer-text').textContent = isAr ? 'اعرف ما تدفعه. قبل أن يُخصم منك.' : 'Know what you pay. Before it charges you.';
+    try { history.replaceState(null, '', isAr ? '?lang=ar' : location.pathname); } catch (e) {}
+  }
+  (function () {
+    var wanted = new URLSearchParams(location.search).get('lang');
+    if (!wanted && (navigator.language || '').toLowerCase().indexOf('ar') === 0) wanted = 'ar';
+    if (wanted === 'ar') setLang('ar');
+  })();
+</script>
+</body>
+</html>
