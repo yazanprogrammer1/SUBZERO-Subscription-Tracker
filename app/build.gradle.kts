@@ -22,10 +22,12 @@ val keystoreProperties: Properties? = rootProject.file("keystore.properties")
     }
 
 android {
+    // The namespace is the code package and stays com.subzero.app; the applicationId is the
+    // Play Store identity, which is permanent once uploaded and must be one nobody else holds.
     namespace = "com.subzero.app"
 
     defaultConfig {
-        applicationId = "com.subzero.app"
+        applicationId = "com.yazanprogrammer.subzero"
         versionCode = 1
         versionName = "1.0.0"
     }

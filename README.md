@@ -28,7 +28,7 @@ The debug build carries a design-system gallery with no launcher icon of its own
 install adds one app icon, not two. Open it with:
 
 ```
-adb shell am start -n com.subzero.app.debug/com.subzero.app.gallery.GalleryActivity
+adb shell am start -n com.yazanprogrammer.subzero.debug/com.subzero.app.gallery.GalleryActivity
 ```
 
 ## Structure

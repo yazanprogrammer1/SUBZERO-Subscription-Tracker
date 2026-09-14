@@ -78,7 +78,7 @@ is `core:data`; `feature-add-subscription` lives inside `feature:subscriptions`;
 | M8 | Git | Local `main`; no remote configured yet. |
 
 Additional decisions made during Phase 1 (routine, recorded for traceability):
-- `applicationId = com.subzero.app`, root package `com.subzero`.
+- `applicationId = com.yazanprogrammer.subzero` (Play identity; `com.subzero.app` was already taken on Play), root code package `com.subzero`.
 - `compileSdk 37`, `targetSdk 37` (lint enforces latest target; API 37 behavior changes are
   verified on an emulator in Phase 12), `minSdk 26`.
 - JVM target 17 for all modules (D8 desugars language features for every minSdk).

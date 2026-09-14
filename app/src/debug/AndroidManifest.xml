@@ -5,7 +5,7 @@
             Debug-only design-system gallery. Deliberately without a LAUNCHER intent-filter: a
             second home-screen icon next to the app confuses anyone with a debug build installed.
             Start it explicitly instead:
-            adb shell am start -n com.subzero.app.debug/com.subzero.app.gallery.GalleryActivity
+            adb shell am start -n com.yazanprogrammer.subzero.debug/com.subzero.app.gallery.GalleryActivity
         -->
         <activity
             android:name=".gallery.GalleryActivity"

@@ -7,7 +7,7 @@ emulator. Tick each line; anything failing becomes a tracked fix before Phase 13
 Build to test: `./gradlew :app:installDebug` (debug) and the release APK from Phase 13 for the
 final pass. The debug build also carries the **SUBZERO Gallery** for component review. It has no
 launcher icon on purpose (one app, one icon); start it with
-`adb shell am start -n com.subzero.app.debug/com.subzero.app.gallery.GalleryActivity`.
+`adb shell am start -n com.yazanprogrammer.subzero.debug/com.subzero.app.gallery.GalleryActivity`.
 
 ## Visual (compare against the reference image)
 
@@ -51,7 +51,7 @@ launcher icon on purpose (one app, one icon); start it with
 
 - [ ] Enable "Upcoming charges" → permission prompt (API 33+) → allow → card disappears.
 - [ ] Deny → warning card stays, "Open system settings" opens the app's notification page.
-- [ ] Add a subscription due tomorrow, force the worker: `adb shell cmd jobscheduler run -f com.subzero.app.debug <jobId>` or wait for the 09:00 run → notification "X charges $Y tomorrow".
+- [ ] Add a subscription due tomorrow, force the worker: `adb shell cmd jobscheduler run -f com.yazanprogrammer.subzero.debug <jobId>` or wait for the 09:00 run → notification "X charges $Y tomorrow".
 - [ ] Tap it → app opens on that subscription's detail (cold and warm start).
 - [ ] Force the worker again the same day → no duplicate.
 - [ ] Turn everything off → nothing arrives.
