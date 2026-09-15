@@ -9,6 +9,10 @@ cut. No accounts, no bank access. Every feature works offline; the one optional 
 
 English and Arabic, with right-to-left layout.
 
+
+<img src="screenshots/app.png"/>
+
+
 ## Requirements
 
 - Android Studio (current stable). The Gradle daemon runs on JDK 21 (`gradle/gradle-daemon-jvm.properties`); Gradle auto-provisions it if the Studio JBR is not found
