@@ -10,7 +10,7 @@ cut. No accounts, no bank access. Every feature works offline; the one optional 
 English and Arabic, with right-to-left layout.
 
 
-<img src="screenshots/app.png"/>
+<img src="screenshots/app.jpg"/>
 
 
 ## Requirements
